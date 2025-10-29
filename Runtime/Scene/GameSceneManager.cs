@@ -5,8 +5,8 @@ public abstract class GameSceneManager : GameManagerComponent
 {
     #region  --------------------------------------------------- PROPERTIES
 
-    
-    public override int Order { get; protected set; } = 0;
+
+    public override int Order => 0;
     
     
     #endregion

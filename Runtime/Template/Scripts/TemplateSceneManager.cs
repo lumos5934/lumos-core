@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Pool;
 
 public class TemplateSceneManager : GameSceneManager
 {
