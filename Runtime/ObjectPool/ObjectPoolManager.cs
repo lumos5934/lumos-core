@@ -1,39 +1,39 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace Lumos.DevPack
 {
-    public class ObjectPool : BaseGameComponent
+    public class ObjectPoolManager : SingletonGlobal<ObjectPoolManager>, IBootable
     {
+        #region >--------------------------------------------------- PROPERTIES
+
+        public int Order => (int)BootsOrder.ObjectPool;
+        public bool IsInitialized { get; private set; }
+
+
+        #endregion
         #region >--------------------------------------------------- FIELDS
 
 
         private Dictionary<string, object> _pools = new();
         private Dictionary<string, HashSet<Component>> _activeObjects = new();
 
+        
         #endregion
-
-        #region >--------------------------------------------------- PROPERTIES
-
-
-        public override int Order => 0;
-        public override bool IsInitialized { get; protected set; }
-
-
-        #endregion
-
         #region >--------------------------------------------------- INIT
 
 
-        public override void Init()
+        public Task InitAsync()
         {
             IsInitialized = true;
+            
+            return Task.CompletedTask; 
         }
 
 
         #endregion
-
         #region >--------------------------------------------------- CREATE
 
 
@@ -76,7 +76,6 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region >--------------------------------------------------- GET
 
 
@@ -108,7 +107,6 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region >--------------------------------------------------- REALEASE
 
 
@@ -130,7 +128,6 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region >--------------------------------------------------- DESTROY
 
 

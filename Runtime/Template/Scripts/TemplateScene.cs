@@ -2,9 +2,9 @@
 
 public class TemplateScene : BaseSceneManager
 {
-    public override bool IsInitialized { get; protected set; }
+    /*public override bool IsInitialized { get; protected set; }
     public override void Init()
     {
         IsInitialized = true;
-    }
+    }*/
 }

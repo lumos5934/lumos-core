@@ -8,6 +8,7 @@ namespace Lumos.DevPack
     {
         #region >--------------------------------------------------- PROPERTIES
 
+        
         public abstract int ID { get; }
         protected UIManager UIManager => _uiManager;
         protected Canvas Canvas => _canvas;
@@ -40,6 +41,7 @@ namespace Lumos.DevPack
             _uiManager?.Unregister(ID);
         }
 
+        
         #endregion
 
         #region >--------------------------------------------------- INIT
@@ -47,7 +49,7 @@ namespace Lumos.DevPack
 
         public virtual void Init()
         {
-            _uiManager = GameManager.Instance.Get<UIManager>();
+            _uiManager = Global.Get<UIManager>();
             _uiManager.Register(ID, this);
         }
 

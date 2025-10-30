@@ -1,14 +1,14 @@
 ﻿using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Lumos.DevPack
 {
-    public abstract class BaseSceneManager : BaseGameComponent
+    public abstract class BaseSceneManager : MonoBehaviour
     {
         #region --------------------------------------------------- PROPERTIES
 
 
-        public override int Order => 0;
 
 
         #endregion
@@ -23,7 +23,7 @@ namespace Lumos.DevPack
 
         protected virtual void OnDestroy()
         {
-            GameManager.Instance?.Unregister(this);
+            Global.Unregister(this);
         }
 
 
@@ -32,15 +32,11 @@ namespace Lumos.DevPack
         #region --------------------------------------------------- INIT
 
 
-        private IEnumerator InitAsync()
+        private IEnumerator InitAsync() 
         {
-            var gameMgr = GameManager.Instance;
+            yield return new WaitUntil(() => Bootstrap.IsInitialized);
 
-            yield return new WaitUntil(() => gameMgr.IsInitialized);
-
-            gameMgr.Register(this);
-
-            Init();
+            Global.Register(this);
         }
 
 

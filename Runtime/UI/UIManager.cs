@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Lumos.DevPack
 {
-    public class UIManager : BaseGameComponent
+    public class UIManager : SingletonGlobal<UIManager>, IBootable
     {
         #region >--------------------------------------------------- PROPERTIES
 
-
-        public override int Order => 1;
-        public override bool IsInitialized { get; protected set; }
+        
+        public int Order => (int)BootsOrder.UI;
+        public bool IsInitialized { get; protected set; }
 
 
         #endregion
@@ -27,7 +28,7 @@ namespace Lumos.DevPack
         #region >--------------------------------------------------- INIT
 
 
-        public override void Init()
+        public Task InitAsync()
         {
             var uiGlobalPrefabs = Resources.LoadAll<UIGlobal>("");
 
@@ -38,12 +39,15 @@ namespace Lumos.DevPack
 
                 _uiGlobalPrefabs[key] = value;
             }
-
+            
             SetEnable<TestUI>(0, true);
-
+            
+            
             IsInitialized = true;
+            
+            return Task.CompletedTask;
         }
-
+  
 
         #endregion
 
