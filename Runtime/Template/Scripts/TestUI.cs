@@ -1,6 +1,6 @@
 ﻿using Lumos.DevPack;
 
-public class TestUI : UIGlobal
+public class TestUI : UIBase
 {
     public override int ID => 0;
     public override void SetEnable(bool enable)

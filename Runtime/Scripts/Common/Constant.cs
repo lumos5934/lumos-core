@@ -7,6 +7,7 @@
 
         public const string GLOBAL = "Global";
         public const string BOOT = GLOBAL + "/Boot";
+        public const string UI = GLOBAL + "/UI";
         
         
         #endregion
