@@ -1,10 +1,9 @@
 ﻿using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Lumos.DevPack
 {
-    public abstract class BaseSceneManager : MonoBehaviour
+    public abstract class BaseSceneManager : SingletonScene<BaseSceneManager>
     {
         #region --------------------------------------------------- PROPERTIES
 
@@ -12,31 +11,28 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region --------------------------------------------------- UNITY
 
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             StartCoroutine(InitAsync());
-        }
-
-        protected virtual void OnDestroy()
-        {
-            Global.Unregister(this);
         }
 
 
         #endregion
-
         #region --------------------------------------------------- INIT
 
 
+        protected abstract void Init();
+        
         private IEnumerator InitAsync() 
         {
-            yield return new WaitUntil(() => Bootstrap.IsInitialized);
+            yield return new WaitUntil(() => Global.IsInitialized);
 
-            Global.Register(this);
+            Init();
         }
 
 

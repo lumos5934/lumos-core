@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Lumos.DevPack
 {
-    public class ResourceManager : SingletonGlobal<ResourceManager>, IBootable
+    public class ResourceManager : MonoBehaviour, IBootable
     {
         #region  >--------------------------------------------------- PROPERTIES
         

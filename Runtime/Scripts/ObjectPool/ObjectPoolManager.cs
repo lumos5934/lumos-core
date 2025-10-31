@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 namespace Lumos.DevPack
 {
-    public class ObjectPoolManager : SingletonGlobal<ObjectPoolManager>, IBootable
+    public class ObjectPoolManager : MonoBehaviour, IBootable
     {
         #region >--------------------------------------------------- PROPERTIES
 

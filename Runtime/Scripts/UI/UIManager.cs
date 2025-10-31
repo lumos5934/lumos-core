@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Lumos.DevPack
 {
-    public class UIManager : SingletonGlobal<UIManager>, IBootable
+    public class UIManager : MonoBehaviour, IBootable
     {
         #region >--------------------------------------------------- PROPERTIES
 
@@ -15,7 +15,6 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region >--------------------------------------------------- PROPERTIES
 
 
@@ -24,7 +23,6 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region >--------------------------------------------------- INIT
 
 
@@ -50,7 +48,6 @@ namespace Lumos.DevPack
   
 
         #endregion
-
         #region >--------------------------------------------------- GET & SET
 
 
@@ -75,7 +72,6 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region >--------------------------------------------------- REGISTER
 
 
@@ -91,7 +87,6 @@ namespace Lumos.DevPack
 
 
         #endregion
-
         #region >--------------------------------------------------- GLOBAL
 
 

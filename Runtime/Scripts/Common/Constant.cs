@@ -3,9 +3,10 @@
     public static class Constant
     {
         #region >--------------------------------------------------- PATH
-        
-        
-        public const string BOOT = "Boot";
+
+
+        public const string GLOBAL = "Global";
+        public const string BOOT = GLOBAL + "/Boot";
         
         
         #endregion
