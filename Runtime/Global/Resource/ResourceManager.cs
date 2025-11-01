@@ -8,7 +8,7 @@ namespace Lumos.DevPack
     {
         #region  >--------------------------------------------------- PROPERTIES
         
-        public int Order => (int)BootsOrder.Resource;
+        public int Order => (int)PreInitializeOrder.Resource;
         public bool IsInitialized { get; private set; }
         
         #endregion

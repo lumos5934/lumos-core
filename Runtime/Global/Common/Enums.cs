@@ -1,9 +1,10 @@
 ﻿namespace Lumos.DevPack
 {
-    public enum BootsOrder
+    public enum PreInitializeOrder
     {
         Resource = int.MinValue,
         ObjectPool,
         UI,
+        Audio,
     }
 }

@@ -33,7 +33,7 @@ namespace Lumos.DevPack
             if (_isInitialized) return;
             
             var initializerPrefabs 
-                = Resources.LoadAll<MonoBehaviour>(Constant.PreInitializer)
+                = Resources.LoadAll<MonoBehaviour>(Path.PreInitializer)
                     .OfType<IPreInitializer>()
                         .OrderBy(x => x.Order); 
             

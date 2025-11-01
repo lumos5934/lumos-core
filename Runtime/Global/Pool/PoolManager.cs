@@ -9,11 +9,12 @@ namespace Lumos.DevPack
     {
         #region >--------------------------------------------------- PROPERTIES
 
-        public int Order => (int)BootsOrder.ObjectPool;
+        public int Order => (int)PreInitializeOrder.ObjectPool;
         public bool IsInitialized { get; private set; }
 
 
         #endregion
+        
         #region >--------------------------------------------------- FIELDS
 
 
@@ -22,6 +23,7 @@ namespace Lumos.DevPack
 
         
         #endregion
+        
         #region >--------------------------------------------------- INIT
 
 
@@ -36,10 +38,11 @@ namespace Lumos.DevPack
 
 
         #endregion
+        
         #region >--------------------------------------------------- CREATE
 
 
-        private ObjectPool<T> CreatePool<T>(string key, T prefab, int defaultCapacity = Constant.POOL_DEFAULT_CAPACITY, int maxSize = Constant.POOL_MAX_SIZE) where T : Component, IPoolable
+        private ObjectPool<T> CreatePool<T>(string key, T prefab, int defaultCapacity = Constant.PoolDefaultCapacity, int maxSize = Constant.PoolMaxSize) where T : Component, IPoolable
         {
             var pool = new ObjectPool<T>(
                 createFunc: () =>
@@ -56,7 +59,7 @@ namespace Lumos.DevPack
                 },
                 actionOnRelease: obj =>
                 {
-                    obj.OnRealease();
+                    obj.OnRelease();
                     obj.gameObject.SetActive(false);
                 },
                 actionOnDestroy: obj =>
@@ -77,10 +80,11 @@ namespace Lumos.DevPack
 
 
         #endregion
+        
         #region >--------------------------------------------------- GET
 
 
-        public ObjectPool<T> GetPool<T>(T prefab, int defaultCapacity = Constant.POOL_DEFAULT_CAPACITY, int maxSize = Constant.POOL_MAX_SIZE) where T : Component, IPoolable
+        public ObjectPool<T> GetPool<T>(T prefab, int defaultCapacity = Constant.PoolDefaultCapacity, int maxSize = Constant.PoolMaxSize) where T : Component, IPoolable
         {
             var key = prefab.gameObject.name;
 
@@ -107,6 +111,7 @@ namespace Lumos.DevPack
 
 
         #endregion
+        
         #region >--------------------------------------------------- REALEASE
 
 
@@ -128,6 +133,7 @@ namespace Lumos.DevPack
 
 
         #endregion
+        
         #region >--------------------------------------------------- DESTROY
 
 

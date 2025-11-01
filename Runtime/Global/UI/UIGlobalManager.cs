@@ -8,7 +8,7 @@ namespace Lumos.DevPack
         #region >--------------------------------------------------- PROPERTIES
 
         
-        public int Order => (int)BootsOrder.UI;
+        public int Order => (int)PreInitializeOrder.UI;
         public bool IsInitialized { get; private set; }
 
 
@@ -25,7 +25,7 @@ namespace Lumos.DevPack
 
         public Task InitAsync()
         {
-            var uiGlobalPrefabs = Global.Get<ResourceManager>().LoadAll<UIBase>(Constant.GLOBAL_UI);
+            var uiGlobalPrefabs = Global.Get<ResourceManager>().LoadAll<UIBase>(Path.UI);
 
             for (int i = 0; i < uiGlobalPrefabs.Length; i++)
             {
