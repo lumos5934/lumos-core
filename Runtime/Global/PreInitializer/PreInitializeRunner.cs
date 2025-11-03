@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace Lumos.DevKit
+namespace LLib.Core
 {
     public class PreInitializeRunner : MonoBehaviour
     {

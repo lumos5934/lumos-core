@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Lumos.DevKit
+namespace LLib.Core
 {
     public abstract class BasePoolManager : MonoBehaviour, IPoolManager, IPreInitialize
     {

@@ -1,7 +1,7 @@
 {
-  "name": "com.lumos.dev-kit",
+  "name": "com.lumos.library",
   "version": "1.0.0",
-  "displayName": "Dev Kit",
+  "displayName": "LLib",
   "description": "description",
   "unity": "2019.1",
   "author": {

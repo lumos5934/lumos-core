@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Lumos.DevKit
+namespace LLib.Core
 {
     public abstract class BaseSceneManager : SingletonScene<BaseSceneManager>, IGlobal
     {

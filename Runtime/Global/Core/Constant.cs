@@ -1,4 +1,4 @@
-﻿namespace Lumos.DevKit
+﻿namespace LLib.Core
 {
     public static class Constant
     {

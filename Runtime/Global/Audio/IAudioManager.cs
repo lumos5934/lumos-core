@@ -1,6 +1,6 @@
 ﻿using UnityEngine.Audio;
 
-namespace Lumos.DevKit
+namespace LLib.Core
 {
     public interface IAudioManager : IGlobal
     {

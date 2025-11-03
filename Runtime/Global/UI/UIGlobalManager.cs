@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Lumos.DevKit
+namespace LLib.Core
 {
     public class UIGlobalManager : UIBaseGlobalManager
     {

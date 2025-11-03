@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Lumos.DevKit
+namespace LLib.Core
 {
     public abstract class BaseAudioManager : MonoBehaviour, IAudioManager, IPreInitialize 
     {

@@ -1,5 +1,5 @@
 {
-    "name": "DevKit.Editor",
+    "name": "LLib.Core.Runtime",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],

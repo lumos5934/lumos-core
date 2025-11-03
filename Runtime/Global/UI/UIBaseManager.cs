@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Lumos.DevKit
+namespace LLib.Core
 {
     public abstract class UIBaseManager : MonoBehaviour
     {
