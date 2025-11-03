@@ -6,6 +6,7 @@ namespace Lumos.DevKit
 {
     public abstract class BasePoolManager : MonoBehaviour, IPoolManager, IPreInitialize
     {
+        public int PreID => (int)PreInitializeOrder.Pool;
         public abstract int PreInitOrder { get; }
         public bool PreInitialized { get; private set; }
         

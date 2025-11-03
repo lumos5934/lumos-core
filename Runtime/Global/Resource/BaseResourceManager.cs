@@ -7,6 +7,8 @@ namespace Lumos.DevKit
     {
         #region  >--------------------------------------------------- PROPERTIE
 
+        
+        public int PreID => (int)PreInitializeOrder.Resource;
         public abstract int PreInitOrder { get; }
         public bool PreInitialized { get; protected set; }
         

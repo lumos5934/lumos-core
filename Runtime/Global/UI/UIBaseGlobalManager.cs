@@ -7,6 +7,7 @@ namespace Lumos.DevKit
         #region >--------------------------------------------------- PROPERTIES
 
 
+        public int PreID => (int)PreInitializeOrder.UI;
         public abstract int PreInitOrder { get; }
         public bool PreInitialized { get; protected set; }
 
@@ -34,7 +35,7 @@ namespace Lumos.DevKit
                 _globalUIPrefabs[key] = value;
             }
             
-            Global.Register(this);
+            Global.Register((IUIManager)this);
         }
   
 

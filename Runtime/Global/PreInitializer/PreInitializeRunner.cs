@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -16,67 +15,101 @@ namespace Lumos.DevKit
         
         private IEnumerator InitAsync()
         {
-            var totalTime = Time.realtimeSinceStartup;
+            var startTime = Time.realtimeSinceStartup;
             
-            var preIniTypes = 
-                AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(a =>
+            var targetAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => a.GetName().Name == "Assembly-CSharp" 
+                            || a.GetName().Name.StartsWith(GetType().Assembly.GetName().Name))
+                .ToArray();
+            
+            //Get IPreInitialize Types
+            var preIniTypes = targetAssemblies
+                .SelectMany(a =>
+                {
+                    try { return a.GetTypes(); }
+                    catch (ReflectionTypeLoadException e) { return e.Types.Where(t => t != null); }
+                })
+                .Where(t => typeof(IPreInitialize).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                .ToList();
+            
+            
+            DebugUtil.Log($" IPreInitialize ( {( Time.realtimeSinceStartup - startTime) * 1000f:F3} ms )", $" GET ASSEMBLIES ");
+            
+            
+            var preInstances = preIniTypes
+                // Create All Instances
+                .Select(type =>
+                {
+                    IPreInitialize instance = null;
+
+                    try
                     {
-                        try { return a.GetTypes(); }
-                        catch (ReflectionTypeLoadException e) { return e.Types.Where(t => t != null); }
-                    })
-                    .Where(t => typeof(IPreInitialize).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-                    .ToList();
-            
-            
-            var initInstances = new Queue<IPreInitialize>();
-            
-            foreach (var type in preIniTypes)
-            {
-                IPreInitialize instance;
+                        if (typeof(MonoBehaviour).IsAssignableFrom(type))
+                        {
+                            var go = new GameObject(type.Name);
+                            go.AddComponent(type);
+                            instance = go.GetComponent<IPreInitialize>();
+                        }
+                        else
+                        {
+                            instance = (IPreInitialize)Activator.CreateInstance(type);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _ = e;
+                        DebugUtil.LogWarning($"{type.Name}", " FAIL CREATE INSTANCE ");
+                    }
 
-                if (typeof(MonoBehaviour).IsAssignableFrom(type))
-                {
-                    var go = new GameObject(type.Name);
-                    go.AddComponent(type);
-                    
-                    instance = go.GetComponent<IPreInitialize>();
-                }
-                else
-                {
-                    instance = (IPreInitialize)Activator.CreateInstance(type);
-                }
-
-                if (instance == null)
-                {
-                    DebugUtil.LogWarning($"{type.Name}", " FAIL CREATE INSTANCE ");
-                    continue;
-                }
+                    return instance;
+                })
+                .Where(x => x != null)
                 
-                initInstances.Enqueue(instance);
-            }
-            
-            
-            var initQueue = new Queue<IPreInitialize>(initInstances.OrderBy(x => x.PreInitOrder));
+                // Grouped ID
+                .GroupBy(x => x.PreID)
+                
+                // Get Highest Order In Grouped ID
+                .Select(g =>
+                {
+                    var selected = g.OrderByDescending(x => x.PreInitOrder).First();
 
-            while (initQueue.Count > 0)
+                    foreach (var duplicate in g.Where(x => x != selected))
+                    {
+                        if (duplicate is MonoBehaviour mono)
+                        {
+                            Destroy(mono.gameObject);
+                        }
+                    }
+
+                    return selected;
+                })
+                .OrderBy(x => x.PreInitOrder)
+                .ToList();
+
+            
+            //Initialize
+            for (int i = 0; i < preInstances.Count; i++)
             {
-                var startTime = Time.realtimeSinceStartup;
-                var target = initQueue.Dequeue();
+                var initStartTime = Time.realtimeSinceStartup;
+                var target = preInstances[i];
                 
                 target.PreInit();
-                
-                yield return new WaitUntil(() => target.PreInitialized); 
-                
-                DebugUtil.Log($" INIT COMPLETE [ { Time.realtimeSinceStartup - startTime} ]", $" { target.GetType().Name } ");
-            }
-            
 
+                if (!target.PreInitialized)
+                {
+                    yield return new WaitUntil(() => target.PreInitialized); 
+                }
+                
+                DebugUtil.Log($" { target.GetType().Name } ( {(Time.realtimeSinceStartup - initStartTime) * 1000f:F3} ms )", $" INITIALIZED ");
+            }
+
+
+            var totalElapsed = Time.realtimeSinceStartup - startTime;
+            DebugUtil.Log($" All ( {totalElapsed * 1000f:F3} ms )", " INITIALIZED ");
+            
             PreInitializer.SetInitialized(true);
             
             Destroy(gameObject);
-
-            DebugUtil.Log($"[ {Time.realtimeSinceStartup - totalTime} ]", " All INIT COMPLETE ");
         }
     }
 }

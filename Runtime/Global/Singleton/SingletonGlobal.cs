@@ -2,7 +2,7 @@
 
 namespace Lumos.DevKit
 {
-    public abstract class SingletonGlobal<T> : SingletonScene<T> where T : SingletonGlobal<T>
+    public abstract class SingletonGlobal<T> : MonoBehaviour where T : SingletonGlobal<T>
     {
         public static T Instance
         {
@@ -31,10 +31,23 @@ namespace Lumos.DevKit
         private static bool applicationIsQuitting = false;
  
   
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
-            DontDestroyOnLoad(gameObject);
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this as T;
+        }
+        
+        protected virtual void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                _instance = null;
+            }
         }
 
         protected virtual void OnApplicationQuit()

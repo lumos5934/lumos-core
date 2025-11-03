@@ -11,6 +11,8 @@ namespace Lumos.DevKit
             base.PreInit();
             
             PreInitialized = true;
+            
+            Debug.Log(1);
         }
     }
 }
