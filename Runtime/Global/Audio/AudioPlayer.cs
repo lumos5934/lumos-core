@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace LLib.Core
+namespace LumosLib.Core
 {
     [RequireComponent(typeof(AudioSource))]
     public class AudioPlayer : MonoBehaviour, IPoolable 
@@ -43,14 +43,14 @@ namespace LLib.Core
         #region >--------------------------------------------------- SET
         
         
-        public void Play(AudioAssetSO asset, bool isLoop)
+        public void Play(SoundAssetSO asset)
         {
             _isPause = false;
             
             _audioSource.outputAudioMixerGroup = asset.MixerGroup;
             _audioSource.clip = asset.Clip;
             _audioSource.volume = DefaultVolume + asset.VolumeFactor;
-            _audioSource.loop = isLoop;
+            _audioSource.loop = asset.IsLoop;
             _audioSource.Play();
 
             _stopAsync = StartCoroutine(StopAsync());

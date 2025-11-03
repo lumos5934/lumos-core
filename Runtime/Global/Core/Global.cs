@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace LLib.Core
+namespace LumosLib.Core
 {
     public static class Global
     {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace LLib.Core
+namespace LumosLib.Core
 {
     public abstract class BaseAudioManager : MonoBehaviour, IAudioManager, IPreInitialize 
     {
@@ -22,7 +22,7 @@ namespace LLib.Core
         protected AudioPlayer _playerPrefab;
         protected Dictionary<int, AudioPlayer> _bgmPlayers = new();
         protected HashSet<AudioPlayer> _activePlayers = new();
-        protected Dictionary<int, AudioAssetSO> _assetResources = new();
+        protected Dictionary<int, SoundAssetSO> _assetResources = new();
         
         
         #endregion
@@ -35,7 +35,7 @@ namespace LLib.Core
             
             
             var resourceManager = Global.Get<IResourceManager>();
-            var resources = resourceManager.LoadAll<AudioAssetSO>(Constant.Audio);
+            var resources = resourceManager.LoadAll<SoundAssetSO>(Constant.Audio);
             foreach (var resource in resources)
             {
                 _assetResources[resource.GetID()] = resource;
@@ -75,11 +75,11 @@ namespace LLib.Core
         public abstract void PlayBGM(int bgmType, int assetId);
         public abstract void PlaySFX(int assetId);
         
-        protected void Play(int assetId, bool isLoop, AudioPlayer player)
+        protected void Play(int assetId, AudioPlayer player)
         {
-            if (_assetResources.TryGetValue(assetId, out AudioAssetSO asset))
+            if (_assetResources.TryGetValue(assetId, out SoundAssetSO asset))
             {
-                player.Play(asset, isLoop);
+                player.Play(asset);
                 
                 _activePlayers.Add(player);
             }

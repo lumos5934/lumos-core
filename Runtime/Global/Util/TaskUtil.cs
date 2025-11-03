@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace LLib.Core
+namespace LumosLib.Core
 {
     public class TaskUtil
     {

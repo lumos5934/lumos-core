@@ -1,4 +1,4 @@
-﻿using LLib.Core;
+﻿using LumosLib.Core;
 using UnityEngine;
 
 public class TemplateSceneManager : BaseSceneManager

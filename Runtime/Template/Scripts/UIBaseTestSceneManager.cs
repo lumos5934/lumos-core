@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using LLib.Core;
+using LumosLib.Core;
 
 public class UIBaseTestSceneManager : UIBaseSceneManager
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LLib.Core
+namespace LumosLib.Core
 {
     public abstract class UIBaseGlobalManager : UIBaseManager, IUIManager, IPreInitialize
     {

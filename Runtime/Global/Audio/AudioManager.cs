@@ -1,4 +1,4 @@
-﻿namespace LLib.Core
+﻿namespace LumosLib.Core
 {
     public class AudioManager : BaseAudioManager
     {
@@ -28,7 +28,7 @@
         {
             if (_bgmPlayers.TryGetValue(bgmType, out var containsPlayer))
             {
-                Play(assetId, true, containsPlayer);
+                Play(assetId, containsPlayer);
                 return;
             }
             
@@ -36,12 +36,12 @@
             
             _bgmPlayers[bgmType] = bgmPlayer;
             
-            Play(assetId, true, bgmPlayer);
+            Play(assetId, bgmPlayer);
         }
         
         public override void PlaySFX(int assetId)
         {
-            Play(assetId, false, _poolManager.Get(_playerPrefab));
+            Play(assetId, _poolManager.Get(_playerPrefab));
         }
         
         

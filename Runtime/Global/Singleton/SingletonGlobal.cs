@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LLib.Core
+namespace LumosLib.Core
 {
     public abstract class SingletonGlobal<T> : MonoBehaviour where T : SingletonGlobal<T>
     {

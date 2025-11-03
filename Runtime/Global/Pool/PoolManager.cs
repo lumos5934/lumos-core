@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace LLib.Core
+namespace LumosLib.Core
 {
     public class PoolManager : BasePoolManager
     {
