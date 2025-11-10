@@ -55,9 +55,9 @@ namespace LumosLib
         #region >--------------------------------------------------- GET
 
 
-        public override ObjectPool<T> GetPool<T>(T prefab, int defaultCapacity = Constant.PoolDefaultCapacity, int maxSize = Constant.PoolMaxSize)
+        protected override ObjectPool<T> GetPool<T>(T prefab, int defaultCapacity = Constant.PoolDefaultCapacity, int maxSize = Constant.PoolMaxSize)
         {
-            var key = prefab.gameObject.name;
+            var key = prefab.name;
 
             return pools.ContainsKey(key)
                 ? pools[key] as ObjectPool<T>
@@ -66,7 +66,7 @@ namespace LumosLib
 
         public override T Get<T>(T prefab)
         {
-            var key = prefab.gameObject.name;
+            var key = prefab.name;
             var pool = GetPool(prefab);
             var obj = pool.Get();
 
@@ -87,7 +87,7 @@ namespace LumosLib
 
         public override void Release<T>(T obj)
         {
-            var key = obj.gameObject.name;
+            var key = obj.name;
 
             if (pools.TryGetValue(key, out var poolObj))
             {
@@ -100,13 +100,62 @@ namespace LumosLib
                 activeObjects[key].Remove(obj);
             }
         }
+        
+        public override void ReleaseActiveObjects<T>(T prefab)
+        {
+            var key = prefab.name;
 
+            var objects = new List<MonoBehaviour>(activeObjects[key]);
+
+            foreach (var obj in objects)
+            {
+                if (obj != null)
+                {
+                    Release(obj as T);
+                }
+            }
+
+            activeObjects.Remove(key);
+        }
+        
+        public override void ReleaseAllActiveObjects()
+        {
+            foreach (var activeSet in activeObjects.Values)
+            {
+                foreach (var obj in activeSet)
+                {
+                    if (obj != null)
+                    {
+                    }
+                }
+
+                activeSet.Clear();
+            }
+
+            activeObjects.Clear();
+        }
+   
 
         #endregion
         #region >--------------------------------------------------- DESTROY
 
+        
+        public override void DestroyActiveObjects<T>(T prefab)
+        {
+            var key = prefab.name;
 
-        public override void DestroyActiveObjectsAll() 
+            foreach (var obj in activeObjects[key])
+            {
+                if (obj != null)
+                {
+                    Destroy(obj.gameObject);
+                }
+            }
+
+            activeObjects.Remove(key);
+        }
+
+        public override void DestroyAllActiveObjects() 
         {
             foreach (var activeSet in activeObjects.Values)
             {
@@ -122,21 +171,6 @@ namespace LumosLib
             }
 
             activeObjects.Clear();
-        }
-
-        public override void DestroyActiveObjects<T>(T prefab)
-        {
-            var key = prefab.gameObject.name;
-
-            foreach (var obj in activeObjects[key])
-            {
-                if (obj != null)
-                {
-                    Destroy(obj.gameObject);
-                }
-            }
-
-            activeObjects.Remove(key);
         }
 
 
