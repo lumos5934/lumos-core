@@ -6,10 +6,10 @@
         
         
         public const string PathLumosLib = "Packages/com.lumos.library";
-        public const string PathPreInitializerConfig = "Assets/Resources/PreInitializer Config.asset";
+        public const string PathPreInitializerConfig = "Assets/Resources/PreInitialize Config.asset";
         public const string PathGlobalHubTemplate = PathLumosLib + "/Editor/Templates/GlobalHub.txt";
+        public const string PathSceneManagerTemplate = PathLumosLib + "/Editor/Templates/SceneManager.txt";
         public const string PathTestEditorTemplate = PathLumosLib + "/Editor/Templates/TestEditor.txt";
-        public const string PathRuntimeSamples = PathLumosLib + "/Runtime/_Samples";
         
         
         #endregion

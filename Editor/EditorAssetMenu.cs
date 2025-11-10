@@ -15,6 +15,12 @@ namespace LumosLib
             CreateScript("GlobalHub.cs", File.ReadAllText(Constant.PathGlobalHubTemplate));
         }
         
+        [MenuItem("Assets/[ ✨Lumos Lib ]/Script/SceneManager Script", false, 0)]
+        public static void CreateSceneManagerScript()
+        {
+            CreateScript("NewSceneManager.cs", File.ReadAllText(Constant.PathSceneManagerTemplate));
+        }
+        
         [MenuItem("Assets/[ ✨Lumos Lib ]/Script/TestEditor Script", false, 0)]
         public static void CreateTestEditorScript()
         {
