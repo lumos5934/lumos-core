@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 
 namespace LumosLib
 {
-    public class PreInitializerConfigSO : ScriptableObject
+    public class PreInitializeConfigSO : ScriptableObject
     {
         public enum TableType
         {
@@ -31,23 +32,25 @@ namespace LumosLib
         {
             SelectedTableType = TableType.None;
             
+            
             if (PreInitializes.Count == 0)
             {
-                PreInitializes.Add(Resources.Load<DataManager>(nameof(DataManager)));
-                PreInitializes.Add(Resources.Load<PoolManager>(nameof(PoolManager)));
-                PreInitializes.Add(Resources.Load<ResourceManager>(nameof(ResourceManager)));
-                PreInitializes.Add(Resources.Load<UIManager>(nameof(UIManager)));
-                PreInitializes.Add(Resources.Load<AudioManager>(nameof(AudioManager)));
+                PreInitializes.Add(
+                    AssetDatabase.LoadAssetAtPath<DataManager>(Constant.PathRuntimeSamples + "/DataManager.prefab"));
+                PreInitializes.Add(
+                    AssetDatabase.LoadAssetAtPath<PoolManager>(Constant.PathRuntimeSamples + "/PoolManager.prefab"));
+                PreInitializes.Add(
+                    AssetDatabase.LoadAssetAtPath<AudioManager>(Constant.PathRuntimeSamples + "/AudioManager.prefab"));
+                PreInitializes.Add(
+                    AssetDatabase.LoadAssetAtPath<UIManager>(Constant.PathRuntimeSamples + "/UIManager.prefab"));
+                PreInitializes.Add(
+                    AssetDatabase.LoadAssetAtPath<ResourceManager>(Constant.PathRuntimeSamples + "/ResourceManager.prefab"));
             }
             
             if (AudioPlayerPrefab == null)
             {
-                var playerPrefabs = Resources.LoadAll<AudioPlayer>("");
-
-                if (playerPrefabs.Length > 0)
-                {
-                    AudioPlayerPrefab = playerPrefabs[0];
-                }
+                AudioPlayerPrefab =
+                    AssetDatabase.LoadAssetAtPath<AudioPlayer>(Constant.PathRuntimeSamples + "/AudioPlayer.prefab");
             }
         }
     }

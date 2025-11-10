@@ -20,7 +20,7 @@ namespace LumosLib
         {
             string path = Constant.PathPreInitializerConfig;
             
-            PreInitializerConfigSO config = AssetDatabase.LoadAssetAtPath<PreInitializerConfigSO>(path);
+            PreInitializeConfigSO config = AssetDatabase.LoadAssetAtPath<PreInitializeConfigSO>(path);
             
             string folderPath = Path.GetDirectoryName(path);
             if (!AssetDatabase.IsValidFolder(folderPath))
@@ -30,7 +30,7 @@ namespace LumosLib
             
             if (config == null)
             {
-                config = ScriptableObject.CreateInstance<PreInitializerConfigSO>();
+                config = ScriptableObject.CreateInstance<PreInitializeConfigSO>();
                 config.Init();
                 
                 AssetDatabase.CreateAsset(config, path);

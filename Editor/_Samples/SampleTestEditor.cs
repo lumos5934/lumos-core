@@ -23,7 +23,7 @@ namespace LumosLib
         
         
         
-        [MenuItem("✨Lumos Lib/Test Editor/SAMPLE")]
+        [MenuItem("[ ✨Lumos Lib ]/Test Editor/SAMPLE")]
         public static void Open()
         {
             OnOpen<SampleTestEditor>("SAMPLE");

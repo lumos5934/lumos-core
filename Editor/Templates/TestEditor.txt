@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class #SCRIPTNAME# : BaseTestEditorWindow
 {
-    [MenuItem("✨Lumos Lib/Test Editor/#SCRIPTNAME#")]
+    [MenuItem("[ ✨Lumos Lib ]/Test Editor/#SCRIPTNAME#")]
     public static void Open()
     {
         OnOpen<#SCRIPTNAME#>("#SCRIPTNAME#");
