@@ -6,6 +6,7 @@
         
         
         public const string GlobalConfig = "Global Config";
+        public const string LumosLib = "Packages/com.lumos.library";
         public const string UI = "UI";
         public const string Audio = "Audio";
         public const string AudioPlayerPrefab = Audio + "/AudioPlayer";

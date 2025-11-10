@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LumosLib
 {
-    public class TemplateTestEditor : BaseTestEditorWindow
+    public class SampleTestEditor : BaseTestEditorWindow
     {
         private int _intField;
         private float _floatField;
@@ -21,11 +21,14 @@ namespace LumosLib
 
         private GameObject _testObject;
         
+
+       
+        
         
         [MenuItem("✨Lumos Lib/01.Test Editor/Template")]
         public static void Open()
         {
-            OnOpen<TemplateTestEditor>("TEMPLATE");
+            OnOpen<SampleTestEditor>("TEMPLATE");
         }
 
         

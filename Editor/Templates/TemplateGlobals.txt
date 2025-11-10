@@ -1,0 +1,40 @@
+﻿using UnityEngine;
+using LumosLib;
+
+public static class Globals
+{
+    public static IUIManager UI
+    {
+        get => _ui ??= Global.Get<IUIManager>();
+        set => _ui = value;
+    }
+    private static IUIManager _ui;
+    
+    public static IAudioManager Audio
+    {
+        get => _audio ??= Global.Get<IAudioManager>();
+        set => _audio = value;
+    }
+    private static IAudioManager _audio;
+
+    public static IDataManager Data
+    {
+        get => _data ??= Global.Get<IDataManager>();
+        set => _data = value;
+    }
+    private static IDataManager _data;
+    
+    public static IPoolManager Pool
+    {
+        get => _pool ??= Global.Get<IPoolManager>();
+        set => _pool = value;
+    }
+    private static IPoolManager _pool;
+    
+    public static IResourceManager Resource
+    {
+        get => _resource ??= Global.Get<IResourceManager>();
+        set => _resource = value;
+    }
+    private static IResourceManager _resource;
+}

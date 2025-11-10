@@ -11,14 +11,13 @@ namespace LumosLib
 
         [field: SerializeField] public AudioMixerGroup Mixer { get; private set; }
 
-        
-        [field: Header("Orders")]
-        [field: SerializeField] public List<MonoBehaviour> PreInitializes { get; private set; }
 
-        private void OnEnable()
+        [field: Header("PreInitialize")]
+        [field: SerializeField] public List<MonoBehaviour> PreInitializes { get; private set; } = new();
+
+        private void Awake()
         {
 #if UNITY_EDITOR
-
             if (PreInitializes.Count == 0)
             {
                 PreInitializes.Add(Resources.Load<DataManager>(nameof(DataManager)));
