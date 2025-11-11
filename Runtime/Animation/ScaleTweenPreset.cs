@@ -4,27 +4,34 @@ using TriInspector;
 
 namespace LumosLib
 {
-    [CreateAssetMenu(fileName = "ScaleTweenPreset", menuName = "[ ✨Lumos Lib ]/Scriptable Object/Tween Preset/Scale")]
+    [CreateAssetMenu(fileName = "ScaleTweenPreset", menuName = "[ ✨Lumos Lib ]/Scriptable Object/Tween Preset/Scale", order = int.MinValue)]
     public class ScaleTweenPreset : BaseTweenPreset
     {
-        [field: PropertySpace(20f)]
-        [field: Title("Scale")]
-        [field: SerializeField] public Ease ScaleEase { get; private set; }
-        [field: SerializeField] public Vector2 TargetScale { get; private set; }
-        [field: SerializeField] public bool UseInitialScale { get; private set; }
-        [field: SerializeField, ShowIf("UseInitialScale")] public Vector2 InitialScale { get; private set; }
+        [PropertySpace(20f)]
+        [Title("Scale")]
+        [SerializeField] private Vector2 _targetScale;
+        [SerializeField] private bool _useInitialScale;
+        [SerializeField, ShowIf("_useInitialScale")] private Vector2 _initialScale;
+
+        private Transform _targetTransform;
         
-        public override Sequence GetTween(Component component)
+        public override void InitComponent(GameObject targetObject)
         {
-            if (component is Transform transform)
+            _targetTransform = targetObject.transform;
+        }
+
+        protected override Tween SetTween()
+        {
+            if (_targetTransform != null)
             {
-                if (UseInitialScale)
+                if (_useInitialScale)
                 {
-                    transform.localScale = InitialScale;
+                    _targetTransform.localScale = _initialScale;
                 }
                 
-                transform.DOScale(TargetScale, Duration).SetEase(ScaleEase);
+                return _targetTransform.DOScale(_targetScale, Duration);
             }
+            
             return null;
         }
     }
