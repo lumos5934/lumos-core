@@ -38,6 +38,7 @@
 
 - **Newtonsoft.Json (자동 설치)**
 - **DOTween (https://dotween.demigiant.com/)**
+- **Tri-Inspector (https://github.com/codewriter-packages/Tri-Inspector?tab=readme-ov-file)**
 
 <br>
 <br>
