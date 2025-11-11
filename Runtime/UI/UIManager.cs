@@ -92,7 +92,5 @@ namespace LumosLib
 
         
         #endregion
-
-    
     }
 }

@@ -10,6 +10,7 @@
         public const string PathGlobalHubTemplate = PathLumosLib + "/Editor/Templates/GlobalHub.txt";
         public const string PathSceneManagerTemplate = PathLumosLib + "/Editor/Templates/SceneManager.txt";
         public const string PathTestEditorTemplate = PathLumosLib + "/Editor/Templates/TestEditor.txt";
+        public const string PathUITemplate = PathLumosLib + "/Editor/Templates/UI.txt";
         
         
         #endregion

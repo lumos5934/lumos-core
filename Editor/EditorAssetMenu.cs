@@ -29,6 +29,12 @@ namespace LumosLib
             CreateScript("NewTestEditor.cs", File.ReadAllText(Constant.PathTestEditorTemplate));
         }
         
+        [MenuItem("Assets/[ ✨Lumos Lib ]/Script/UI Script", false, 0)]
+        public static void CreateUIScript()
+        {
+            CreateScript("UINew.cs", File.ReadAllText(Constant.PathUITemplate));
+        }
+        
         private static void CreateScript(string scriptName, string template)
         {
             string path = AssetDatabase.GetAssetPath(Selection.activeObject);
