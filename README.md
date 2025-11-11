@@ -3,7 +3,7 @@
 
 <br>
 
-[README ( 기능 설명서 )](https://www.notion.so/Lumos-Library-2a846d59656180d583b9c73691d6e60f?source=copy_link)
+[ 기능 설명서 ](https://www.notion.so/Lumos-Library-2a846d59656180d583b9c73691d6e60f?source=copy_link)
 
 **의존성**
 - **Newtonsoft.Json (자동 설치)**
