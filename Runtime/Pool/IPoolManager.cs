@@ -7,8 +7,7 @@ namespace LumosLib
     {
         public T Get<T>(T prefab) where T : MonoBehaviour, IPoolable;
         public void Release<T>(T obj) where T : MonoBehaviour, IPoolable;
-        /*public void ReleaseActiveObjects<T>(T prefab) where T : MonoBehaviour, IPoolable;
-        public void DestroyActiveObjects<T>(T prefab) where T : MonoBehaviour, IPoolable;
-        public void DestroyAllActiveObjects();*/
+        public void ReleaseAll<T>(T prefab) where T : MonoBehaviour, IPoolable;
+        public void DestroyAll<T>(T prefab) where T : MonoBehaviour, IPoolable;
     }
 }
