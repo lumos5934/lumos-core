@@ -38,29 +38,35 @@ namespace LumosLib
         {
             DebugUtil.Log($"", " INIT : START ");
             
+                
             Config = Resources.Load<ProjectConfig>(Constant.ProjectConfig);
             if (Config == null)
             {
-                PrintInitFail($"not found Resources/{Constant.ProjectConfig}");
-                yield break;
+                Config = ScriptableObjectUtil.CreateAsset<ProjectConfig>("Assets/Resources");
             }
+            
+            _elementInitStartMS = Time.realtimeSinceStartup;
             
             //Instantiate Preload Objects
             InstantiatePreloadObjects(Config);
 
-            List<IPreInitialize> preInitializes = new();
-
-            for (int i = 0; i < _preloadObjects.Count; i++)
+            var preInitializes = new List<IPreInitialize>();
+            var allActiveMono = Object.FindObjectsOfType<MonoBehaviour>();
+            
+            for (int i = 0; i < allActiveMono.Length; i++)
             {
-                if (_preloadObjects[i].TryGetComponent(out IPreInitialize preInitialize))
+                if (allActiveMono[i] is IPreInitialize preInitialize)
                 {
                     preInitializes.Add(preInitialize);
                 }
             }
-            preInitializes = preInitializes.OrderBy(target => target.PreInitOrder).ToList();
 
-            _maxInitCount = preInitializes.Count;
+            preInitializes = preInitializes.OrderBy(x => x.PreInitOrder).ToList();
+
+            _maxInitCount = preInitializes.Count + 1;
+            _curInitCount++;
             
+            PrintInitComplete(" Preload ");
             
             //Initialize
             for (int i = 0; i < preInitializes.Count; i++)
@@ -111,7 +117,7 @@ namespace LumosLib
             InstantiatePackageResource<AudioManager>();
             InstantiatePackageResource<UIManager>();
             //
-            
+         
             for (int i = 0; i < config.PreloadObjects.Count; i++)
             {
                 _preloadObjects.Add( Object.Instantiate(config.PreloadObjects[i]).gameObject);

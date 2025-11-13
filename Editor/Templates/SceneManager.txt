@@ -2,8 +2,8 @@ using LumosLib;
 
 public class #SCRIPTNAME# : BaseSceneManager<#SCRIPTNAME#>
 {
-    protected override void Init()
+    protected override void OnInitAsync()
     {
-        base.Init();
+        base.OnInitAsync();
     }
 }

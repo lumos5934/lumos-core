@@ -21,12 +21,8 @@ namespace LumosLib
                 {
                     Directory.CreateDirectory(resourcesDir);
                 }
-                
-                var config = ScriptableObject.CreateInstance<ProjectConfig>();
-                
-                string assetPath = "Assets/Resources/" + Constant.ProjectConfig + ".asset";
-                AssetDatabase.CreateAsset(config, assetPath);
-                AssetDatabase.SaveAssets();
+
+                ScriptableObjectUtil.CreateAsset<ProjectConfig>("Assets/Resources");
             }
         }
     }

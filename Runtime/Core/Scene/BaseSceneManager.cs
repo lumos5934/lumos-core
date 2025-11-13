@@ -1,23 +1,28 @@
 ﻿using System.Collections;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace LumosLib
 {
-    public abstract class BaseSceneManager<T> : MonoBehaviour where T : BaseSceneManager<T>
+    public abstract class BaseSceneManager<T> : SingletonScene<BaseSceneManager<T>> where T : BaseSceneManager<T>
     {
         #region --------------------------------------------------- UNITY
 
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
+        
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            base.OnDestroy();
+            
             Global.Unregister<T>();
+            
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
 
@@ -25,26 +30,24 @@ namespace LumosLib
         #region --------------------------------------------------- INIT
 
 
-        protected virtual void Init()
+        protected virtual void OnInitAsync()
         {
             Global.Register((T)this);
         }
         
         private IEnumerator InitAsync() 
         {
-            
             if (!Project.Initialized)
             { 
                 yield return Project.InitAsync();
             }
 
-            Init();
+            OnInitAsync();
         }
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             StartCoroutine(InitAsync());
-    
         }
 
 

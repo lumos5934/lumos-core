@@ -27,7 +27,7 @@ namespace LumosLib
 
         [field: PropertySpace(20f)]
         [field: Title("Preload")]
-        [field: SerializeField] public List<GameObject> PreloadObjects { get; private set; }
+        [field: SerializeField] public List<GameObject> PreloadObjects { get; private set; } = new();
 
 
         private void OnEnable()
