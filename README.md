@@ -16,7 +16,7 @@
 <br>
 <br>
 
-## ℹ️기능 설명
+## ℹ️기능
 
 
 * [ Project Config ](https://www.notion.so/PreInitialize-2a846d59656180cf9235d2e1f2633f0c?source=copy_link)
