@@ -25,7 +25,7 @@ namespace LumosLib
 
         public virtual void Awake()
         {
-            Global.Register<IResourceManager>(this);
+            GlobalService.Register<IResourceManager>(this);
             
             DontDestroyOnLoad(gameObject);
         }

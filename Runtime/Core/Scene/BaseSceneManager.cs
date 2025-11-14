@@ -20,7 +20,7 @@ namespace LumosLib
         {
             base.OnDestroy();
             
-            Global.Unregister<T>();
+            GlobalService.Unregister<T>();
             
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
@@ -32,7 +32,7 @@ namespace LumosLib
 
         protected virtual void OnInitAsync()
         {
-            Global.Register((T)this);
+            GlobalService.Register((T)this);
         }
         
         private IEnumerator InitAsync() 

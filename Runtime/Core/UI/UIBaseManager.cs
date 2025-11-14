@@ -27,7 +27,7 @@ namespace LumosLib
         
         protected virtual void Awake()
         {
-            Global.Register<IUIManager>(this);
+            GlobalService.Register<IUIManager>(this);
             
             DontDestroyOnLoad(gameObject);
         }
@@ -39,7 +39,7 @@ namespace LumosLib
         
         public virtual IEnumerator InitAsync()
         {
-            var uiGlobalPrefabs =  Global.GetInternal<IResourceManager>().LoadAll<UIBase>("");
+            var uiGlobalPrefabs =  GlobalService.GetInternal<IResourceManager>().LoadAll<UIBase>("");
 
             for (int i = 0; i < uiGlobalPrefabs.Length; i++)
             {

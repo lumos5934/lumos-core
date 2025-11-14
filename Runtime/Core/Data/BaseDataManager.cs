@@ -27,7 +27,7 @@ namespace LumosLib
         
         protected virtual void Awake()
         {
-            Global.Register<IDataManager>(this);
+            GlobalService.Register<IDataManager>(this);
             
             DontDestroyOnLoad(gameObject);
         }

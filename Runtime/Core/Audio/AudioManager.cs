@@ -23,7 +23,7 @@ namespace LumosLib
         {
            yield return base.InitAsync();
            
-           _poolManager = Global.GetInternal<IPoolManager>();
+           _poolManager = GlobalService.GetInternal<IPoolManager>();
         }
 
         #endregion

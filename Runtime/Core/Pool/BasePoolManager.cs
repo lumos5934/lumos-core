@@ -26,7 +26,7 @@ namespace LumosLib
         
         protected void Awake()
         {
-            Global.Register<IPoolManager>(this);
+            GlobalService.Register<IPoolManager>(this);
             
             DontDestroyOnLoad(gameObject);
         }

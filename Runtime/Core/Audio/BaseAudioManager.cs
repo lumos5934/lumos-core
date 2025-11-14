@@ -28,7 +28,7 @@ namespace LumosLib
 
         protected virtual void Awake()
         {
-            Global.Register<IAudioManager>(this);
+            GlobalService.Register<IAudioManager>(this);
             
             DontDestroyOnLoad(gameObject);
         }
@@ -40,7 +40,7 @@ namespace LumosLib
         
         public virtual IEnumerator InitAsync()
         {
-            var resourceManager = Global.GetInternal<IResourceManager>();
+            var resourceManager = GlobalService.GetInternal<IResourceManager>();
             var resources = resourceManager.LoadAll<SoundAsset>("");
             
             foreach (var resource in resources)

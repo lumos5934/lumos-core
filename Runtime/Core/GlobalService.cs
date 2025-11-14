@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LumosLib
 {
-    public static class Global
+    public static class GlobalService
     {
         #region >--------------------------------------------------- FIELD
 
