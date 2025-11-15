@@ -1,9 +1,8 @@
 ﻿using System;
-using LumosLib;
 using TriInspector;
 using UnityEngine;
 
-namespace DOTween
+namespace LumosLib
 {
     [Serializable]
     public class TweenPresetEntry<T> where T : BaseTweenPreset

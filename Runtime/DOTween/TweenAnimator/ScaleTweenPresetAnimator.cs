@@ -1,9 +1,7 @@
 ﻿using DG.Tweening;
-using LumosLib;
 using TriInspector;
-using UnityEngine;
 
-namespace DOTween.TweenAnimator
+namespace LumosLib
 {
     public class ScaleTweenPresetAnimator : BaseTweenPresetAnimator<ScaleTweenPreset>
     {

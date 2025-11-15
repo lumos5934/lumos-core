@@ -1,7 +1,5 @@
-﻿using DG.Tweening;
-using TriInspector;
+﻿using TriInspector;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace LumosLib
 {

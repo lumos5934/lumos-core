@@ -1,10 +1,9 @@
 ﻿using DG.Tweening;
-using LumosLib;
 using TriInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DOTween.TweenAnimator
+namespace LumosLib
 {
     public class FadeTweenPresetAnimator : BaseTweenPresetAnimator<FadeTweenPreset>
     {

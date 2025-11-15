@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using DG.Tweening;
-using DOTween;
 using TriInspector;
 
 namespace LumosLib

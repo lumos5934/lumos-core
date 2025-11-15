@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
-using LumosLib;
 using TriInspector;
 using UnityEngine;
 
-namespace DOTween.TweenAnimator
+namespace LumosLib
 {
     public abstract class BaseTweenPresetAnimator<T> : MonoBehaviour where T : BaseTweenPreset
     {
