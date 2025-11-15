@@ -29,6 +29,8 @@ namespace LumosLib
         private static int _curInitCount;
         private static int _maxInitCount;
         
+        private static bool _isStartedInitAsync;
+        
 
         #endregion
         #region >--------------------------------------------------- INIT
@@ -36,13 +38,18 @@ namespace LumosLib
 
         public static IEnumerator InitAsync()
         {
+            if(_isStartedInitAsync) yield break;
+            
+            _isStartedInitAsync = true;
+            
             DebugUtil.Log($"", " INIT : START ");
             
                 
             Config = Resources.Load<ProjectConfig>(Constant.ProjectConfig);
             if (Config == null)
             {
-                Config = ScriptableObjectUtil.CreateAsset<ProjectConfig>("Assets/Resources");
+                PrintInitFail("not found ProjectConfig");
+                yield break;
             }
             
             _elementInitStartMS = Time.realtimeSinceStartup;
@@ -51,7 +58,7 @@ namespace LumosLib
             InstantiatePreloadObjects(Config);
 
             var preInitializes = new List<IPreInitialize>();
-            var allActiveMono = Object.FindObjectsOfType<MonoBehaviour>();
+            var allActiveMono = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
             
             for (int i = 0; i < allActiveMono.Length; i++)
             {
