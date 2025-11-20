@@ -7,4 +7,5 @@ public static class Global
     public static IDataManager Data => GlobalService.Get<IDataManager>();
     public static IResourceManager Resource => GlobalService.Get<IResourceManager>();
     public static IPoolManager Pool => GlobalService.Get<IPoolManager>();
+    public static IEventBus Event => GlobalService.Get<IEventBus>();
 }

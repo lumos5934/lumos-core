@@ -53,9 +53,17 @@ namespace LumosLib
             }
             
             _elementInitStartMS = Time.realtimeSinceStartup;
+
+            PreloadInternalInstance();
             
-            //Instantiate Preload Objects
-            InstantiatePreloadObjects(Config);
+            for (int i = 0; i < Config.PreloadObjects.Count; i++)
+            {
+                var target = Config.PreloadObjects[i];
+                
+                if(target == null) continue;
+                
+                _preloadObjects.Add( Object.Instantiate(Config.PreloadObjects[i]).gameObject);
+            }
 
             var preInitializes = new List<IPreInitialize>();
             var allActiveMono = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
@@ -112,26 +120,20 @@ namespace LumosLib
 
         
         #endregion
-        #region >--------------------------------------------------- INSTANTIATE
-        
-        
-        private static void InstantiatePreloadObjects(ProjectConfig config)
+        #region >--------------------------------------------------- Preload
+
+        private static void PreloadInternalInstance()
         {
-            //MEMO : Add LumosLib Base Object
-            InstantiatePackageResource<DataManager>();
-            InstantiatePackageResource<ResourceManager>();
-            InstantiatePackageResource<PoolManager>();
-            InstantiatePackageResource<AudioManager>();
-            InstantiatePackageResource<UIManager>();
-            //
-         
-            for (int i = 0; i < config.PreloadObjects.Count; i++)
-            {
-                _preloadObjects.Add( Object.Instantiate(config.PreloadObjects[i]).gameObject);
-            }
+            //MEMO : create internal object or class
+            _ = new EventBus();
+            CreateInternalResource<DataManager>();
+            CreateInternalResource<ResourceManager>();
+            CreateInternalResource<PoolManager>();
+            CreateInternalResource<AudioManager>();
+            CreateInternalResource<UIManager>();
         }
         
-        private static void InstantiatePackageResource<T>() where T : MonoBehaviour
+        private static void CreateInternalResource<T>() where T : MonoBehaviour
         {
             var prefab = Resources.Load<T>(typeof(T).Name);
             _preloadObjects.Add(Object.Instantiate(prefab).gameObject);

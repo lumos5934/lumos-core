@@ -7,6 +7,12 @@ namespace LumosLib
     {
         private readonly Dictionary<Type, List<Delegate>> _table = new ();
 
+
+        public EventBus()
+        {
+            GlobalService.Register<IEventBus>(this);
+        }
+        
         public void Subscribe<T>(Action<T> listener)
         {
             var type = typeof(T);
