@@ -5,7 +5,7 @@ using System;
 
 namespace LumosLib
 {
-    public abstract class UIBaseManager : MonoBehaviour, IUIManager, IPreInitializer
+    public abstract class BaseUIManager : MonoBehaviour, IUIManager, IPreInitializer
     {
         #region >--------------------------------------------------- PROPERTIE
         

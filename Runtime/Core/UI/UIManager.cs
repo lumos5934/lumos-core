@@ -1,6 +1,6 @@
 ﻿namespace LumosLib
 {
-    public class UIManager : UIBaseManager
+    public class UIManager : BaseUIManager
     {
     }
 }
