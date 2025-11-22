@@ -65,12 +65,12 @@ namespace LumosLib
                 _preloadObjects.Add( Object.Instantiate(Config.PreloadObjects[i]).gameObject);
             }
 
-            var preInitializes = new List<IPreInitialize>();
+            var preInitializes = new List<IPreInitializer>();
             var allActiveMono = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
             
             for (int i = 0; i < allActiveMono.Length; i++)
             {
-                if (allActiveMono[i] is IPreInitialize preInitialize)
+                if (allActiveMono[i] is IPreInitializer preInitialize)
                 {
                     preInitializes.Add(preInitialize);
                 }

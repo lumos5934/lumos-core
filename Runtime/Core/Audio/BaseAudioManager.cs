@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 
 namespace LumosLib
 {
-    public abstract class BaseAudioManager : MonoBehaviour, IPreInitialize, IAudioManager
+    public abstract class BaseAudioManager : MonoBehaviour, IPreInitializer, IAudioManager
     {
         #region >--------------------------------------------------- PROPERTIE
 

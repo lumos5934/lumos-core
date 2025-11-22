@@ -2,7 +2,7 @@
 
 namespace LumosLib
 {
-    public interface IPreInitialize
+    public interface IPreInitializer
     {
         public int PreInitOrder { get; }
         public IEnumerator InitAsync();

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace LumosLib
 {
-    public abstract class BaseDataManager : MonoBehaviour, IPreInitialize, IDataManager
+    public abstract class BaseDataManager : MonoBehaviour, IPreInitializer, IDataManager
     {
         #region >--------------------------------------------------- PROPERTIE
         
