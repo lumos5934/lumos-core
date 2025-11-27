@@ -55,23 +55,17 @@ namespace LumosLib
             
             if (pointerClickRef != null)
             {
-                pointerClickRef.action.started += StartPointerClick;
-                pointerClickRef.action.canceled += EndPointerClick;
+                pointerClickRef.action.started += StartedPointerDown;
+                pointerClickRef.action.canceled += CanceledPointerDown;
                 pointerClickRef.action.actionMap.Enable(); 
             }
             
-            var pointerPosRef = Project.Config.PointerPosActionReference;
+            var pointerPosRef = Project.Config.PointerMoveActionReference;
             if (pointerPosRef != null)
             {
-                pointerPosRef.action.performed += context => _pointerPos = context.ReadValue<Vector2>();
+                pointerPosRef.action.performed += PerformedPointerMove;
+                pointerPosRef.action.canceled += CanceledPointerMove;
                 pointerPosRef.action.actionMap.Enable(); 
-            }
-            
-            var pointerDeltaPosRef = Project.Config.PointerDeltaPosActionReference;
-            if (pointerDeltaPosRef != null)
-            {
-                pointerDeltaPosRef.action.performed += context => _pointerPos = context.ReadValue<Vector2>();
-                pointerDeltaPosRef.action.actionMap.Enable(); 
             }
             
             yield break;
@@ -98,14 +92,14 @@ namespace LumosLib
         #region >--------------------------------------------------- POINTER
 
 
-        private void StartPointerClick(InputAction.CallbackContext context)
+        private void StartedPointerDown(InputAction.CallbackContext context)
         {
             OnDown?.Invoke(_pointerPos);
 
             _pointerClickCoroutine = StartCoroutine(PointerClickCoroutine());
         }
         
-        private void EndPointerClick(InputAction.CallbackContext context)
+        private void CanceledPointerDown(InputAction.CallbackContext context)
         {
             OnUp?.Invoke(_pointerPos);
             
@@ -120,6 +114,19 @@ namespace LumosLib
                 
                 OnHold?.Invoke(_pointerPos);
             }
+        }
+
+
+        private void PerformedPointerMove(InputAction.CallbackContext context)
+        {
+            var pointerPos = context.ReadValue<Vector2>();
+            _pointerDeltaPos = pointerPos - _pointerPos;
+            _pointerPos = pointerPos;
+        }
+
+        private void CanceledPointerMove(InputAction.CallbackContext context)
+        {
+            _pointerDeltaPos = _pointerPos;
         }
 
         
