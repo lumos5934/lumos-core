@@ -20,8 +20,10 @@ namespace LumosLib
         [field: SerializeField, HideIf("DataTableType", TableType.None)] public string TablePath { get; private set; }
         
         [field: PropertySpace(20f)]
-        [field: Title("Input")]
-        [field: SerializeField] public InputActionAsset InputAsset { get; private set; }
+        [field: Title("Pointer")]
+        [field: SerializeField] public InputActionReference PointerPosActionReference { get; private set; }
+        [field: SerializeField] public InputActionReference PointerDeltaPosActionReference { get; private set; }
+        [field: SerializeField] public InputActionReference PointerClickActionReference { get; private set; }
         
         
         [field: PropertySpace(20f)]

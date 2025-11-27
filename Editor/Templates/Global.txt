@@ -8,5 +8,5 @@ public static class Global
     public static IResourceManager Resource => GlobalService.Get<IResourceManager>();
     public static IPoolManager Pool => GlobalService.Get<IPoolManager>();
     public static IEventBus Event => GlobalService.Get<IEventBus>();
-    public static InputManager Input => GlobalService.Get<InputManager>();
+    public static PointerManager Pointer => GlobalService.Get<PointerManager>();
 }
