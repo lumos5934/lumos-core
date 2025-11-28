@@ -1,25 +1,22 @@
 ﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace LumosLib
 {
-    public abstract class BaseSceneManager<T> : SingletonScene<BaseSceneManager<T>> where T : BaseSceneManager<T>
+    public abstract class BaseSceneManager<T> : MonoBehaviour where T : BaseSceneManager<T>
     {
         #region --------------------------------------------------- UNITY
 
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
-            
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         
 
-        protected override void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            base.OnDestroy();
-            
             GlobalService.Unregister<T>();
             
             SceneManager.sceneLoaded -= OnSceneLoaded;
