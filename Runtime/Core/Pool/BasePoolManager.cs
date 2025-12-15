@@ -7,12 +7,6 @@ namespace LumosLib
 {
     public abstract class BasePoolManager : MonoBehaviour, IPreInitializer, IPoolManager
     {
-        #region >--------------------------------------------------- PROPERTIE
-        
-        public int PreInitOrder  => (int)PreInitializeOrder.Pool;
-        
-        
-        #endregion
         #region >--------------------------------------------------- FIELD
  
         
@@ -21,22 +15,16 @@ namespace LumosLib
 
         
         #endregion
-        #region >--------------------------------------------------- UNITY
-
-        
-        protected void Awake()
-        {
-            GlobalService.Register<IPoolManager>(this);
-            
-            DontDestroyOnLoad(gameObject);
-        }
-        
-
-        #endregion
         #region >--------------------------------------------------- INIT
 
 
-        public abstract IEnumerator InitAsync();
+        public virtual IEnumerator InitAsync()
+        {
+            GlobalService.Register<IPoolManager>(this);
+            DontDestroyOnLoad(gameObject);
+            
+            yield break;
+        }
        
         
         #endregion

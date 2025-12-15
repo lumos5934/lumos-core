@@ -6,13 +6,6 @@ namespace LumosLib
 {
     public abstract class BaseResourceManager : MonoBehaviour, IPreInitializer, IResourceManager
     {
-        #region  >--------------------------------------------------- PROPERTIE
-
-        
-        public int PreInitOrder => (int)PreInitializeOrder.Resource;
-      
-        
-        #endregion
         #region  >--------------------------------------------------- FIELD
 
 
@@ -20,22 +13,16 @@ namespace LumosLib
         
         
         #endregion
-        #region  >--------------------------------------------------- UNITY
-
-
-        public virtual void Awake()
-        {
-            GlobalService.Register<IResourceManager>(this);
-            
-            DontDestroyOnLoad(gameObject);
-        }
-        
-        
-        #endregion
         #region  >--------------------------------------------------- INIT
 
 
-        public abstract IEnumerator InitAsync();
+        public virtual IEnumerator InitAsync()
+        {
+            GlobalService.Register<IResourceManager>(this);
+            DontDestroyOnLoad(gameObject);
+            
+            yield break;
+        }
 
 
         #endregion

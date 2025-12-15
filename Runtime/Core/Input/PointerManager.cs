@@ -12,7 +12,8 @@ namespace LumosLib
         #region >--------------------------------------------------- PROPERTIE
 
         
-        public int PreInitOrder => (int)PreInitializeOrder.Pointer;
+
+
         public bool IsOverUI { get; private set; } 
 
 
@@ -37,13 +38,6 @@ namespace LumosLib
         #region >--------------------------------------------------- UNITY
         
         
-        protected virtual void Awake()
-        {
-            GlobalService.Register(this);
-
-            DontDestroyOnLoad(gameObject);
-        }
-
         protected virtual void LateUpdate()
         {
             IsOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
@@ -73,6 +67,9 @@ namespace LumosLib
                 pointerPosRef.action.actionMap.Enable(); 
             }
             
+            GlobalService.Register(this);
+            DontDestroyOnLoad(gameObject);
+            
             yield break;
         }
         
@@ -81,12 +78,10 @@ namespace LumosLib
         #region >--------------------------------------------------- GET
         
         
-        
         public Vector2 GetPos()
         {
             return _pointerPos;
         }
-        
         
         
         #endregion

@@ -8,13 +8,6 @@ namespace LumosLib
 {
     public abstract class BaseDataManager : MonoBehaviour, IPreInitializer, IDataManager
     {
-        #region >--------------------------------------------------- PROPERTIE
-        
-        
-        public int PreInitOrder => (int)PreInitializeOrder.Data;
-        
-        
-        #endregion
         #region >--------------------------------------------------- FIELD
         
         
@@ -22,28 +15,22 @@ namespace LumosLib
         
         
         #endregion
-        #region >--------------------------------------------------- UNITY
-
-        
-        protected virtual void Awake()
-        {
-            GlobalService.Register<IDataManager>(this);
-            
-            DontDestroyOnLoad(gameObject);
-        }
-        
-
-        #endregion
         #region >--------------------------------------------------- INIT
 
-        
-        public abstract IEnumerator InitAsync();
+
+        public virtual IEnumerator InitAsync()
+        {
+            GlobalService.Register<IDataManager>(this);
+            DontDestroyOnLoad(gameObject);
+            
+            yield break;
+        }
         
         
         #endregion
         #region >--------------------------------------------------- GET
 
-        
+
         public List<T> GetAll<T>() where T : BaseData
         {
             if (_loadDatas.TryGetValue(typeof(T), out var dict))

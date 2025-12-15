@@ -7,31 +7,12 @@ namespace LumosLib
 {
     public abstract class BaseAudioManager : MonoBehaviour, IPreInitializer, IAudioManager
     {
-        #region >--------------------------------------------------- PROPERTIE
-
-
-        public int PreInitOrder => (int)PreInitializeOrder.Audio;
-        
-
-        #endregion
         #region >--------------------------------------------------- FIELD
         
         
         [SerializeField] protected AudioPlayer _playerPrefab;
         protected readonly Dictionary<string, SoundAsset> _assetResources = new();
         protected AudioMixer _mixer;
-        
-        
-        #endregion
-        #region >--------------------------------------------------- UNITY
-
-
-        protected virtual void Awake()
-        {
-            GlobalService.Register<IAudioManager>(this);
-            
-            DontDestroyOnLoad(gameObject);
-        }
         
         
         #endregion
@@ -49,6 +30,10 @@ namespace LumosLib
             }
 
             _mixer =  Project.Config.Mixer;
+            
+            
+            GlobalService.Register<IAudioManager>(this);
+            DontDestroyOnLoad(gameObject);
             
             yield break;
         }

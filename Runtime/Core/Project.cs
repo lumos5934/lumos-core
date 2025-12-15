@@ -24,7 +24,6 @@ namespace LumosLib
 
 
         private static double _elementInitStartMS;
-        private static List<GameObject> _preloadObjects = new();
         
         private static int _curInitCount;
         private static int _maxInitCount;
@@ -54,30 +53,21 @@ namespace LumosLib
             
             _elementInitStartMS = Time.realtimeSinceStartup;
 
-            PreloadInternalInstance();
+            var preInitializes = new List<IPreInitializer>();
             
             for (int i = 0; i < Config.PreloadObjects.Count; i++)
             {
-                var target = Config.PreloadObjects[i];
-                
-                if(target == null) continue;
-                
-                _preloadObjects.Add( Object.Instantiate(Config.PreloadObjects[i]).gameObject);
-            }
+                var preloadPrefab = Config.PreloadObjects[i];
+                if(preloadPrefab == null) continue;
 
-            var preInitializes = new List<IPreInitializer>();
-            var allActiveMono = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
-            
-            for (int i = 0; i < allActiveMono.Length; i++)
-            {
-                if (allActiveMono[i] is IPreInitializer preInitialize)
+                var preloadObj = Object.Instantiate(Config.PreloadObjects[i]).gameObject;
+
+                if (preloadObj.TryGetComponent(out IPreInitializer initializer))
                 {
-                    preInitializes.Add(preInitialize);
+                    preInitializes.Add(initializer);
                 }
             }
-
-            preInitializes = preInitializes.OrderBy(x => x.PreInitOrder).ToList();
-
+            
             _maxInitCount = preInitializes.Count + 1;
             _curInitCount++;
             
@@ -120,28 +110,5 @@ namespace LumosLib
 
         
         #endregion
-        #region >--------------------------------------------------- Preload
-
-        private static void PreloadInternalInstance()
-        {
-            //MEMO : create internal object or class
-            _ = new EventBus();
-            CreateInternalResource<DataManager>();
-            CreateInternalResource<ResourceManager>();
-            CreateInternalResource<PoolManager>();
-            CreateInternalResource<AudioManager>();
-            CreateInternalResource<UIManager>();
-            CreateInternalResource<PointerManager>();
-            CreateInternalResource<TutorialManager>();
-        }
-        
-        private static void CreateInternalResource<T>() where T : MonoBehaviour
-        {
-            var prefab = Resources.Load<T>(typeof(T).Name);
-            _preloadObjects.Add(Object.Instantiate(prefab).gameObject);
-        }
-        
-        
-        #endregion  
     }
 }

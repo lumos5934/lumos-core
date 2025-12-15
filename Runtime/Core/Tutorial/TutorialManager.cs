@@ -5,13 +5,6 @@ namespace LumosLib
 {
     public class TutorialManager : MonoBehaviour, IPreInitializer
     {
-        #region >--------------------------------------------------- PROPERTIE
-
-
-        public int PreInitOrder => 0;
-
-    
-        #endregion
         #region >--------------------------------------------------- FIELD
 
 
@@ -43,7 +36,6 @@ namespace LumosLib
         public IEnumerator InitAsync()
         {
             GlobalService.Register(this);
-        
             DontDestroyOnLoad(gameObject);
         
             yield break;
@@ -53,7 +45,7 @@ namespace LumosLib
         #endregion
         #region >--------------------------------------------------- GET
 
-
+        
         public TutorialTable GetTable()
         {
             return _curTutorialTable;

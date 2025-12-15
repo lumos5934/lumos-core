@@ -12,7 +12,7 @@ namespace LumosLib
         
         public override IEnumerator InitAsync()
         {
-            yield break;
+            yield return base.InitAsync();
         }
         
         

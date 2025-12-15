@@ -14,6 +14,8 @@ namespace LumosLib
         
         public override IEnumerator InitAsync()
         {
+            yield return base.InitAsync();
+            
             var tableLoader = GetLoader();
             if (tableLoader == null) yield break;
 
