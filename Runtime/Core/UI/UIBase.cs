@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using LumosLib;
+using UnityEngine;
 
 namespace LumosLib
 {

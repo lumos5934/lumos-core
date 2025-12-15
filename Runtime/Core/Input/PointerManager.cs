@@ -28,9 +28,9 @@ namespace LumosLib
         #region >--------------------------------------------------- EVENT
 
         
-        public event UnityAction<Vector2> OnDown;
-        public event UnityAction<Vector2> OnHold;
-        public event UnityAction<Vector2> OnUp;
+        public event UnityAction OnDown;
+        public event UnityAction OnHold;
+        public event UnityAction OnUp;
         
         
         #endregion
@@ -69,7 +69,7 @@ namespace LumosLib
             var pointerPosRef = Project.Config.PointerMoveActionReference;
             if (pointerPosRef != null)
             {
-                pointerPosRef.action.performed += context =>  _pointerPos =  context.ReadValue<Vector2>();
+                //pointerPosRef.action.performed += context =>  _pointerPos =  context.ReadValue<Vector2>();
                 pointerPosRef.action.actionMap.Enable(); 
             }
             
@@ -95,16 +95,19 @@ namespace LumosLib
 
         private void StartedPointerDown(InputAction.CallbackContext context)
         {
-            OnDown?.Invoke(_pointerPos);
-
+            OnDown?.Invoke();
+        
             _pointerClickCoroutine = StartCoroutine(PointerClickCoroutine());
         }
         
         private void CanceledPointerDown(InputAction.CallbackContext context)
         {
-            OnUp?.Invoke(_pointerPos);
-            
-            StopCoroutine(_pointerClickCoroutine);
+            OnUp?.Invoke();
+
+            if (_pointerClickCoroutine != null)
+            {
+                StopCoroutine(_pointerClickCoroutine);
+            }
         }
 
         private IEnumerator PointerClickCoroutine()
@@ -113,7 +116,7 @@ namespace LumosLib
             {
                 yield return null;
                 
-                OnHold?.Invoke(_pointerPos);
+                OnHold?.Invoke();
             }
         }
         

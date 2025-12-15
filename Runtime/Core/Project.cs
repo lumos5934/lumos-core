@@ -132,6 +132,7 @@ namespace LumosLib
             CreateInternalResource<AudioManager>();
             CreateInternalResource<UIManager>();
             CreateInternalResource<PointerManager>();
+            CreateInternalResource<ObjectiveManager>();
         }
         
         private static void CreateInternalResource<T>() where T : MonoBehaviour
