@@ -21,7 +21,7 @@ namespace LumosLib
         
         [field: PropertySpace(20f)]
         [field: Title("Pointer")]
-        [field: SerializeField] public InputActionReference PointerMoveActionReference { get; private set; }
+        [field: SerializeField] public InputActionReference PointerPosActionReference { get; private set; }
         [field: SerializeField] public InputActionReference PointerClickActionReference { get; private set; }
         
         

@@ -66,7 +66,7 @@ namespace LumosLib
                 pointerClickRef.action.actionMap.Enable(); 
             }
             
-            var pointerPosRef = Project.Config.PointerMoveActionReference;
+            var pointerPosRef = Project.Config.PointerPosActionReference;
             if (pointerPosRef != null)
             {
                 //pointerPosRef.action.performed += context =>  _pointerPos =  context.ReadValue<Vector2>();
