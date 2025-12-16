@@ -22,12 +22,12 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync()
+        public IEnumerator InitAsync(Action<bool> onComplete)
         {
             _resourceManager = GlobalService.Get<IResourceManager>();
             if (_resourceManager == null)
             {
-                Project.PrintInitFail("IResourceManager is null");
+                onComplete?.Invoke(false);
                 yield break;
             }
             
@@ -43,6 +43,7 @@ namespace LumosLib
             GlobalService.Register<IUIManager>(this);
             DontDestroyOnLoad(gameObject);
             
+            onComplete?.Invoke(true);
             yield break;
         }
         

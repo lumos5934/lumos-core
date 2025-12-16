@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -18,11 +19,12 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync()
+        public IEnumerator InitAsync(Action<bool> onComplete)
         {
             GlobalService.Register<IPoolManager>(this);
             DontDestroyOnLoad(gameObject);
 
+            onComplete?.Invoke(true);
             yield break;
         }
         

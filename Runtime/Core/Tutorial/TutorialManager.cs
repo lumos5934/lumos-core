@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -33,11 +34,13 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
     
     
-        public IEnumerator InitAsync()
+        public IEnumerator InitAsync(Action<bool> onComplete)
         {
             GlobalService.Register<ITutorialManager>(this);
             DontDestroyOnLoad(gameObject);
         
+            onComplete?.Invoke(true);
+            
             yield break;
         }
 

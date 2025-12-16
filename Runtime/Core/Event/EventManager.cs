@@ -10,18 +10,19 @@ namespace LumosLib
         #region >--------------------------------------------------- FIELD
 
         
-        private readonly Dictionary<Type, List<Delegate>> _table = new ();
-        
+        private readonly Dictionary<Type, Delegate> _events = new();
 
+        
         #endregion
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync()
+        public IEnumerator InitAsync(Action<bool> onComplete)
         {
             GlobalService.Register<IEventManager>(this);
             DontDestroyOnLoad(gameObject);
             
+            onComplete?.Invoke(true);
             yield break;
         }
         
@@ -30,47 +31,25 @@ namespace LumosLib
         #region >--------------------------------------------------- CORE
 
         
-        public void Subscribe<T>(Action<T> listener)
+        public void Subscribe<T>(Action<T> handler) where T : IGameEvent
         {
-            var type = typeof(T);
-
-            if (!_table.TryGetValue(type, out var list))
-            {
-                list = new List<Delegate>();
-                _table[type] = list;
-            }
-
-            list.Add(listener);
+            if (_events.TryGetValue(typeof(T), out var del))
+                _events[typeof(T)] = Delegate.Combine(del, handler);
+            else
+                _events[typeof(T)] = handler;
         }
 
         
-        public void Unsubscribe<T>(Action<T> listener)
+        public void Unsubscribe<T>(Action<T> handler) where T : IGameEvent
         {
-            var type = typeof(T);
-
-            if (_table.TryGetValue(type, out var list))
-            {
-                list.Remove(listener);
-
-                if (list.Count == 0)
-                    _table.Remove(type);
-            }
+            if (_events.TryGetValue(typeof(T), out var del))
+                _events[typeof(T)] = Delegate.Remove(del, handler);
         }
 
-        
-        public void Publish<T>(T evt)
+        public void Publish<T>(T evt) where T : IGameEvent
         {
-            var type = typeof(T);
-
-            if (_table.TryGetValue(type, out var list))
-            {
-                var temp = list.ToArray();
-
-                foreach (var del in temp)
-                {
-                    (del as Action<T>)?.Invoke(evt);
-                }
-            }
+            if (_events.TryGetValue(typeof(T), out var del))
+                ((Action<T>)del)?.Invoke(evt);
         }
         
         

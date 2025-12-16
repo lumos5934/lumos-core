@@ -24,15 +24,23 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync()
+        public IEnumerator InitAsync(Action<bool> onComplete)
         {
             var tableLoader = GetLoader();
-            if (tableLoader == null) yield break;
+            if (tableLoader == null)
+            {
+                onComplete?.Invoke(true);
+                yield break;
+            }
 
             tableLoader.SetPath(_tablePath);
 
             yield return tableLoader.LoadJsonAsync();
-            if (tableLoader.Json == "") yield break;
+            if (tableLoader.Json == "")
+            {
+                onComplete?.Invoke(true);
+                yield break;
+            }
            
             
             var allSheets = JsonConvert.DeserializeObject<Dictionary<string, object[]>>(tableLoader.Json);
@@ -72,12 +80,14 @@ namespace LumosLib
                 }
                 else
                 {
-                    Project.PrintInitFail($" haven't sheet '{type.Name}'");
+                    onComplete?.Invoke(false);
                 }
             }
             
             GlobalService.Register<IDataTableManager>(this);
             DontDestroyOnLoad(gameObject);
+            
+            onComplete?.Invoke(true);
         }
          
         

@@ -30,6 +30,8 @@ namespace LumosLib
         
         private static bool _isStartedInitAsync;
         
+        private static int _failCount;
+        
 
         #endregion
         #region >--------------------------------------------------- INIT
@@ -47,7 +49,7 @@ namespace LumosLib
             Config = Resources.Load<ProjectConfig>(Constant.ProjectConfig);
             if (Config == null)
             {
-                PrintInitFail("not found ProjectConfig");
+                DebugUtil.LogError("not found ProjectConfig", " INIT : FAIL ");
                 yield break;
             }
             
@@ -68,10 +70,9 @@ namespace LumosLib
                 }
             }
             
-            _maxInitCount = preInitializes.Count + 1;
-            _curInitCount++;
+            DebugUtil.Log("", " INIT : PRELOAD ");
             
-            PrintInitComplete(" Preload ");
+            _maxInitCount = preInitializes.Count;
             
             //Initialize
             for (int i = 0; i < preInitializes.Count; i++)
@@ -80,34 +81,28 @@ namespace LumosLib
                 
                 _elementInitStartMS = Time.realtimeSinceStartup;
                 
-                yield return target.InitAsync();
-
-                _curInitCount++;
-                
-                PrintInitComplete($" {target.GetType().Name} ");
+                yield return target.InitAsync(isComplete =>
+                    {
+                         _curInitCount++;
+                        
+                        if (isComplete)
+                        {
+                            DebugUtil.Log($" {target.GetType().Name} {ElementInitText}", " INIT : SUCCESS ");
+                        }
+                        else
+                        {
+                            DebugUtil.Log($" {target.GetType().Name} {ElementInitText}", " INIT : FAIL ");
+                            _failCount++;
+                        }
+                    });
             }
 
             
-            DebugUtil.Log($"", " INIT : FINISH ");
+            DebugUtil.Log($"", $" INIT : FINISH - COMPLETE : { _curInitCount - _failCount }, FAIL : { _failCount }");
             
             Initialized = true;
         }
         
-        
-        #endregion
-        #region >--------------------------------------------------- PRINT
-
-        
-        public static void PrintInitComplete(string contents)
-        {
-            DebugUtil.Log($" {contents} {ElementInitText}", " INIT : COMPLETE ");
-        }
-        
-        public static void PrintInitFail(string contents)
-        {
-            DebugUtil.LogError($" {contents} {ElementInitText}", " INIT : FAIL ");
-        }
-
         
         #endregion
     }

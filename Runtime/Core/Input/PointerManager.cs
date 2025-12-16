@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using TriInspector;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -20,15 +21,9 @@ namespace LumosLib
         private GameObject _scanObj;
         private Coroutine _clickCoroutine;
         
-        
-        #endregion
-        #region >--------------------------------------------------- EVENT
+        [Title("REQUIREMENT")]
+        [ShowInInspector, HideReferencePicker, ReadOnly, LabelText("IEventManager")] private IEventManager _eventManager;
 
-        
-        public event UnityAction OnDown;
-        public event UnityAction OnHold;
-        public event UnityAction OnUp;
-        
         
         #endregion
         #region >--------------------------------------------------- UNITY
@@ -44,8 +39,15 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync()
+        public IEnumerator InitAsync(Action<bool> onComplete)
         {
+            _eventManager = GlobalService.Get<IEventManager>();
+            if (_eventManager == null)
+            {
+                onComplete?.Invoke(false);
+                yield break;
+            }
+            
             var pointerClickRef = _clickInputReference;
             if (pointerClickRef != null)
             {
@@ -61,9 +63,10 @@ namespace LumosLib
                 pointerPosRef.action.actionMap.Enable(); 
             }
             
-            GlobalService.Register(this);
+            GlobalService.Register<IPointerManager>(this);
             DontDestroyOnLoad(gameObject);
             
+            onComplete?.Invoke(true);
             yield break;
         }
         
@@ -114,7 +117,7 @@ namespace LumosLib
         {
             _clickCoroutine = StartCoroutine(PointerClickCoroutine());
             
-            OnDown?.Invoke();
+            _eventManager.Publish(new PointerDownEvent());
         }
         
         private void CanceledPointerDown(InputAction.CallbackContext context)
@@ -124,7 +127,7 @@ namespace LumosLib
                 StopCoroutine(_clickCoroutine);
             }
 
-            OnUp?.Invoke();
+            _eventManager.Publish(new PointerUpEvent());
         }
 
         private IEnumerator PointerClickCoroutine()
@@ -133,7 +136,7 @@ namespace LumosLib
             {
                 yield return null;
                 
-                OnHold?.Invoke();
+                _eventManager.Publish(new PointerHoldEvent());
             }
         }
         

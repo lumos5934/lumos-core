@@ -29,19 +29,19 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
         
         
-        public virtual IEnumerator InitAsync()
+        public virtual IEnumerator InitAsync(Action<bool> onComplete)
         {
             _resourceManager = GlobalService.Get<IResourceManager>();
-            if (_resourceManager == null)
+            if (_resourceManager == null) 
             {
-                Project.PrintInitFail("IResourceManager is null");
+                onComplete?.Invoke(false);
                 yield break;
             }
             
             _poolManager = GlobalService.Get<IPoolManager>();
             if (_poolManager == null)
             {
-                Project.PrintInitFail("IPoolManager is null");
+                onComplete?.Invoke(false);
                 yield break;
             }
             
@@ -56,6 +56,7 @@ namespace LumosLib
             GlobalService.Register<IAudioManager>(this);
             DontDestroyOnLoad(gameObject);
             
+            onComplete?.Invoke(true);
             yield break;
         }
         
