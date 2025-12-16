@@ -8,10 +8,13 @@
 ## ℹ️사전 작업
 
 ![Scene](https://github.com/user-attachments/assets/e5b8cb62-61d4-415b-b8ae-fc7da5f223cd)
+![Create](https://github.com/user-attachments/assets/f657c69e-0a23-4469-bd71-285c691891e9)
+
 > [!NOTE]
 > 어느 씬에서든 BaseSceneManager 를 상속받는 컴포넌트가 씬에 하나라도 있으면 씬이 로드 된 후 전체적인 사전 비동기 초기화를 진행하고, <br>
 이후 해당 SceneManager 의 OnInitAsync 구현을 통해 씬에서의 초기화 & 동작들을 수행 할 수 있습니다. <br>
-이로 인해 Awake() 와 Start() 에서의 실행 순서는 보장 받을 수 없습니다.
+이로 인해 Awake() 와 Start() 에서의 실행 순서는 보장 받을 수 없습니다. <br><br>
+또한 에셋메뉴와 하이어라키창 우클릭을 통해 사전에 준비된 프리팹 , SO , Script 들을 생성 할 수 있습니다.
 
 
 
