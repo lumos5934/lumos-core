@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
@@ -139,8 +138,8 @@ namespace LumosLib
             CreatePrefab<UIManager>();
         }
         
-        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Managers/Data Table", false, int.MinValue)]
-        public static void CreateDataTableManagerPrefab()
+        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Managers/Database", false, int.MinValue)]
+        public static void CreateDatabaseManagerPrefab()
         {
             CreatePrefab<DatabaseManager>();
         }
@@ -168,6 +167,13 @@ namespace LumosLib
         {
             CreatePrefab<AudioPlayer>();
         }
+        
+        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Managers/Save", false, int.MinValue)]
+        public static void CreateSaveManagerPrefab()
+        {
+            CreatePrefab<SaveManager>();
+        }
+  
         
         private static GameObject CreatePrefab<T>() where T : MonoBehaviour
         {
