@@ -12,7 +12,7 @@ namespace LumosLib
         #region >--------------------------------------------------- FIELD
         
        
-        private Dictionary<Type, Dictionary<int, BaseData>> _dataDict = new();
+        private Dictionary<Type, Dictionary<int, BaseBGData>> _dataDict = new();
         
         
         #endregion
@@ -40,16 +40,16 @@ namespace LumosLib
         #region >--------------------------------------------------- REGISTER
 
 
-        public void RegisterData<T>() where T : BaseData
+        public void Register<T>() where T : BaseBGData
         {
             var type = typeof(T);
             var meta = BGRepo.I[type.Name];
             
-            _dataDict[type] = new Dictionary<int, BaseData>();
+            _dataDict[type] = new Dictionary<int, BaseBGData>();
             
             foreach (var entity in  meta.EntitiesToList())
             {
-                var instance = (BaseData)Activator.CreateInstance(typeof(T), entity);
+                var instance = (BaseBGData)Activator.CreateInstance(typeof(T), entity);
                 
                 _dataDict[type][instance.TableID] = instance;
             }
@@ -60,7 +60,7 @@ namespace LumosLib
         #region >--------------------------------------------------- GET
 
 
-        public List<T> GetAll<T>() where T : BaseData
+        public List<T> GetAll<T>() where T : BaseBGData
         {
             if (_dataDict.TryGetValue(typeof(T), out var dict))
             {
@@ -71,7 +71,7 @@ namespace LumosLib
             return null;
         }
         
-        public T Get<T>(int tableID) where T : BaseData
+        public T Get<T>(int tableID) where T : BaseBGData
         {
             if (_dataDict.TryGetValue(typeof(T), out var dict))
             {
