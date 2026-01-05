@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -20,7 +19,7 @@ namespace LumosLib
         #endregion
         #region >--------------------------------------------------- FIELD
 
-
+        
         private static double _elementInitStartMS;
         
         private static int _curInitCount;
@@ -33,6 +32,7 @@ namespace LumosLib
         private static UniTask _initTask;
         private static bool _isInitialized;
 
+        
         #endregion
         #region >--------------------------------------------------- INIT
 

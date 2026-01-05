@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -32,7 +33,7 @@ namespace LumosLib
             };
         }
 
-        public async Task SaveAsync<T>(T data) where T : ISaveData
+        public async UniTask SaveAsync<T>(T data) where T : ISaveData
         {
             JObject root = LoadRoot();
 
@@ -43,17 +44,17 @@ namespace LumosLib
             await File.WriteAllTextAsync(_path, json);
         }
 
-        public Task<T> LoadAsync<T>() where T : ISaveData
+        public UniTask<T> LoadAsync<T>() where T : ISaveData
         {
             if (!File.Exists(_path))  
-                return Task.FromResult<T>(default);
+                return UniTask.FromResult<T>(default);
             
             JObject root = LoadRoot();
             string key = typeof(T).Name;
 
             if (!root.TryGetValue(key, out JToken token)) return default;
               
-            return Task.FromResult(token.ToObject<T>());
+            return UniTask.FromResult(token.ToObject<T>());
         }
         
         private JObject LoadRoot()
