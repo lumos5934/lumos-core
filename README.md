@@ -49,11 +49,12 @@
 
 ## ℹ️의존성
 
-- **Newtonsoft.Json (자동 설치)**
-- [ DOTween ](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676?locale=ko-KR&srsltid=AfmBOorERKqVIWHnYtX-Ib3WRvr0KqT-k48G_H4SXEk8uU_Eczqg4U9v)
-- [ Tri-Inspector ](https://github.com/codewriter-packages/Tri-Inspector?tab=readme-ov-file)
-- [ BG Database ](https://assetstore.unity.com/packages/tools/integration/bg-database-data-editor-with-google-sheets-and-excel-syncing-112262)
-- [ UniTask ](https://github.com/Cysharp/UniTask?tab=readme-ov-file#upm-package)**(자동 설치)**
+* **Newtonsoft.Json (자동 설치)**
+* [ UniTask ](https://github.com/Cysharp/UniTask?tab=readme-ov-file#upm-package)**(자동 설치)**
+* [ DOTween ](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676?locale=ko-KR&srsltid=AfmBOorERKqVIWHnYtX-Ib3WRvr0KqT-k48G_H4SXEk8uU_Eczqg4U9v)
+* [ Tri-Inspector ](https://github.com/codewriter-packages/Tri-Inspector?tab=readme-ov-file)
+* [ BG Database ](https://assetstore.unity.com/packages/tools/integration/bg-database-data-editor-with-google-sheets-and-excel-syncing-112262)
+
 
 <br>
 <br>
