@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace LumosLib
@@ -17,10 +16,6 @@ namespace LumosLib
         #endregion
         #region >--------------------------------------------------- UNITY
         
-        private void Awake()
-        {
-            GlobalService.Register<ITutorialManager>(this);
-        }
         
         private void Update()
         {
@@ -35,17 +30,17 @@ namespace LumosLib
             }
         }
 
+        
         #endregion
         #region >--------------------------------------------------- INIT
     
     
-        public IEnumerator InitAsync(Action<bool> onComplete)
+        public UniTask<bool> InitAsync()
         {
-            onComplete?.Invoke(true);
-            
-            yield break;
+            GlobalService.Register<ITutorialManager>(this);
+            return UniTask.FromResult(true);
         }
-
+      
     
         #endregion
         #region >--------------------------------------------------- GET
@@ -86,6 +81,8 @@ namespace LumosLib
     
 
         #endregion
+
+
     }
 }
 

@@ -1,9 +1,0 @@
-using LumosLib;
-
-public class #SCRIPTNAME# : BaseSceneManager<#SCRIPTNAME#>
-{
-    protected override void OnInitAsync()
-    {
-        base.OnInitAsync();
-    }
-}

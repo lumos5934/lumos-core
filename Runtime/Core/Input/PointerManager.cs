@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,11 +30,6 @@ namespace LumosLib
         #region >--------------------------------------------------- UNITY
 
 
-        private void Awake()
-        {
-            GlobalService.Register<IPointerManager>(this);
-        }
-        
         private void LateUpdate()
         {
             _isOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
@@ -44,14 +40,11 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync(Action<bool> onComplete)
+        public UniTask<bool> InitAsync()
         {
             _eventManager = GlobalService.Get<IEventManager>();
             if (_eventManager == null)
-            {
-                onComplete?.Invoke(false);
-                yield break;
-            }
+                return UniTask.FromResult(false);
             
             var pointerClickRef = _clickInputReference;
             if (pointerClickRef != null)
@@ -68,10 +61,10 @@ namespace LumosLib
                 pointerPosRef.action.actionMap.Enable(); 
             }
             
-            onComplete?.Invoke(true);
-            yield break;
+            GlobalService.Register<IPointerManager>(this);
+            return UniTask.FromResult(true);
         }
-        
+  
         
         #endregion
         #region >--------------------------------------------------- SET
@@ -144,5 +137,7 @@ namespace LumosLib
         
         
         #endregion
+
+
     }
 }

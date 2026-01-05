@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -16,25 +17,15 @@ namespace LumosLib
 
         
         #endregion
-        #region >--------------------------------------------------- UNITY
-
-
-        private void Awake()
-        {
-            GlobalService.Register<IPoolManager>(this);
-        }
-        
-        
-        #endregion
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync(Action<bool> onComplete)
+        public UniTask<bool> InitAsync()
         {
-            onComplete?.Invoke(true);
-            yield break;
+            GlobalService.Register<IPoolManager>(this);
+            return UniTask.FromResult(true);
         }
-        
+      
         
         #endregion
         #region >--------------------------------------------------- CREATE
@@ -174,5 +165,7 @@ namespace LumosLib
         
         
         #endregion
+
+      
     }
 }

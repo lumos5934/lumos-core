@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -25,46 +24,27 @@ namespace LumosLib
         
         
         #endregion
-        #region >--------------------------------------------------- UNITY
-
-
-        private void Awake()
-        {
-            GlobalService.Register<IAudioManager>(this);
-        }
-        
-        
-        #endregion
         #region >--------------------------------------------------- INIT
         
         
-        public virtual IEnumerator InitAsync(Action<bool> onComplete)
+        public UniTask<bool> InitAsync()
         {
             _resourceManager = GlobalService.Get<IResourceManager>();
-            if (_resourceManager == null) 
-            {
-                onComplete?.Invoke(false);
-                yield break;
-            }
+            if (_resourceManager == null)
+                return UniTask.FromResult(false);
             
             _poolManager = GlobalService.Get<IPoolManager>();
             if (_poolManager == null)
-            {
-                onComplete?.Invoke(false);
-                yield break;
-            }
-            
+                return UniTask.FromResult(false);
             
             var soundResources = _resourceManager.LoadAll<SoundAsset>("");
-            
             foreach (var resource in soundResources)
             {
                 _assetResources[resource.name] = resource;
             }
 
-            
-            onComplete?.Invoke(true);
-            yield break;
+            GlobalService.Register<IAudioManager>(this);
+            return UniTask.FromResult(true);
         }
         
         

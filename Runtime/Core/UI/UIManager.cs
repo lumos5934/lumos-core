@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Cysharp.Threading.Tasks;
 using TriInspector;
 
 namespace LumosLib
@@ -19,27 +19,15 @@ namespace LumosLib
 
 
         #endregion
-        #region >--------------------------------------------------- UNITY
-
-
-        private void Awake()
-        {
-            GlobalService.Register<IUIManager>(this);
-        }
-        
-        
-        #endregion
         #region >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync(Action<bool> onComplete)
+        public UniTask<bool> InitAsync()
         {
             _resourceManager = GlobalService.Get<IResourceManager>();
             if (_resourceManager == null)
-            {
-                onComplete?.Invoke(false);
-                yield break;
-            }
+                return UniTask.FromResult(false);
+
             
             var uiGlobalPrefabs =  _resourceManager.LoadAll<UIBase>("");
 
@@ -50,10 +38,10 @@ namespace LumosLib
                 _prefabUIs[uiGlobalPrefabs[i].GetType()] = value;
             }
             
-            onComplete?.Invoke(true);
-            yield break;
+            GlobalService.Register<IUIManager>(this);
+            return UniTask.FromResult(true);
         }
-        
+     
         
         #endregion
         #region >--------------------------------------------------- GET & SET

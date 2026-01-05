@@ -35,6 +35,11 @@ namespace LumosLib
             
             //default : 20
             SetTitleFontSize(20);
+
+            AddGroup("Script", false, group =>
+            {
+                group.DrawButton("Open", OpenScript);
+            });
             
             AddGroup("Test", false, group =>
             {
@@ -97,6 +102,20 @@ namespace LumosLib
                 });
             })
             .SetRuntimeOnly(true);
+        }
+        
+        private static void OpenScript()
+        {
+            string[] guids = AssetDatabase.FindAssets($"{nameof(SampleTestEditor)} t:MonoScript");
+
+            if (guids.Length > 0)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                MonoScript script =
+                    AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+
+                AssetDatabase.OpenAsset(script);
+            }
         }
     }
 }

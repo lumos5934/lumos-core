@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -15,26 +16,15 @@ namespace LumosLib
         
         
         #endregion
-        #region >--------------------------------------------------- UNITY
-
-
-        private void Awake()
-        {
-            GlobalService.Register<IResourceManager>(this);
-        }
-        
-        
-        #endregion
         #region  >--------------------------------------------------- INIT
         
         
-        public IEnumerator InitAsync(Action<bool> onComplete)
+        public UniTask<bool> InitAsync()
         {
-            onComplete?.Invoke(true);
-            
-            yield break;
+            GlobalService.Register<IResourceManager>(this);
+            return UniTask.FromResult(true);
         }
-        
+    
         
         #endregion
         #region  >--------------------------------------------------- LOAD
@@ -74,5 +64,7 @@ namespace LumosLib
 
         
         #endregion
+
+
     }
 }

@@ -32,12 +32,6 @@ namespace LumosLib
             CreateScript("Global.cs", File.ReadAllText(Constant.PathGlobalTemplate));
         }
         
-        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Script/SceneManager", false, int.MinValue)]
-        public static void CreateSceneManagerScript()
-        {
-            CreateScript("NewSceneManager.cs", File.ReadAllText(Constant.PathSceneManagerTemplate));
-        }
-        
         [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Script/TestEditor", false, int.MinValue)]
         public static void CreateTestEditorScript()
         {
@@ -84,9 +78,15 @@ namespace LumosLib
         
         
         [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Scriptable Object/Sound Asset", false, int.MinValue)]
-        public static void CreateSoundAssetSO()
+        public static void CreateSoundAsset()
         {
             CreateSO<SoundAsset>("NewSoundAsset.asset");
+        }
+        
+        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Scriptable Object/LumosLib Settings", false, int.MinValue)]
+        public static void CreateLumosLibSettings()
+        {
+            CreateSO<LumosLibSettings>($"{nameof(LumosLibSettings)}.asset");
         }
         
         private static void CreateSO<T>(string assetName) where T : ScriptableObject
@@ -112,6 +112,20 @@ namespace LumosLib
         public static void CreateEmptyPrefab()
         {
             CreatePrefab(new GameObject("Empty"));
+        }
+        
+        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Managers/All", false, int.MinValue)]
+        public static void CreateAllManagerPrefab()
+        {
+            CreatePrefab<AudioManager>();
+            CreatePrefab<DatabaseManager>();
+            CreatePrefab<EventManager>();
+            CreatePrefab<PoolManager>();
+            CreatePrefab<PointerManager>();
+            CreatePrefab<ResourceManager>();
+            CreatePrefab<SaveManager>();
+            CreatePrefab<TutorialManager>();
+            CreatePrefab<UIManager>();
         }
         
         [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Managers/Event", false, int.MinValue)]
@@ -162,20 +176,21 @@ namespace LumosLib
             CreatePrefab<TutorialManager>();
         }
         
+        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Managers/Save", false, int.MinValue)]
+        public static void CreateSaveManagerPrefab()
+        {
+            CreatePrefab<SaveManager>();
+        }
+        
+        
         [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Audio Player", false, int.MinValue)]
         public static void CreateAudioPlayerPrefab()
         {
             CreatePrefab<AudioPlayer>();
         }
         
-        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Prefab/Managers/Save", false, int.MinValue)]
-        public static void CreateSaveManagerPrefab()
-        {
-            CreatePrefab<SaveManager>();
-        }
-  
         
-        private static GameObject CreatePrefab<T>() where T : MonoBehaviour
+        private static void CreatePrefab<T>() where T : MonoBehaviour
         {
             string typeName = typeof(T).Name;
             
@@ -183,8 +198,6 @@ namespace LumosLib
             obj.AddComponent<T>();
 
             CreatePrefab(obj);
-
-            return obj;
         }
 
         private static void CreatePrefab(GameObject obj)
@@ -192,6 +205,8 @@ namespace LumosLib
             string prefabPath = Path.Combine(GetCurrentPath(), obj.name + ".prefab");
 
             PrefabUtility.SaveAsPrefabAsset(obj, prefabPath);
+            
+            Selection.activeObject = null;
             Object.DestroyImmediate(obj);
             AssetDatabase.Refresh();
         }
