@@ -43,6 +43,8 @@ namespace LumosLib
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Boot()
         {
+            _initBarrier = new UniTaskCompletionSource();
+            
             _settings = Resources.Load<LumosLibSettings>(nameof(LumosLibSettings));
             
             if (_isInitializing || _isInitialized || _settings == null)
@@ -53,7 +55,6 @@ namespace LumosLib
 
 
             _isInitializing = true;
-            _initBarrier = new UniTaskCompletionSource();
 
             Initialize().Forget();
         }
