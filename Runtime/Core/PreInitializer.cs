@@ -50,7 +50,7 @@ namespace LumosLib
             if (_isInitializing || _isInitialized || _settings == null)
                 return;
 
-            if (!_settings.UsePreload)
+            if (!_settings.UsePreInit)
                 return;
 
 

@@ -6,8 +6,8 @@ namespace LumosLib
 {
     public class LumosLibSettings : ScriptableObject
     {
-        [field: Title("Preload")]
-        [field: SerializeField, LabelText("Use")] public bool UsePreload { get; private set; }
-        [field: SerializeField, ShowIf("UsePreload")] public List<GameObject> PreloadObjects { get; private set; } = new();
+        [field: Title("Pre Initialize Settings")]
+        [field: SerializeField, LabelText("Use")] public bool UsePreInit { get; private set; }
+        [field: SerializeField, ShowIf("UsePreInit")] public List<GameObject> PreloadObjects { get; private set; } = new();
     }
 }
