@@ -1,17 +1,47 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace LumosLib
 {
-    public class JsonSaveStorage : ISaveStorage
+    public class JsonSaveStorage : BaseSaveStorage
     {
-        private readonly string _path;
-        private readonly JsonSerializerSettings _settings;
+        [SerializeField] private string _folderPath;
+        [SerializeField] private string _fileName;
+        
+        private bool _isInitialized;
+        private string _path;
+        private JsonSerializerSettings _settings;
 
-        public JsonSaveStorage(string folderPath, string fileName)
+        public override async UniTask SaveAsync<T>(T data) 
+        {
+            if(!_isInitialized) Init(_folderPath, _fileName);
+            
+            JObject root = LoadRoot();
+
+            root[data.GetType().Name] = JToken.FromObject(data, JsonSerializer.Create(_settings));
+
+            string json = root.ToString();
+            
+            await File.WriteAllTextAsync(_path, json);
+        }
+
+        public override UniTask<T> LoadAsync<T>()
+        {
+            if (!File.Exists(_path))  
+                return UniTask.FromResult<T>(default);
+            
+            JObject root = LoadRoot();
+            string key = typeof(T).Name;
+
+            if (!root.TryGetValue(key, out JToken token)) return default;
+              
+            return UniTask.FromResult(token.ToObject<T>());
+        }
+
+        private void Init(string folderPath, string fileName)
         {
             if (!Directory.Exists(folderPath))
             {
@@ -31,30 +61,8 @@ namespace LumosLib
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore
             };
-        }
-
-        public async UniTask SaveAsync<T>(T data) where T : ISaveData
-        {
-            JObject root = LoadRoot();
-
-            root[data.GetType().Name] = JToken.FromObject(data, JsonSerializer.Create(_settings));
-
-            string json = root.ToString();
             
-            await File.WriteAllTextAsync(_path, json);
-        }
-
-        public UniTask<T> LoadAsync<T>() where T : ISaveData
-        {
-            if (!File.Exists(_path))  
-                return UniTask.FromResult<T>(default);
-            
-            JObject root = LoadRoot();
-            string key = typeof(T).Name;
-
-            if (!root.TryGetValue(key, out JToken token)) return default;
-              
-            return UniTask.FromResult(token.ToObject<T>());
+            _isInitialized = true;
         }
         
         private JObject LoadRoot()

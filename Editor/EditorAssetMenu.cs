@@ -89,6 +89,12 @@ namespace LumosLib
             CreateSO<LumosLibSettings>($"{nameof(LumosLibSettings)}.asset");
         }
         
+        [MenuItem("Assets/Create/[ ✨Lumos Lib ]/Scriptable Object/Save Storage/Json", false, int.MinValue)]
+        public static void CreateJsonSaveStorage()
+        {
+            CreateSO<JsonSaveStorage>($"New{nameof(JsonSaveStorage)}.asset");
+        }
+        
         private static void CreateSO<T>(string assetName) where T : ScriptableObject
         {
             string path = GetCurrentPath();

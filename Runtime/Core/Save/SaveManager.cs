@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using TriInspector;
 using UnityEngine;
 
 namespace LumosLib
@@ -13,10 +11,7 @@ namespace LumosLib
         #region >--------------------------------------------------- FIELD
 
         
-        [SerializeField] private SaveStorageType _saveType;
-        [SerializeField, ShowIf("_saveType", SaveStorageType.Json)] private string _folderPath;
-        [SerializeField, ShowIf("_saveType", SaveStorageType.Json)] private string _fileName;
-        private ISaveStorage _saveStorage;
+        [SerializeField] private BaseSaveStorage _saveStorage;
         
         private readonly Dictionary<Type, ISaveData> _saveDataDict = new();
         
@@ -27,13 +22,6 @@ namespace LumosLib
         
         public UniTask<bool> InitAsync()
         {
-            switch (_saveType)
-            {
-                case SaveStorageType.Json:
-                    _saveStorage = new JsonSaveStorage(_folderPath, _fileName);
-                    break;
-            }
-
             GlobalService.Register<ISaveManager>(this);
             return UniTask.FromResult(true);
         }
