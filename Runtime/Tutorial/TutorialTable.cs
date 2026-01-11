@@ -2,7 +2,7 @@
 
 namespace LumosLib
 {
-    [CreateAssetMenu(fileName = "TutorialTable", menuName = "[ ✨Lumos Lib ]/Scriptable Object/Tutorial Table")]
+    [CreateAssetMenu(fileName = "TutorialTable", menuName = "SO/Tutorial Table")]
     public class TutorialTable : ScriptableObject
     {
         [SerializeField] private int _id;

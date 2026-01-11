@@ -4,6 +4,7 @@ using TriInspector;
 
 namespace LumosLib
 {
+    [CreateAssetMenu(fileName = "LumosLibSettings", menuName = "SO/Settings", order = int.MinValue)]
     public class LumosLibSettings : ScriptableObject
     {
         [field: Title("Pre Initialize Settings")]
