@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public static class EditorAssetMenu
     {

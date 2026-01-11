@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace Lumos
+namespace Lumos.Core
 {
     [CreateAssetMenu(fileName = "Json_DataSource", menuName = "SO/Data Source/Json")]
     public class JsonDataSource : BaseDataSource

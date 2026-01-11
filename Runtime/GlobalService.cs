@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public static class GlobalService
     {

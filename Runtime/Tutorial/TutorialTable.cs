@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Lumos
+namespace Lumos.Core
 {
     [CreateAssetMenu(fileName = "TutorialTable", menuName = "SO/Tutorial Table")]
     public class TutorialTable : ScriptableObject

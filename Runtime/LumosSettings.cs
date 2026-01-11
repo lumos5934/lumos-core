@@ -2,7 +2,7 @@
 using UnityEngine;
 using TriInspector;
 
-namespace Lumos
+namespace Lumos.Core
 {
     [CreateAssetMenu(fileName = "LumosSettings", menuName = "SO/Settings", order = int.MinValue)]
     public class LumosSettings : ScriptableObject
