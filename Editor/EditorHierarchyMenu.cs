@@ -6,7 +6,7 @@ namespace LumosLib
 {
     public class EditorHierarchyMenu
     {
-        [MenuItem("GameObject/[ ✨Lumos Lib ]/World Button", false, 0)]
+        [MenuItem("GameObject/UI/World Button", false, 0)]
         private static void CreateWorldButton(MenuCommand menuCommand)
         {
             CreateNewObject(menuCommand, "WorldButton", new []
