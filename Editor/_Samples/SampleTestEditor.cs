@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace LumosLib
+namespace Lumos
 {
     public class SampleTestEditor : BaseTestEditorWindow
     {

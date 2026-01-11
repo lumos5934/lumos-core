@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-namespace LumosLib
+namespace Lumos
 {
     public interface ISaveManager
     {

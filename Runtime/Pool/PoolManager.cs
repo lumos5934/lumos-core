@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace LumosLib
+namespace Lumos
 {
     public class PoolManager : MonoBehaviour, IPreInitializable, IPoolManager
     {

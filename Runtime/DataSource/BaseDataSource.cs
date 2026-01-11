@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace LumosLib
+namespace Lumos
 {
     public abstract class BaseDataSource : ScriptableObject
     {

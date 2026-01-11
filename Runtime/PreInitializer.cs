@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 
-namespace LumosLib
+namespace Lumos
 {
     public static class PreInitializer
     {
@@ -33,7 +33,7 @@ namespace LumosLib
         private static bool _isInitialized;
 
         private static UniTaskCompletionSource _initBarrier;
-        private static LumosLibSettings _settings;
+        private static LumosSettings _settings;
         
 
         #endregion
@@ -45,7 +45,7 @@ namespace LumosLib
         {
             _initBarrier = new UniTaskCompletionSource();
             
-            _settings = Resources.Load<LumosLibSettings>(nameof(LumosLibSettings));
+            _settings = Resources.Load<LumosSettings>(nameof(LumosSettings));
             
             if (_isInitializing || _isInitialized || _settings == null)
                 return;

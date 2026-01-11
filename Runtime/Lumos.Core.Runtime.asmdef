@@ -3,7 +3,6 @@
     "rootNamespace": "",
     "references": [
         "TriInspector",
-        "DOTween.Modules",
         "Unity.InputSystem",
         "UniTask"
     ],

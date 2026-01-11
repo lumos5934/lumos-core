@@ -2,10 +2,10 @@
 using UnityEngine;
 using TriInspector;
 
-namespace LumosLib
+namespace Lumos
 {
-    [CreateAssetMenu(fileName = "LumosLibSettings", menuName = "SO/Settings", order = int.MinValue)]
-    public class LumosLibSettings : ScriptableObject
+    [CreateAssetMenu(fileName = "LumosSettings", menuName = "SO/Settings", order = int.MinValue)]
+    public class LumosSettings : ScriptableObject
     {
         [field: Title("Pre Initialize Settings")]
         [field: SerializeField, LabelText("Use")] public bool UsePreInit { get; private set; }

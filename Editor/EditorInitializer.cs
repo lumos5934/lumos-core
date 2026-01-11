@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-namespace LumosLib
+namespace Lumos
 {
     public static class EditorInitializer
     {
@@ -16,9 +16,9 @@ namespace LumosLib
         
         private static void OnEditorFullyLoaded()
         {
-            var name = nameof(LumosLibSettings);
+            var name = nameof(LumosSettings);
             
-            if (Resources.Load<LumosLibSettings>(name) != null)
+            if (Resources.Load<LumosSettings>(name) != null)
                 return;
 
             string resourcesDir = Path.Combine(Application.dataPath, "Resources");
@@ -26,7 +26,7 @@ namespace LumosLib
             if (!Directory.Exists(resourcesDir))
                 Directory.CreateDirectory(resourcesDir);
 
-            var asset = ScriptableObject.CreateInstance<LumosLibSettings>();
+            var asset = ScriptableObject.CreateInstance<LumosSettings>();
             string assetPath = $"Assets/Resources/{name}.asset";
 
             AssetDatabase.CreateAsset(asset, assetPath);

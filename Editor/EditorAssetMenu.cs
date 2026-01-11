@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
-namespace LumosLib
+namespace Lumos
 {
     public static class EditorAssetMenu
     {
@@ -127,12 +127,6 @@ namespace LumosLib
         public static void CreateUIManagerPrefab()
         {
             CreatePrefab<UIManager>();
-        }
-        
-        [MenuItem("Assets/Create/Prefab/Manager/Database", false, int.MinValue)]
-        public static void CreateDatabaseManagerPrefab()
-        {
-            CreatePrefab<DatabaseManager>();
         }
         
         [MenuItem("Assets/Create/Prefab/Manager/Pool", false, int.MinValue)]

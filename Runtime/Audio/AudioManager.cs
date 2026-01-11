@@ -4,7 +4,7 @@ using TriInspector;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace LumosLib
+namespace Lumos
 {
     public class AudioManager : MonoBehaviour, IPreInitializable, IAudioManager
     {
