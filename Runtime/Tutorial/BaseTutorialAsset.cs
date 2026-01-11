@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public abstract class BaseTutorialAsset : ScriptableObject
     {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Lumos
+namespace Lumos.Core
 {
     [RequireComponent(typeof(AudioSource))]
     public class AudioPlayer : MonoBehaviour, IPoolable 

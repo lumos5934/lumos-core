@@ -1,4 +1,4 @@
-﻿namespace Lumos
+﻿namespace Lumos.Core
 {
     public struct TriggerEvent : IGameEvent
     {

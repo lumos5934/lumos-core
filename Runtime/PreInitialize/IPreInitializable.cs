@@ -2,7 +2,7 @@
 using System.Collections;
 using Cysharp.Threading.Tasks;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public interface IPreInitializable
     {

@@ -1,4 +1,4 @@
-﻿namespace Lumos
+﻿namespace Lumos.Core
 {
     public enum PreInitializeOrder
     {

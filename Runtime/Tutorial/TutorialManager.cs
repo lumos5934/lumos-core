@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public class TutorialManager : MonoBehaviour, IPreInitializable, ITutorialManager
     {

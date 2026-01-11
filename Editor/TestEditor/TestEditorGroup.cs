@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public class TestEditorGroup : Editor
     {

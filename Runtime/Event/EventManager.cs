@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public class EventManager : MonoBehaviour, IPreInitializable, IEventManager
     {

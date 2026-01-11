@@ -1,5 +1,5 @@
 ﻿
-namespace Lumos
+namespace Lumos.Core
 {
     public abstract class BaseTutorial
     {

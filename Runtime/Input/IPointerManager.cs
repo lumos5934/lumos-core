@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public interface IPointerManager
     {

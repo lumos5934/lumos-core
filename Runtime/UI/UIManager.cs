@@ -4,7 +4,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public class UIManager : MonoBehaviour, IUIManager, IPreInitializable
     {

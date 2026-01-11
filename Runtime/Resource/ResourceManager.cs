@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public class ResourceManager : MonoBehaviour, IPreInitializable, IResourceManager
     {

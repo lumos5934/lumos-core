@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 
-namespace Lumos
+namespace Lumos.Core
 {
     public class PointerManager : MonoBehaviour, IPreInitializable, IPointerManager
     {

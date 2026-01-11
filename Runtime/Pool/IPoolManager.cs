@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Lumos
+namespace Lumos.Core
 {
     public interface IPoolManager
     {
