@@ -16,7 +16,7 @@ namespace LumosLib
         
         
         //menu name
-        [MenuItem("[ ✨Lumos Lib ]/Test Editor/SAMPLE")]
+        [MenuItem("Window/Lumos Lib/Test Editor/SAMPLE")]
         public static void Open()
         {
             //window tab name
