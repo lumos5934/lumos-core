@@ -26,7 +26,6 @@ namespace LumosLib
                 Object.DontDestroyOnLoad(monoService.gameObject);
             }
             
-            Debug.Log(typeof(T));
             _services[typeof(T)] = service;
         }
 
