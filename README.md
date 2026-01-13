@@ -1,8 +1,15 @@
-# ✨lumos-library
+# ✨lumos-library-core
 유니티 기반 & 에셋에서 자주 사용되는 요소, <br>
 또는 확장하는 기능의 스크립트를 모아놓아 개발의 생산성 상승을 위한 유니티 패키지
 
 <br>
+
+## ℹ️의존성
+
+* **Newtonsoft.Json (자동 설치)**
+* [ UniTask ](https://github.com/Cysharp/UniTask?tab=readme-ov-file#upm-package)
+* [ Tri-Inspector ](https://github.com/codewriter-packages/Tri-Inspector?tab=readme-ov-file)
+
 <br>
 
 ## ℹ️사전 작업
@@ -16,15 +23,11 @@
 > Use 체크를 통해 사전 생성, 초기화를 실행 할 지 선택 할 수 있으며, <br>
 > 어느 씬에서든지 런타임시 비동기적으로 사전 초기화를 진행합니다.
 
-
-<br>
 <br>
 
 ## ℹ️기능
 
 * [ Audio ](https://www.notion.so/Audio-2df3966a742c80f8bfbddaf7cb01e22e?source=copy_link)
-* [ Database ](https://www.notion.so/Database-2df3966a742c8045a87eedd2461c0cbc?source=copy_link)
-* [ DOTween ](https://www.notion.so/DOTween-2df3966a742c807cb6cce392acfc2e2d?source=copy_link)
 * [ Event ](https://www.notion.so/Event-2df3966a742c801ebe59ddbca58e32e3?source=copy_link)
 * [ FSM ](https://www.notion.so/FSM-2df3966a742c8021b453c80bab800d3f?source=copy_link)
 * [ Global ](https://www.notion.so/Global-2df3966a742c802d9ca9ffb15b215c58?source=copy_link)
@@ -37,18 +40,5 @@
 * [ TestEditor ](https://www.notion.so/Test-Editor-2df3966a742c80c3af6ac96904d157da?source=copy_link)
 * [ UI ](https://www.notion.so/UI-2df3966a742c80f38990cbc42a6d1b49?source=copy_link)
 
-
-<br>
 <br>
 
-## ℹ️의존성
-
-* **Newtonsoft.Json (자동 설치)**
-* [ UniTask ](https://github.com/Cysharp/UniTask?tab=readme-ov-file#upm-package)
-* [ DOTween ](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676?locale=ko-KR&srsltid=AfmBOorERKqVIWHnYtX-Ib3WRvr0KqT-k48G_H4SXEk8uU_Eczqg4U9v)
-* [ Tri-Inspector ](https://github.com/codewriter-packages/Tri-Inspector?tab=readme-ov-file)
-* [ BG Database ](https://assetstore.unity.com/packages/tools/integration/bg-database-data-editor-with-google-sheets-and-excel-syncing-112262)
-
-
-<br>
-<br>
