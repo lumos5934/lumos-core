@@ -27,8 +27,6 @@ namespace LumosLib
 
             string json = root.ToString();
             
-            Debug.Log(_path);
-            
             await File.WriteAllTextAsync(_path, json);
         }
 
