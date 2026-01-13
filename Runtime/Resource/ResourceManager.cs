@@ -55,7 +55,7 @@ namespace LumosLib
         #region  >--------------------------------------------------- LOAD
        
 
-        public T Load<T>(string fileName) where T : Object
+        public T Get<T>(string fileName) where T : Object
         {
             if (_allResources.TryGetValue(fileName, out var resource))
             {
@@ -68,7 +68,7 @@ namespace LumosLib
             return null;
         }
         
-        public T Load<T>(string label, string fileName) where T : Object
+        public T Get<T>(string label, string fileName) where T : Object
         {
             if (_resourceEntriesDict.TryGetValue(label, out var entry))
             {
@@ -82,7 +82,7 @@ namespace LumosLib
             return null;
         }
 
-        public List<T> LoadAll<T>(string label) where T : Object
+        public List<T> GetAll<T>(string label) where T : Object
         {
             if (_resourceEntriesDict.TryGetValue(label, out var entry))
             {
