@@ -57,12 +57,19 @@ namespace LumosLib
 
         public T Get<T>(string fileName) where T : Object
         {
-            if (_allResources.TryGetValue(fileName, out var resource))
+            if (!_allResources.TryGetValue(fileName, out var resource))
+                return null;
+            
+            if (resource is GameObject go)
             {
-                if (resource is T t)
+                if (go.TryGetComponent(out T result))
                 {
-                    return t;
+                    return result;
                 }
+            }
+            else
+            {
+                return resource as T;
             }
 
             return null;
@@ -70,13 +77,20 @@ namespace LumosLib
         
         public T Get<T>(string label, string fileName) where T : Object
         {
-            if (_resourceEntriesDict.TryGetValue(label, out var entry))
+            if (!_resourceEntriesDict.TryGetValue(label, out var entry))
+                return null;
+            
+            var resource = entry.GetResource(fileName);
+            if (resource is GameObject go)
             {
-                var resource = entry.GetResource(fileName);
-                if (resource is T t)
+                if (go.TryGetComponent(out T result))
                 {
-                    return t;
+                    return result;
                 }
+            }
+            else
+            {
+                return resource as T;
             }
             
             return null;
@@ -84,14 +98,21 @@ namespace LumosLib
 
         public List<T> GetAll<T>(string label) where T : Object
         {
-            if (_resourceEntriesDict.TryGetValue(label, out var entry))
+            if (!_resourceEntriesDict.TryGetValue(label, out var entry))
+                return null;
+
+            if (typeof(Component).IsAssignableFrom(typeof(T)))
             {
                 return entry.Resources
-                    .OfType<T>()  
+                    .OfType<GameObject>()
+                    .Select(go => go.GetComponent<T>())
+                    .Where(c => c != null)
                     .ToList();
             }
-            
-            return null;
+
+            return entry.Resources
+                .OfType<T>()
+                .ToList();
         }
 
         
