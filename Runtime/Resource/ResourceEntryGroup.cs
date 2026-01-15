@@ -5,14 +5,16 @@ using UnityEngine;
 
 namespace LumosLib
 {
-    [Serializable]
-   
+    [Serializable, 
+     DeclareHorizontalGroup("horizontal")]
     public class ResourceEntryGroup
     {
+        public bool UseLabel => _useLabel;
         public string Label => _label;
         public string FolderPath => _folderPath;
-        
-        [SerializeField] private string _label;
+
+        [SerializeField, Group("horizontal"), LabelText("Label")] private bool _useLabel;
+        [SerializeField, Group("horizontal"), ShowIf("_useLabel"), HideLabel] private string _label;
         [SerializeField] private string _folderPath;
         [SerializeField, 
          ReadOnly, 

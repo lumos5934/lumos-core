@@ -13,9 +13,12 @@ namespace LumosLib
         #region  >--------------------------------------------------- FIELD
 
         
-        [Group("Resources"), SerializeField, LabelText("Entries")] private List<ResourceEntryGroup> _entryGroups;
+        [Group("Resources"), 
+         SerializeField, 
+         LabelText("Entries")] 
+        private List<ResourceEntryGroup> _entryGroups;
         
-        private Dictionary<string, ResourceEntryGroup> _entryGroupsDict = new();
+        private Dictionary<(bool, string), ResourceEntryGroup> _entryGroupsDict = new();
         
         
         #endregion
@@ -28,7 +31,7 @@ namespace LumosLib
             {
                 group.Init();
                 
-                if (!_entryGroupsDict.TryAdd(group.Label, group))
+                if (!_entryGroupsDict.TryAdd((group.UseLabel, group.Label), group))
                 {
                     DebugUtil.LogError("duplicate entry label", "Resource");
                     return UniTask.FromResult(false);
@@ -61,7 +64,7 @@ namespace LumosLib
         
         public T Get<T>(string label, string assetName)
         {
-            if (_entryGroupsDict.TryGetValue(label, out var entry))
+            if (_entryGroupsDict.TryGetValue((true, label), out var entry))
             {
                 return entry.GetResource<T>(assetName);
             }
@@ -71,7 +74,7 @@ namespace LumosLib
 
         public List<T> GetAll<T>(string label)
         {
-            if (_entryGroupsDict.TryGetValue(label, out var entry))
+            if (_entryGroupsDict.TryGetValue((true, label), out var entry))
             {
                 return entry.GetResourcesAll<T>();
             }
