@@ -18,7 +18,6 @@ namespace LumosLib
          LabelText("Entries")] 
         private List<ResourceEntryGroup> _entryGroups;
         
-        private Dictionary<(bool, string), ResourceEntryGroup> _entryGroupsDict = new();
         
         
         #endregion
@@ -30,12 +29,6 @@ namespace LumosLib
             foreach (var group in _entryGroups)
             {
                 group.Init();
-                
-                if (!_entryGroupsDict.TryAdd((group.UseLabel, group.Label), group))
-                {
-                    DebugUtil.LogError("duplicate entry label", "Resource");
-                    return UniTask.FromResult(false);
-                }
             }
             
             GlobalService.Register<IResourceManager>(this);
@@ -64,19 +57,28 @@ namespace LumosLib
         
         public T Get<T>(string label, string assetName)
         {
-            if (_entryGroupsDict.TryGetValue((true, label), out var entry))
+            foreach (var group in _entryGroups)
             {
-                return entry.GetResource<T>(assetName);
+                if(!group.UseLabel ||
+                   group.Label != label) continue;
+
+
+                return Get<T>(assetName);
             }
+            
             
             return default;
         }
 
         public List<T> GetAll<T>(string label)
         {
-            if (_entryGroupsDict.TryGetValue((true, label), out var entry))
+            foreach (var group in _entryGroups)
             {
-                return entry.GetResourcesAll<T>();
+                if(!group.UseLabel ||
+                   group.Label != label) continue;
+
+
+                return group.GetResourcesAll<T>();
             }
             
             return default;
@@ -94,11 +96,6 @@ namespace LumosLib
             {
                 group.SetResources(ResourcesUtil.Find<Object>(this, group.FolderPath, SearchOption.TopDirectoryOnly));
             }
-            
-            /*foreach (var entry in _resourceEntries)
-            {
-                entry.SetResources(ResourcesUtil.FindObjects<Object>(this, entry.FolderPath, SearchOption.TopDirectoryOnly));
-            }*/
         }
         
         
