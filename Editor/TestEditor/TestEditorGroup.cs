@@ -175,7 +175,7 @@ namespace LumosLib.Editor
         
         public void DrawField<T>(string label, ref T value) where T : Object
         {
-            value = (T)EditorGUILayout.ObjectField(label, value, typeof(T), false);
+            value = (T)EditorGUILayout.ObjectField(label, value, typeof(T), true);
         }
         
         public void DrawField(string label, ref Bounds value)
