@@ -147,9 +147,20 @@ namespace LumosLib.Editor
             value = EditorGUILayout.Vector2Field(label, value); 
         }
         
+        public void DrawField(string label, ref Vector2Int value)
+        {
+            value = EditorGUILayout.Vector2IntField(label, value); 
+        }
+     
+        
         public void DrawField(string label, ref Vector3 value)
         {
             value = EditorGUILayout.Vector3Field(label, value); 
+        }
+        
+        public void DrawField(string label, ref Vector3Int value)
+        {
+            value = EditorGUILayout.Vector3IntField(label, value); 
         }
         
         public void DrawField(string label, ref Vector4 value)
