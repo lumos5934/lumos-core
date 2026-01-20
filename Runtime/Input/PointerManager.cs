@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
@@ -13,7 +12,7 @@ namespace LumosLib
     {
         #region >--------------------------------------------------- FIELD
 
-
+        [SerializeField] private bool _UseLogScanObject;
         [SerializeField] private InputActionReference _posInputReference;
         [SerializeField] private InputActionReference _clickInputReference;
 
@@ -90,7 +89,7 @@ namespace LumosLib
             Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
-            if (hit.collider != null)
+            if (hit.collider != null && _UseLogScanObject)
             {
                 Debug.Log(hit.collider.name);
             }
@@ -137,7 +136,5 @@ namespace LumosLib
         
         
         #endregion
-
-
     }
 }
