@@ -8,13 +8,32 @@ public abstract class BaseStateMachine
     
     
     public BaseState CurState => _curState;
+
+    private Dictionary<Type, BaseState> States
+    {
+        get
+        {
+            if (_stateDict == null)
+            {
+                _stateDict = new();
+                
+                var states = InitStates();
+                foreach (var state in states)
+                {
+                    _stateDict[state.GetType()] = state;
+                }
+            }
+
+            return _stateDict;
+        }
+    }
     
     
     #endregion
     #region >--------------------------------------------------- FIELD
 
     
-    private Dictionary<Type, BaseState> _stateDict = new();
+    private Dictionary<Type, BaseState> _stateDict;
     private BaseState _curState;
 
     
@@ -31,15 +50,6 @@ public abstract class BaseStateMachine
     #region >--------------------------------------------------- CORE
 
     
-    protected BaseStateMachine()    
-    {
-        var states = InitStates();
-        foreach (var state in states)
-        {
-            _stateDict[state.GetType()] = state;
-        }
-    }
-    
     protected abstract BaseState[] InitStates();
     public virtual void Update()
     {
@@ -53,7 +63,7 @@ public abstract class BaseStateMachine
     
     public T GetState<T>() where T : BaseState
     {
-        if(_stateDict.TryGetValue(typeof(T), out var state))
+        if(States.TryGetValue(typeof(T), out var state))
         {
             return state as T;
         }
