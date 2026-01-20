@@ -1,44 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
-public abstract class BaseStateMachine<TState, T> where T : IState where TState : Enum
+public abstract class BaseStateMachine
 {
+    #region >--------------------------------------------------- PROPERTIE
+    
+    
+    public BaseState CurState => _curState;
+    
+    
+    #endregion
     #region >--------------------------------------------------- FIELD
 
     
-    public T CurState { get; private set; }
-    private Dictionary<TState, T> _states = new();
+    private Dictionary<Type, BaseState> _stateDict = new();
+    private BaseState _curState;
 
     
     #endregion
-    #region >--------------------------------------------------- METHODS
+    #region >--------------------------------------------------- EVENT
+    
+    
+    public event UnityAction<BaseState> OnExit;
+    public event UnityAction<BaseState> OnEnter;
+    public event UnityAction<BaseState> OnUpdate;
+    
+    
+    #endregion    
+    #region >--------------------------------------------------- CORE
 
-
+    
+    protected BaseStateMachine()    
+    {
+        var states = InitStates();
+        foreach (var state in states)
+        {
+            _stateDict[state.GetType()] = state;
+        }
+    }
+    
+    protected abstract BaseState[] InitStates();
     public virtual void Update()
     {
-        CurState?.Update();
+        if (CurState != null)
+        {
+            CurState.Update();
+            OnUpdate?.Invoke(CurState);
+        }
     }
 
-    protected void AddState(TState type, T state) =>  _states[type] = state;
     
-    public T GetState(TState type)
+    public T GetState<T>() where T : BaseState
     {
-        if (_states.TryGetValue(type, out T state))
+        if(_stateDict.TryGetValue(typeof(T), out var state))
         {
-            return state;
+            return state as T;
         }
         
-        return default; 
+        return null;
     }
     
-    public void SetState(TState type)
+    public void SetState<T>() where T : BaseState
     {
-        var newState = GetState(type);
+        var newState = GetState<T>();
         if (newState == null) return;
-        
-        CurState?.Exit();
-        CurState = newState;
-        CurState.Enter();
+
+        if (CurState != null)
+        {
+            CurState.Exit();
+            OnExit?.Invoke(CurState);
+        }
+
+        _curState = newState;
+
+        if (CurState != null)
+        {
+            CurState.Enter();
+            OnEnter?.Invoke(CurState);
+        }
     }
     
     
