@@ -44,8 +44,8 @@ namespace LumosLib
         #region >--------------------------------------------------- EVENT
         
         
-        public UnityAction<PointerDownEvent> OnPointerDown;
-        public UnityAction<PointerUpEvent> OnPointerUp;
+        public event UnityAction<PointerDownEvent> OnPointerDown;
+        public event UnityAction<PointerUpEvent> OnPointerUp;
         
         
         #endregion
