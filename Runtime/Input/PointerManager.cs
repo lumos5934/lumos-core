@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
-using TriInspector;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -13,7 +13,6 @@ namespace LumosLib
 
 
         public bool IsPressed { get; private set; }
-        public bool IsOverUI => EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
         public Vector2 ScreenPosition { get; private set; }
         public Vector2 WorldPosition { get; private set; }
         
@@ -37,38 +36,65 @@ namespace LumosLib
         [SerializeField] private InputActionReference _posInputReference;
         [SerializeField] private InputActionReference _clickInputReference;
 
-        [Title("REQUIREMENT")]
-        [ShowInInspector, HideReferencePicker, ReadOnly, LabelText("IEventManager")] private IEventManager _eventManager;
-
         private Camera _camera;
         private Vector2 _worldPosition;
         
         
+        #endregion
+        #region >--------------------------------------------------- EVENT
+        
+        
+        public UnityAction<PointerDownEvent> OnPointerDown;
+        public UnityAction<PointerUpEvent> OnPointerUp;
+        
+        
+        #endregion
+        #region >--------------------------------------------------- UNITY
+
+        private void Update()
+        {
+            ScreenPosition = _posInputReference.action.ReadValue<Vector2>();
+            
+            if (Camera == null)
+            {
+                DebugUtil.LogWarning("Camera is null", "FAIL");
+                WorldPosition = Vector2.zero;
+            }
+            else
+            {
+                WorldPosition = Camera.ScreenToWorldPoint(ScreenPosition);
+            }
+
+            IsPressed = _clickInputReference.action.IsPressed();
+                
+            if (_clickInputReference.action.WasPressedThisFrame())
+            {
+                OnPointerDown?.Invoke(
+                    new PointerDownEvent(ScreenPosition, WorldPosition, GetHitObject()));
+            }
+
+            if (_clickInputReference.action.WasReleasedThisFrame())
+            {
+                OnPointerUp?.Invoke(
+                    new PointerUpEvent(ScreenPosition, WorldPosition, GetHitObject()));
+            }
+        }
+
         #endregion
         #region >--------------------------------------------------- INIT
         
         
         public UniTask<bool> InitAsync()
         {
-            _eventManager = GlobalService.Get<IEventManager>();
-            if (_eventManager == null)
+            if (_clickInputReference == null ||
+                _posInputReference == null)
+            {
+                gameObject.SetActive(false);
                 return UniTask.FromResult(false);
-            
-            
-            var pointerClickRef = _clickInputReference;
-            if (pointerClickRef != null)
-            {
-                pointerClickRef.action.started += OnPointerBegan;
-                pointerClickRef.action.canceled += OnPointerEnded;
-                pointerClickRef.action.actionMap.Enable(); 
             }
             
-            var pointerPosRef = _posInputReference;
-            if (pointerPosRef != null)
-            {
-                pointerPosRef.action.performed += SetPointerPos;
-                pointerPosRef.action.actionMap.Enable(); 
-            }
+            _clickInputReference.action.actionMap.Enable(); 
+            _posInputReference.action.actionMap.Enable(); 
             
             GlobalService.Register<IPointerManager>(this);
             
@@ -82,53 +108,17 @@ namespace LumosLib
 
         public GameObject GetHitObject()
         {
-            if (IsOverUI)
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return null;
             
-            var hit = Physics2D.Raycast(WorldPosition, Vector2.zero);
+            var hitCollider = Physics2D.OverlapPoint(WorldPosition);
 
-            return hit.collider != null ? hit.collider.gameObject : null;
-        }
-        
-        private void SetPointerPos(InputAction.CallbackContext context)
-        {
-            ScreenPosition = context.ReadValue<Vector2>();
-            
-            if (Camera == null)
-            {
-                DebugUtil.LogWarning("Camera is null", "FAIL");
-                WorldPosition = Vector2.zero;
-            }
-            else
-            {
-                WorldPosition = Camera.ScreenToWorldPoint(ScreenPosition);
-            }
+            return hitCollider != null ? hitCollider.gameObject : null;
         }
         
         public void SetCamera(Camera cam)
         {
             _camera = cam;
-        }
-        
-        
-        #endregion
-        #region >--------------------------------------------------- CORE
-
-        
-        private void OnPointerBegan(InputAction.CallbackContext context)
-        {
-            IsPressed = true;
-            
-            _eventManager.Publish(
-                new PointerDownEvent(ScreenPosition, WorldPosition, GetHitObject()));
-        }
-        
-        private void OnPointerEnded(InputAction.CallbackContext context)
-        {
-            IsPressed = false;
-
-            _eventManager.Publish(
-                new PointerUpEvent(ScreenPosition, WorldPosition, GetHitObject()));
         }
         
         
