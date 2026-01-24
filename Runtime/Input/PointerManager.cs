@@ -119,14 +119,16 @@ namespace LumosLib
         {
             IsPressed = true;
             
-            _eventManager.Publish(new PointerDownEvent());
+            _eventManager.Publish(
+                new PointerDownEvent(ScreenPosition, WorldPosition, GetHitObject()));
         }
         
         private void OnPointerEnded(InputAction.CallbackContext context)
         {
             IsPressed = false;
 
-            _eventManager.Publish(new PointerUpEvent());
+            _eventManager.Publish(
+                new PointerUpEvent(ScreenPosition, WorldPosition, GetHitObject()));
         }
         
         
