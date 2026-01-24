@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace LumosLib
 {
-    public abstract class StateMachine
+    public class StateMachine
     {
         #region >--------------------------------------------------- PROPERTIE
         
@@ -40,7 +40,7 @@ namespace LumosLib
             _stateDict = states.ToDictionary(state => state.GetType(),  state => state);
         }
         
-        public virtual void Update()
+        public void Update()
         {
             if (CurState != null)
             {
