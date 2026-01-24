@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,31 +9,41 @@ namespace LumosLib
 {
     public class PointerManager : MonoBehaviour, IPreInitializable, IPointerManager
     {
-        #region >--------------------------------------------------- FIELD
+        #region >--------------------------------------------------- PROPERTIE
 
-        [SerializeField] private bool _UseLogScanObject;
-        [SerializeField] private InputActionReference _posInputReference;
-        [SerializeField] private InputActionReference _clickInputReference;
 
-        private bool _isOverUI;
-        private Vector2 _pos;
-        private GameObject _scanObj;
-        private Coroutine _clickCoroutine;
+        public bool IsPressed { get; private set; }
+        public bool IsOverUI => EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        public Vector2 ScreenPosition { get; private set; }
+        public Vector2 WorldPosition { get; private set; }
         
-        [Title("REQUIREMENT")]
-        [ShowInInspector, HideReferencePicker, ReadOnly, LabelText("IEventManager")] private IEventManager _eventManager;
-
-        
-        #endregion
-        #region >--------------------------------------------------- UNITY
-
-
-        private void LateUpdate()
+        private Camera Camera
         {
-            _isOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+            get
+            {
+                if (_camera == null)
+                {
+                    _camera = Camera.main;
+                }
+                return _camera;
+            }
         }
 
 
+        #endregion
+        #region >--------------------------------------------------- FIELD
+
+        
+        [SerializeField] private InputActionReference _posInputReference;
+        [SerializeField] private InputActionReference _clickInputReference;
+
+        [Title("REQUIREMENT")]
+        [ShowInInspector, HideReferencePicker, ReadOnly, LabelText("IEventManager")] private IEventManager _eventManager;
+
+        private Camera _camera;
+        private Vector2 _worldPosition;
+        
+        
         #endregion
         #region >--------------------------------------------------- INIT
         
@@ -45,11 +54,12 @@ namespace LumosLib
             if (_eventManager == null)
                 return UniTask.FromResult(false);
             
+            
             var pointerClickRef = _clickInputReference;
             if (pointerClickRef != null)
             {
-                pointerClickRef.action.started += StartedPointerDown;
-                pointerClickRef.action.canceled += CanceledPointerDown;
+                pointerClickRef.action.started += OnPointerBegan;
+                pointerClickRef.action.canceled += OnPointerEnded;
                 pointerClickRef.action.actionMap.Enable(); 
             }
             
@@ -61,45 +71,43 @@ namespace LumosLib
             }
             
             GlobalService.Register<IPointerManager>(this);
+            
             return UniTask.FromResult(true);
         }
   
         
         #endregion
-        #region >--------------------------------------------------- SET
+        #region >--------------------------------------------------- GET & SET
 
 
-        public bool GetOverUI()
+        public GameObject GetHitObject()
         {
-            return _isOverUI;
-        }
-        
-        public Vector2 GetPos()
-        {
-            return _pos;
-        }
-
-        public GameObject GetScanObject(bool ignoreUI = true)
-        {
-            if (GetOverUI() && !ignoreUI)  return null;
-
-            var cam = Camera.main;
-            if (cam == null) return null;
+            if (IsOverUI)
+                return null;
             
-            Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+            var hit = Physics2D.Raycast(WorldPosition, Vector2.zero);
 
-            if (hit.collider != null && _UseLogScanObject)
-            {
-                Debug.Log(hit.collider.name);
-            }
-            
             return hit.collider != null ? hit.collider.gameObject : null;
         }
         
         private void SetPointerPos(InputAction.CallbackContext context)
         {
-            _pos = context.ReadValue<Vector2>();
+            ScreenPosition = context.ReadValue<Vector2>();
+            
+            if (Camera == null)
+            {
+                DebugUtil.LogWarning("Camera is null", "FAIL");
+                WorldPosition = Vector2.zero;
+            }
+            else
+            {
+                WorldPosition = Camera.ScreenToWorldPoint(ScreenPosition);
+            }
+        }
+        
+        public void SetCamera(Camera cam)
+        {
+            _camera = cam;
         }
         
         
@@ -107,31 +115,18 @@ namespace LumosLib
         #region >--------------------------------------------------- CORE
 
         
-        private void StartedPointerDown(InputAction.CallbackContext context)
+        private void OnPointerBegan(InputAction.CallbackContext context)
         {
-            _clickCoroutine = StartCoroutine(PointerClickCoroutine());
+            IsPressed = true;
             
             _eventManager.Publish(new PointerDownEvent());
         }
         
-        private void CanceledPointerDown(InputAction.CallbackContext context)
+        private void OnPointerEnded(InputAction.CallbackContext context)
         {
-            if (_clickCoroutine != null)
-            {
-                StopCoroutine(_clickCoroutine);
-            }
+            IsPressed = false;
 
             _eventManager.Publish(new PointerUpEvent());
-        }
-
-        private IEnumerator PointerClickCoroutine()
-        {
-            while (true)
-            {
-                yield return null;
-                
-                _eventManager.Publish(new PointerHoldEvent());
-            }
         }
         
         

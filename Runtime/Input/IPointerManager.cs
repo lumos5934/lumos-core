@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 
 namespace LumosLib
 {
     public interface IPointerManager
     {
-        public bool GetOverUI();
-        public Vector2 GetPos();
-        public GameObject GetScanObject(bool ignoreUI);
+        public bool IsPressed { get; }
+        public Vector2 ScreenPosition { get; }
+        public Vector2 WorldPosition { get; }
+        public GameObject GetHitObject();
     }
 }
