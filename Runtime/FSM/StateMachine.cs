@@ -10,7 +10,7 @@ namespace LumosLib
         #region >--------------------------------------------------- PROPERTIE
         
         
-        public IState CurState => _curState;
+        public Type CurStateType => _curState.GetType();
 
         
         #endregion
@@ -25,9 +25,9 @@ namespace LumosLib
         #region >--------------------------------------------------- EVENT
         
         
-        public event UnityAction<IState> OnExit;
-        public event UnityAction<IState> OnEnter;
-        public event UnityAction<IState> OnUpdate;
+        public event UnityAction<Type> OnExit;
+        public event UnityAction<Type> OnEnter;
+        public event UnityAction<Type> OnUpdate;
         
         
         #endregion    
@@ -39,44 +39,36 @@ namespace LumosLib
         {
             _stateDict = states.ToDictionary(state => state.GetType(),  state => state);
         }
+
         
         public void Update()
         {
-            if (CurState != null)
+            if (_curState != null)
             {
-                CurState.Update();
-                OnUpdate?.Invoke(CurState);
+                _curState.Update();
+                OnUpdate?.Invoke(CurStateType);
             }
         }
 
 
-        public T GetState<T>() where T : IState
-        {
-            if(_stateDict.TryGetValue(typeof(T), out var state))
-            {
-                return (T)state;
-            }
-            
-            return default;
-        }
-        
         public void SetState<T>() where T : IState
         {
-            var newState = GetState<T>();
+            _stateDict.TryGetValue(typeof(T), out var newState)
+
             if (newState == null) return;
 
-            if (CurState != null)
+            if (_curState != null)
             {
-                CurState.Exit();
-                OnExit?.Invoke(CurState);
+                _curState.Exit();
+                OnExit?.Invoke(CurStateType);
             }
 
             _curState = newState;
 
-            if (CurState != null)
+            if (_curState != null)
             {
-                CurState.Enter();
-                OnEnter?.Invoke(CurState);
+                _curState.Enter();
+                OnEnter?.Invoke(CurStateType);
             }
         }
         
