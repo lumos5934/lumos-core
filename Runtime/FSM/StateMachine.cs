@@ -17,7 +17,7 @@ namespace LumosLib
         #region >--------------------------------------------------- FIELD
 
         
-        private Dictionary<Type, IState> _stateDict = new();
+        private Dictionary<Type, IState> _stateDict;
         private IState _curState;
 
         
@@ -53,7 +53,7 @@ namespace LumosLib
 
         public void SetState<T>() where T : IState
         {
-            _stateDict.TryGetValue(typeof(T), out var newState)
+            _stateDict.TryGetValue(typeof(T), out var newState);
 
             if (newState == null) return;
 
