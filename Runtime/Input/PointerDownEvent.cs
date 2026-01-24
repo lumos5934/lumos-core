@@ -2,7 +2,7 @@
 
 namespace LumosLib
 {
-    public struct PointerDownEvent : IGameEvent
+    public struct PointerDownEvent
     {
         public readonly Vector2 ScreenPosition;
         public readonly Vector2 WorldPosition;
