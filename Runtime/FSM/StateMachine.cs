@@ -10,7 +10,7 @@ namespace LumosLib
         #region >--------------------------------------------------- PROPERTIE
         
         
-        public Type CurStateType => _curState?.GetType();
+        public IState CurState => _curState;
 
         
         #endregion
@@ -25,8 +25,8 @@ namespace LumosLib
         #region >--------------------------------------------------- EVENT
         
         
-        public event UnityAction<Type> OnExit;
-        public event UnityAction<Type> OnEnter;
+        public event UnityAction<IState> OnExit;
+        public event UnityAction<IState> OnEnter;
         
         
         #endregion    
@@ -51,14 +51,16 @@ namespace LumosLib
                 _curState == newState) return;
 
             var prevState = _curState;
-            
-            prevState?.Exit();
-            OnExit?.Invoke(prevState?.GetType());
-            
+
+            if (prevState != null)
+            {
+                prevState.Exit();
+                OnExit?.Invoke(prevState);
+            }
+          
             _curState = newState;
-            
-            _curState?.Enter();
-            OnEnter?.Invoke(_curState?.GetType());
+            _curState.Enter();
+            OnEnter?.Invoke(_curState);
         }
         
         
