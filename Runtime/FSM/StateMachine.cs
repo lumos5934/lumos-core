@@ -10,7 +10,7 @@ namespace LumosLib
         #region >--------------------------------------------------- PROPERTIE
         
         
-        public Type CurStateType => _curState.GetType();
+        public Type CurStateType => _curState?.GetType();
 
         
         #endregion
@@ -27,12 +27,10 @@ namespace LumosLib
         
         public event UnityAction<Type> OnExit;
         public event UnityAction<Type> OnEnter;
-        public event UnityAction<Type> OnUpdate;
         
         
         #endregion    
         #region >--------------------------------------------------- CORE
-
 
 
         public StateMachine(IState[] states)
@@ -43,33 +41,24 @@ namespace LumosLib
         
         public void Update()
         {
-            if (_curState != null)
-            {
-                _curState.Update();
-                OnUpdate?.Invoke(CurStateType);
-            }
+            _curState?.Update();
         }
 
 
         public void SetState<T>() where T : IState
         {
-            _stateDict.TryGetValue(typeof(T), out var newState);
+            if (!_stateDict.TryGetValue(typeof(T), out var newState) ||
+                _curState == newState) return;
 
-            if (newState == null) return;
-
-            if (_curState != null)
-            {
-                _curState.Exit();
-                OnExit?.Invoke(CurStateType);
-            }
-
+            var prevState = _curState;
+            
+            prevState?.Exit();
+            OnExit?.Invoke(prevState?.GetType());
+            
             _curState = newState;
-
-            if (_curState != null)
-            {
-                _curState.Enter();
-                OnEnter?.Invoke(CurStateType);
-            }
+            
+            _curState?.Enter();
+            OnEnter?.Invoke(_curState?.GetType());
         }
         
         
