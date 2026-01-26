@@ -34,25 +34,22 @@ namespace LumosLib
         {
             if (_saveDataSource == null)
             {
-                DebugUtil.LogWarning("data source not found", "");
+                DebugUtil.LogWarning("SAVE : data source not found", "");
                 return;
             }
-            
+
             var type = typeof(T);
 
-            if (!_saveDataDict.ContainsKey(type))
-            {
-                _saveDataDict[typeof(T)] = data;
-            }
+            _saveDataDict[type] = data;
 
             try
             {
                 await _saveDataSource.WriteAsync(data);
-                DebugUtil.Log("SAVE", "SUCCESS");
+                DebugUtil.Log("SAVE", $"SUCCESS ({type.Name})");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Debug.LogException(e);
                 throw;
             }
         }
@@ -65,24 +62,32 @@ namespace LumosLib
                 return default;
             }
             
-            if (_saveDataDict.ContainsKey(typeof(T)))
+            if (_saveDataDict.TryGetValue(typeof(T), out var cached))
+                return (T)cached;
+            
+            var type = typeof(T);
+            
+            try
             {
-                try
-                {
-                    var result = await _saveDataSource.ReadAsync<T>();
-                    DebugUtil.Log("LOAD", "SUCCESS");
+                var result = await _saveDataSource.ReadAsync<T>();
 
-                    return result;
-                }
-                catch (Exception e)
+                if (!EqualityComparer<T>.Default.Equals(result, default))
                 {
-                    Console.WriteLine(e);
-                    throw;
+                    _saveDataDict[type] = result;
+                    DebugUtil.Log("LOAD", $"SUCCESS ({type.Name})");
                 }
+                else
+                {
+                    DebugUtil.LogWarning("LOAD : save data not found", type.Name);
+                }
+
+                return result;
             }
-
-            DebugUtil.LogWarning("LOAD : save data not found", "FAIL");
-            return default;
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
         }
         
         
