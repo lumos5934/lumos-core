@@ -10,7 +10,7 @@ namespace LumosLib
     [CreateAssetMenu(fileName = "Json_DataSource", menuName = "SO/Data Source/Json")]
     public class JsonDataSource : BaseDataSource
     {
-        [InfoBox("Path : C:\\Users\\사용자명\\AppData\\LocalLow\\회사명\\게임명\\FileName.json")]
+        [InfoBox("Path : C:\\Users\\%UserName%\\AppData\\LocalLow\\%Company%\\%Project%\\FileName.json")]
         [SerializeField] private string _fileName;
       
         private bool _isInitialized;
@@ -28,6 +28,8 @@ namespace LumosLib
             string json = root.ToString();
             
             await File.WriteAllTextAsync(_path, json);
+            
+            DebugUtil.Log(_path, "PATH");
         }
 
         public override UniTask<T> ReadAsync<T>()
@@ -65,6 +67,8 @@ namespace LumosLib
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore
             };
+
+            _isInitialized = true;
         }
 
         
