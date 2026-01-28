@@ -15,7 +15,11 @@ namespace LumosLib
         
         [Group("Resources"), 
          SerializeField, 
-         LabelText("Entries")] 
+         LabelText("Entries"), 
+         TableList(Draggable = true,
+             HideAddButton = false,
+             HideRemoveButton = false,
+             AlwaysExpanded = false)] 
         private List<ResourceEntryGroup> _entryGroups;
         
         
@@ -57,31 +61,34 @@ namespace LumosLib
         
         public T Get<T>(string label, string assetName)
         {
+            if(label == "") 
+                return Get<T>(assetName);
+            
+            
             foreach (var group in _entryGroups)
             {
-                if(!group.UseLabel ||
-                   group.Label != label) continue;
-
+                if(group.Label != label) 
+                    continue;
 
                 return Get<T>(assetName);
             }
-            
             
             return default;
         }
 
         public List<T> GetAll<T>(string label)
         {
+            var result = new List<T>();
+            
             foreach (var group in _entryGroups)
             {
-                if(!group.UseLabel ||
-                   group.Label != label) continue;
+                if(group.Label != label)
+                    continue;
 
-
-                return group.GetResourcesAll<T>();
+                result.AddRange(group.GetResourcesAll<T>());
             }
             
-            return default;
+            return result;
         }
 
         

@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using TriInspector;
 using UnityEngine;
 
 namespace LumosLib
 {
-    [Serializable, 
-     DeclareHorizontalGroup("horizontal")]
+    [Serializable]
     public class ResourceEntryGroup
     {
-        public bool UseLabel => _useLabel;
         public string Label => _label;
         public string FolderPath => _folderPath;
 
-        [SerializeField, Group("horizontal"), LabelText("Label")] private bool _useLabel;
-        [SerializeField, Group("horizontal"), ShowIf("_useLabel"), HideLabel] private string _label;
-        [SerializeField] private string _folderPath;
-        [SerializeField, 
-         ReadOnly, 
-         TableList(Draggable = true,
-            HideAddButton = false,
-            HideRemoveButton = false,
-            AlwaysExpanded = false)] private List<ResourceEntry> _entries;
+        [SerializeField, LabelWidth(5)] private string _folderPath;
+        [SerializeField] private string _label;
+        [SerializeField, ReadOnly] private List<ResourceEntry> _entries;
 
         private Dictionary<string, ResourceEntry> _entriesDict;
-        
 
         public void Init()
         {

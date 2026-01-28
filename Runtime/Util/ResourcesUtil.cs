@@ -69,7 +69,6 @@ namespace LumosLib
                 EditorUtility.SetDirty(owner);
             }
 
-            DebugUtil.Log($"Find {results.Count} resources.", $"Complete");
             return results;
 #endif
             return null;
@@ -80,7 +79,7 @@ namespace LumosLib
     public class ResourceEntry
     {
         public string key;
-        public List<UnityEngine.Object> _resources;
+        public List<Object> _resources;
         
         public T GetResource<T>()
         {
