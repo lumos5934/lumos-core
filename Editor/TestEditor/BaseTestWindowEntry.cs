@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -39,6 +40,24 @@ namespace LumosLib.Editor
 
         protected abstract void OnDraw();
         
+        #region >--------------------------------------------------- DRAW : BUTTON
+        
+        
+        public void DrawButton(string label, UnityAction onClick, float width = -1, float height = -1)
+        {
+            List<GUILayoutOption> options = new();
+        
+            if (width > 0) options.Add(GUILayout.Width(width));
+            if (height > 0) options.Add(GUILayout.Height(height));
+        
+            if (GUILayout.Button(label, options.ToArray()))
+            {
+                onClick?.Invoke();
+            }
+        }
+        
+        
+        #endregion
         #region >--------------------------------------------------- DRAW : FIELD
 
         
