@@ -54,12 +54,6 @@ namespace LumosLib.Editor
             CreateScript("Global.cs", File.ReadAllText(Constant.PathGlobalTemplate));
         }
         
-        [MenuItem("Assets/Create/Scripting/TestEditor", false, int.MinValue)]
-        public static void CreateTestEditorScript()
-        {
-            CreateScript("NewTestEditor.cs", File.ReadAllText(Constant.PathTestEditorTemplate));
-        }
-        
         [MenuItem("Assets/Create/Scripting/UI", false, int.MinValue)]
         public static void CreateUIScript()
         {
