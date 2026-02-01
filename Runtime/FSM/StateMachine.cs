@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.Events;
 
 namespace LumosLib
@@ -17,7 +16,7 @@ namespace LumosLib
         #region >--------------------------------------------------- FIELD
 
         
-        private Dictionary<Type, IState> _stateDict;
+        private Dictionary<Type, IState> _stateDict = new();
         private IState _curState;
 
         
@@ -32,20 +31,17 @@ namespace LumosLib
         #endregion    
         #region >--------------------------------------------------- CORE
 
-
-        public StateMachine(IState[] states)
+        public void Register(IState state)
         {
-            _stateDict = states.ToDictionary(state => state.GetType(),  state => state);
+            _stateDict[state.GetType()] = state;
         }
-
         
         public void Update()
         {
             _curState?.Update();
         }
 
-
-        public void SetState<T>() where T : IState
+        public void Transition<T>() where T : IState
         {
             if (!_stateDict.TryGetValue(typeof(T), out var newState) ||
                 _curState == newState) return;

@@ -30,9 +30,7 @@ namespace LumosLib.Editor
 
             if (_isOpen)
             {
-                DrawSpaceLine();
                 OnDraw();
-                DrawSpaceLine();
             }
             
             EditorGUILayout.EndVertical();
