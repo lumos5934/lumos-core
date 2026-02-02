@@ -38,10 +38,28 @@ namespace LumosLib.Editor
 
         protected abstract void OnDraw();
         
-        #region >--------------------------------------------------- DRAW : BUTTON
+        #region >--------------------------------------------------- DRAW : OTHER
+
+
+        protected void DrawLabel(string label, GUIStyle style = null)
+        {
+            if (style == null)
+                GUILayout.Label(label);
+            else
+                GUILayout.Label(label, style);
+        }
+
+        protected void DrawLine()
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        }
         
+        protected void DrawSpace(float height = 11)
+        {
+            EditorGUILayout.Space(height); 
+        }
         
-        public void DrawButton(string label, UnityAction onClick, float width = -1, float height = -1)
+        protected void DrawButton(string label, UnityAction onClick, float width = -1, float height = -1)
         {
             List<GUILayoutOption> options = new();
         
@@ -54,15 +72,12 @@ namespace LumosLib.Editor
             }
         }
         
+       
+        
         
         #endregion
         #region >--------------------------------------------------- DRAW : FIELD
 
-        
-        protected void DrawSpaceLine(float height = 11)
-        {
-            EditorGUILayout.Space(height); 
-        }
         
         protected void DrawField(string label, ref int value)
         {
@@ -84,7 +99,6 @@ namespace LumosLib.Editor
             value = EditorGUILayout.Vector2IntField(label, value); 
         }
      
-        
         protected void DrawField(string label, ref Vector3 value)
         {
             value = EditorGUILayout.Vector3Field(label, value); 
@@ -140,24 +154,24 @@ namespace LumosLib.Editor
             value = EditorGUILayout.EnumFlagsField(label, value);
         }
         
-        protected void DrawField(string label, ref bool value, UnityAction<bool> onClick)
+        protected void DrawField(string label, ref bool toggleValue, UnityAction<bool> onClick)
         {
             GUILayout.BeginHorizontal();
 
             GUILayout.Label(label, GUILayout.Width(EditorStyles.label.CalcSize(new GUIContent(label)).x + 10));
             
-            bool newValue = GUILayout.Toggle(value, GUIContent.none);
+            bool newValue = GUILayout.Toggle(toggleValue, GUIContent.none);
 
-            if (newValue != value)
+            if (newValue != toggleValue)
             {
-                value = newValue;
-                onClick?.Invoke(value);
+                toggleValue = newValue;
+                onClick?.Invoke(toggleValue);
             }
 
             GUILayout.EndHorizontal();
         }
 
-
+        
         #endregion
     }
 }

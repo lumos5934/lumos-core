@@ -27,18 +27,18 @@ namespace LumosLib.Editor
                 .Where(t => !t.IsAbstract)
                 .Select(t => Activator.CreateInstance(t) as BaseTestWindowEntry)
                 .ToArray();
+            
+            EditorApplication.update += Repaint;
+        }
+
+        private void OnDisable()
+        {
+            EditorApplication.update -= Repaint;
         }
 
         private void OnGUI()
         {
-            _scrollPos = EditorGUILayout.BeginScrollView(
-                _scrollPos,
-                false,
-                true,
-                GUIStyle.none,
-                GUI.skin.verticalScrollbar,
-                GUIStyle.none
-            );
+            _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
             
             EditorGUILayout.Space(20f);
             
@@ -47,16 +47,22 @@ namespace LumosLib.Editor
             style.normal.textColor = Color.cyan;
             style.alignment = TextAnchor.MiddleCenter;
 
+            EditorGUILayout.Space(10f);
             EditorGUILayout.LabelField("Test Window", style);
-            
             EditorGUILayout.Space(20f);
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            
+            
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             
             for (int i = 0; i < _entries.Length; i++)
             {
                 _entries[i].Draw();
             }
             
+            EditorGUILayout.EndVertical();
+            
+            
+            EditorGUILayout.Space(20f);
             EditorGUILayout.EndScrollView();
         }
     }
