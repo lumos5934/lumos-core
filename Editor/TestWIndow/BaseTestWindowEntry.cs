@@ -16,11 +16,10 @@ namespace LumosLib.Editor
         public void Draw()
         {
             EditorGUILayout.BeginVertical("box");
-            
           
             var style = new GUIStyle(EditorStyles.foldout);
             style.fontStyle = FontStyle.Bold;
-            style.fontSize = 14;
+            style.fontSize = 13;
             style.normal.textColor = Color.gray;
             style.onNormal.textColor = Color.green;
             style.hover.textColor  = Color.gray;
@@ -39,8 +38,16 @@ namespace LumosLib.Editor
 
             if (_isOpen)
             {
+                var contentStyle = new GUIStyle
+                {
+                    padding = new RectOffset(6, 6, 0, 0)
+                };
+                EditorGUILayout.BeginVertical(contentStyle);
+               
                 OnDraw();
                 DrawButton("Script", OpenScript);
+                
+                EditorGUILayout.EndVertical();
             }
             
             EditorGUILayout.EndVertical();
