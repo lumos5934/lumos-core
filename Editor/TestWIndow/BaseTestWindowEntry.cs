@@ -19,7 +19,7 @@ namespace LumosLib.Editor
             
             var style = new GUIStyle(EditorStyles.foldout);
             style.fontStyle = FontStyle.Bold;
-            style.fontSize = 13;
+            style.fontSize = 15;
             
             _isOpen = EditorGUILayout.Foldout(
                 _isOpen,
@@ -31,16 +31,41 @@ namespace LumosLib.Editor
             if (_isOpen)
             {
                 OnDraw();
+                DrawButton("Script", OpenScript);
             }
             
             EditorGUILayout.EndVertical();
         }
 
+        private void OpenScript()
+        {
+            string[] guids = AssetDatabase.FindAssets($"{GetType().Name} t:MonoScript");
+
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                MonoScript script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+
+                if (script != null && script.GetClass() == GetType())
+                {
+                    AssetDatabase.OpenAsset(script);
+                    return;
+                }
+            }
+        }
         protected abstract void OnDraw();
         
         #region >--------------------------------------------------- DRAW : OTHER
 
 
+        protected void DrawBox(Action contentsDraw)
+        {
+            EditorGUILayout.BeginVertical("box");
+            
+            contentsDraw?.Invoke();
+            
+            EditorGUILayout.EndVertical();
+        }
         protected void DrawLabel(string label, GUIStyle style = null)
         {
             if (style == null)

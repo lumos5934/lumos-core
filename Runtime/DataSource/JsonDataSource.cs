@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Cysharp.Threading.Tasks;
-using Firebase.Firestore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TriInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace LumosLib
@@ -24,6 +24,8 @@ namespace LumosLib
                 NullValueHandling = NullValueHandling.Ignore
             };
         }
+
+
 
         public override async UniTask WriteAsync<T>(T data)
         {
@@ -82,5 +84,13 @@ namespace LumosLib
 
             return path;
         }
+        
+#if UNITY_EDITOR
+        [Button("Open")]
+        public void OpenFolder()
+        {
+            EditorUtility.RevealInFinder(Application.persistentDataPath);
+        }
+#endif
     }
 }
