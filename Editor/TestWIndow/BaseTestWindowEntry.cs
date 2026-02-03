@@ -17,9 +17,18 @@ namespace LumosLib.Editor
         {
             EditorGUILayout.BeginVertical("box");
             
+          
             var style = new GUIStyle(EditorStyles.foldout);
             style.fontStyle = FontStyle.Bold;
-            style.fontSize = 15;
+            style.fontSize = 14;
+            style.normal.textColor = Color.gray;
+            style.onNormal.textColor = Color.green;
+            style.hover.textColor  = Color.gray;
+            style.onHover.textColor= Color.green;
+            style.active.textColor  = Color.gray;
+            style.onActive.textColor= Color.green;
+            style.focused.textColor  = Color.gray;
+            style.onFocused.textColor= Color.green;
             
             _isOpen = EditorGUILayout.Foldout(
                 _isOpen,
