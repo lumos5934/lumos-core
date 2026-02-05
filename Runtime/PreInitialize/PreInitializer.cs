@@ -40,7 +40,7 @@ namespace LumosLib
         #region >--------------------------------------------------- INIT
 
         
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Boot()
         {
             _initBarrier = new UniTaskCompletionSource();
