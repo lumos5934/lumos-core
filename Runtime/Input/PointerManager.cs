@@ -70,13 +70,13 @@ namespace LumosLib
             if (_clickInputReference.action.WasPressedThisFrame())
             {
                 OnPointerDown?.Invoke(
-                    new PointerDownEvent(ScreenPosition, WorldPosition, GetHitObject()));
+                    new PointerDownEvent(ScreenPosition, WorldPosition, GetHitCollider()));
             }
 
             if (_clickInputReference.action.WasReleasedThisFrame())
             {
                 OnPointerUp?.Invoke(
-                    new PointerUpEvent(ScreenPosition, WorldPosition, GetHitObject()));
+                    new PointerUpEvent(ScreenPosition, WorldPosition, GetHitCollider()));
             }
         }
 
@@ -106,14 +106,12 @@ namespace LumosLib
         #region >--------------------------------------------------- GET & SET
 
 
-        public GameObject GetHitObject()
+        public Collider2D GetHitCollider()
         {
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return null;
             
-            var hitCollider = Physics2D.OverlapPoint(WorldPosition);
-
-            return hitCollider != null ? hitCollider.gameObject : null;
+            return Physics2D.OverlapPoint(WorldPosition);
         }
         
         public void SetCamera(Camera cam)

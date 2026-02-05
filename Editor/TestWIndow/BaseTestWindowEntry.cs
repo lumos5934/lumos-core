@@ -45,8 +45,9 @@ namespace LumosLib.Editor
                 EditorGUILayout.BeginVertical(contentStyle);
                
                 OnDraw();
-                DrawButton("Script", OpenScript);
-                
+                DrawLine();
+                DrawButton("Open Script", OpenScript);
+            
                 EditorGUILayout.EndVertical();
             }
             
@@ -74,14 +75,20 @@ namespace LumosLib.Editor
         #region >--------------------------------------------------- DRAW : OTHER
 
 
-        protected void DrawBox(Action contentsDraw)
+        protected void DrawBox(Action drawContents)
         {
             EditorGUILayout.BeginVertical("box");
             
-            contentsDraw?.Invoke();
+            drawContents?.Invoke();
             
             EditorGUILayout.EndVertical();
         }
+        
+        protected void DrawFoldout(string label, ref bool isOpen)
+        {
+            isOpen = EditorGUILayout.Foldout(isOpen, label, true);
+        }
+        
         protected void DrawLabel(string label, GUIStyle style = null)
         {
             if (style == null)

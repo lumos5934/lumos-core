@@ -6,13 +6,15 @@ namespace LumosLib
     {
         public readonly Vector2 ScreenPosition;
         public readonly Vector2 WorldPosition;
-        public readonly GameObject HitObject;
+        public readonly Collider2D HitCollider;
+
         
-        public PointerUpEvent(Vector2 screenPosition, Vector2 worldPosition, GameObject hitObject)
+        public PointerUpEvent(Vector2 screenPosition, Vector2 worldPosition, Collider2D hitCollider)
         {
             ScreenPosition = screenPosition;
             WorldPosition = worldPosition;
-            HitObject = hitObject;
+            HitCollider = hitCollider;
+
         }
     }
 }
