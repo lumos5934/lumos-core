@@ -3,23 +3,14 @@ using UnityEngine;
 
 namespace LumosLib
 {
-    [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIBase : MonoBehaviour
     {
         #region >--------------------------------------------------- PROPERTIES
 
+        
         public bool IsEnabled { get; protected set; }
-        protected Canvas Canvas => _canvas;
-        protected CanvasGroup CanvasGroup => _canvasGroup;
-
-
-        #endregion
-        #region >--------------------------------------------------- FIELDS
-
-
-        private Canvas _canvas;
-        private CanvasGroup _canvasGroup;
+        protected CanvasGroup CanvasGroup { get; private set; }
 
 
         #endregion
@@ -28,8 +19,7 @@ namespace LumosLib
 
         protected virtual void Awake()
         {
-            _canvas = GetComponent<Canvas>();
-            _canvasGroup = GetComponent<CanvasGroup>();
+            CanvasGroup = GetComponent<CanvasGroup>();
         }
 
         
