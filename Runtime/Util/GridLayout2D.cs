@@ -1,6 +1,8 @@
 using TriInspector;
 using UnityEngine;
 
+
+[ExecuteAlways]
 public class GridLayout2D : MonoBehaviour
 {
     private enum SortDirection
@@ -20,24 +22,21 @@ public class GridLayout2D : MonoBehaviour
     [Title("Parameter")]
     [SerializeField] private StartAxis _sortAxis;
     [SerializeField] private SortDirection _sortDirection;
-    [SerializeField] private int _columns;
+    [SerializeField, Min(1)] private int _columns = 1;
     [SerializeField] private Vector2 _spacing;
-    [SerializeField] private bool _useUpdate;
 
-    private void Update()
+
+    void OnValidate()
     {
-        if (!_useUpdate)
-            return;
-
         SortGrid();
     }
 
-    [Button("Sort")]  
-    public void SortGrid()
+    private void SortGrid()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
             int row, col;
+            
             
             if (_sortAxis == StartAxis.Horizontal)
             {
