@@ -26,7 +26,7 @@ public class GridLayout2D : MonoBehaviour
     [SerializeField] private Vector2 _spacing;
 
 
-    void OnValidate()
+    private void Update()
     {
         SortGrid();
     }
