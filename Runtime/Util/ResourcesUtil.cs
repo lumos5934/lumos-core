@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using TriInspector;
 using UnityEditor;
 using UnityEngine;
 
@@ -50,15 +51,15 @@ namespace LumosLib
                             entry = new ResourceEntry()
                             {
                                 key = Path.GetFileNameWithoutExtension(relativePath),
-                                _resources = new()
+                                resources = new()
                             };
                         }
                         
-                        entry._resources.Add(asset);
+                        entry.resources.Add(asset);
                     }
                 }
                 
-                if (entry != null && entry._resources.Count > 0)
+                if (entry != null && entry.resources.Count > 0)
                 {
                     results.Add(entry);
                 }
@@ -78,12 +79,12 @@ namespace LumosLib
     [System.Serializable]
     public class ResourceEntry
     {
-        public string key;
-        public List<Object> _resources;
+        [HideLabel] public string key;
+        [HideInInspector] public List<Object> resources;
         
         public T GetResource<T>()
         {
-            foreach (var resource in _resources)
+            foreach (var resource in resources)
             {
                 if (resource is T t)
                 {
