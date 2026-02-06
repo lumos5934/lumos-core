@@ -2,7 +2,6 @@
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace LumosLib.Editor
 {
@@ -80,61 +79,61 @@ namespace LumosLib.Editor
         #region >--------------------------------------------------- PREFAB
 
         
-        [MenuItem("Assets/Create/Prefab/Empty", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Empty", false, int.MinValue)]
         public static void CreateEmptyPrefab()
         {
             CreatePrefab(new GameObject("Empty"));
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Event", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Event", false, int.MinValue)]
         public static void CreateEventManagerPrefab()
         {
             CreatePrefab<EventManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Resource", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Resource", false, int.MinValue)]
         public static void CreateResourceManagerPrefab()
         {
             CreatePrefab<ResourceManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Audio", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Audio", false, int.MinValue)]
         public static void CreateAudioManagerPrefab()
         {
             CreatePrefab<AudioManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Popup", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Popup", false, int.MinValue)]
         public static void CreatePopupManagerPrefab()
         {
             CreatePrefab<PopupManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Pool", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Pool", false, int.MinValue)]
         public static void CreatePoolManagerPrefab()
         {
             CreatePrefab<PoolManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Pointer", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Pointer", false, int.MinValue)]
         public static void CreatePointerManagerPrefab()
         {
             CreatePrefab<PointerManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Tutorial", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Tutorial", false, int.MinValue)]
         public static void CreateTutorialManagerPrefab()
         {
             CreatePrefab<TutorialManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/Save", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Manager/Save", false, int.MinValue)]
         public static void CreateSaveManagerPrefab()
         {
             CreatePrefab<SaveManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Audio Player", false, int.MinValue)]
+        [MenuItem("Assets/Create/[ LumosLib ]/Prefab/Audio Player", false, int.MinValue)]
         public static void CreateAudioPlayerPrefab()
         {
             CreatePrefab<AudioPlayer>();

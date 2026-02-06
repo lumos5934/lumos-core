@@ -3,7 +3,7 @@ using UnityEngine.Audio;
 
 namespace LumosLib
 {
-    [CreateAssetMenu(fileName = "SoundAsset", menuName = "SO/Sound Asset")]
+    [CreateAssetMenu(fileName = "SoundAsset", menuName = "[ LumosLib ]/SO/Sound Asset")]
     public class SoundAsset : ScriptableObject
     {
         [field: SerializeField] public AudioMixerGroup MixerGroup { get; set; }

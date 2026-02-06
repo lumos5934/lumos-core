@@ -11,7 +11,6 @@ namespace LumosLib
         {
             base.Init();
             
-            
             GlobalService.Get<IPopupManager>()?.Register(this);
         }
 
