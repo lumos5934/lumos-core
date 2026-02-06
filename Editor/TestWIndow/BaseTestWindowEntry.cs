@@ -15,7 +15,7 @@ namespace LumosLib.Editor
         
         public void Draw()
         {
-            EditorGUILayout.BeginVertical("box");
+            Rect contentRect  = EditorGUILayout.BeginVertical("box");
           
             var style = new GUIStyle(EditorStyles.foldout);
             style.fontStyle = FontStyle.Bold;
@@ -43,13 +43,13 @@ namespace LumosLib.Editor
                     padding = new RectOffset(6, 6, 0, 0)
                 };
                 EditorGUILayout.BeginVertical(contentStyle);
-               
+                
                 OnDraw();
-                DrawLine();
-                DrawButton("Open Script", OpenScript);
             
                 EditorGUILayout.EndVertical();
             }
+            
+            HandleContextMenu(contentRect);
             
             EditorGUILayout.EndVertical();
         }
@@ -70,6 +70,23 @@ namespace LumosLib.Editor
                 }
             }
         }
+        
+        private void HandleContextMenu(Rect rect)
+        {
+            Event current = Event.current;
+        
+            if (current.type == EventType.ContextClick && rect.Contains(current.mousePosition))
+            {
+                GenericMenu menu = new GenericMenu();
+            
+                menu.AddItem(new GUIContent("Script"), false, OpenScript);
+            
+                menu.ShowAsContext();
+            
+                current.Use();
+            }
+        }
+        
         protected abstract void OnDraw();
         
         #region >--------------------------------------------------- DRAW : OTHER
