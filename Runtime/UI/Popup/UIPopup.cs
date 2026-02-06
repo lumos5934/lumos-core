@@ -11,7 +11,6 @@ namespace LumosLib
         {
             base.Init();
             
-            Canvas.renderMode = RenderMode.ScreenSpaceCamera;
             
             GlobalService.Get<IPopupManager>()?.Register(this);
         }

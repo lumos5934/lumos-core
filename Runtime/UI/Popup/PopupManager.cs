@@ -4,7 +4,6 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 namespace LumosLib
@@ -13,9 +12,6 @@ namespace LumosLib
     {
         #region >--------------------------------------------------- FIELD
 
-        
-        [Title("Component")]
-        [SerializeField] private Camera _camera;
         
         [PropertySpace(15f)]
         [Title("Parameter")]
@@ -31,6 +27,7 @@ namespace LumosLib
         private Dictionary<Type, UIPopup> _popupPool = new();
         private Dictionary<Type, UIPopup> _popupPrefabDict = new();
         private Stack<UIPopup> _popupStack = new();
+        private Camera _camera;
        
         
         #endregion
@@ -48,14 +45,8 @@ namespace LumosLib
             {
                 _popupPrefabDict[prefab.GetType()] = prefab;
             }
-
-            var mainCam = Camera.main;
-            if (mainCam != null)
-            {
-                UpdateCameraStack(mainCam);
-            }
             
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneLoaded += ( scene, mode) => CloseAll();
             
             GlobalService.Register<IPopupManager>(this);
             
@@ -77,6 +68,16 @@ namespace LumosLib
         {
             var type = popup.GetType();
             _popupPool.Remove(type);
+        }
+        
+        public void SetCamera(Camera sceneCam)
+        {
+            _camera = sceneCam;
+
+            foreach (var popup in _popupStack)
+            {
+                popup.SetCamera(_camera);
+            }
         }
         
         public T Open<T>()  where T : UIPopup
@@ -102,8 +103,8 @@ namespace LumosLib
             }
             
             _popupStack.Push(popup);
-            popup.Canvas.sortingOrder = _startOrder + _popupStack.Count * _orderInterval;
-            popup.Canvas.worldCamera = _camera;
+            popup.SetOrder(_startOrder + _popupStack.Count * _orderInterval);
+            popup.SetCamera(_camera);
             popup.Open();
             
             return popup as T;
@@ -147,7 +148,7 @@ namespace LumosLib
                 var popup = tempStackList[i];
                 _popupStack.Push(popup);
             
-                popup.Canvas.sortingOrder = _startOrder + (_popupStack.Count * _orderInterval);
+                popup.SetOrder(_startOrder + _popupStack.Count * _orderInterval);
             }
         }
         
@@ -176,53 +177,8 @@ namespace LumosLib
             return null;
         }
         
-        public void UpdateCameraStack(Camera baseCam)
-        {
-            if (_camera == null || 
-                baseCam == null)
-                return;
-            
-            var baseCamData = baseCam.GetUniversalAdditionalCameraData();
-            
-            _camera.targetTexture = baseCam.targetTexture;
-            _camera.allowHDR = baseCam.allowHDR;
-            _camera.allowMSAA = baseCam.allowMSAA;
-            
-            var stack = baseCamData.cameraStack;
-            
-            if (stack.Contains(_camera))
-            {
-                stack.Remove(_camera);
-            }
-          
-            if (_cameraStackIndex < stack.Count)
-            {
-                stack.Insert(_cameraStackIndex, _camera);
-            }
-            else
-            {
-                stack.Add(_camera);
-            }
-        }
-        
-        
         #endregion
-        #region >--------------------------------------------------- EVENT_HANDLER
-
-        
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            var mainCam = Camera.main;
-            if (mainCam != null)
-            {
-                UpdateCameraStack(mainCam);
-            }
-
-            CloseAll();
-        }
-
-        
-        #endregion
+#if UNITY_EDITOR
         #region >--------------------------------------------------- INSPECTOR
         
         
@@ -245,5 +201,6 @@ namespace LumosLib
         
         
         #endregion
+#endif
     }
 }

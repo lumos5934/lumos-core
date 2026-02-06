@@ -6,7 +6,7 @@ namespace LumosLib
         typeof(RectTransform))]
     public abstract class UIBase : MonoBehaviour
     {
-        public CanvasGroup CanvasGroup { get; private set; }
+        protected CanvasGroup CanvasGroup { get; private set; }
         public RectTransform RectTransform { get; private set; }
 
         public virtual void Init()

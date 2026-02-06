@@ -6,7 +6,9 @@ namespace LumosLib
     public abstract class UIPanel : UIBase
     {
         public bool IsOpened { get; protected set; }
-        public Canvas Canvas { get; private set; }
+        protected Canvas Canvas { get; private set; }
+        
+        [SerializeField] protected Camera _camera;
         
         
         public virtual void Open() => IsOpened = true;
@@ -16,7 +18,7 @@ namespace LumosLib
             base.Init();
             
             Canvas =  GetComponent<Canvas>();
-
+            
             var childUIs = GetComponentsInChildren<UIBase>();
             foreach (var ui in childUIs)
             {
@@ -25,6 +27,17 @@ namespace LumosLib
                 
                 ui.Init();
             }
+        }
+
+        public void SetCamera(Camera cam)
+        {
+            _camera = cam;
+            Canvas.worldCamera = cam;
+        }
+
+        public void SetOrder(int order)
+        {
+            Canvas.sortingOrder = order;
         }
     }
 }
