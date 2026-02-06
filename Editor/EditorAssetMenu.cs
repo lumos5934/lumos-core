@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LumosLib.Editor
 {
@@ -21,43 +22,27 @@ namespace LumosLib.Editor
             return path;
         }
         
-        public static void CreatePrefab<T>() where T : MonoBehaviour
+        public static GameObject CreatePrefab<T>() where T : Component
         {
             string typeName = typeof(T).Name;
             
             GameObject obj = new GameObject(typeName);
             obj.AddComponent<T>();
-
-            CreatePrefab(obj);
+            
+            return CreatePrefab(obj);
         }
         
-        private static void CreatePrefab(GameObject obj)
+        private static GameObject CreatePrefab(GameObject obj)
         {
             string prefabPath = Path.Combine(GetCurrentPath(), obj.name + ".prefab");
 
-            PrefabUtility.SaveAsPrefabAsset(obj, prefabPath);
+            GameObject prefab = PrefabUtility.SaveAsPrefabAsset(obj, prefabPath);
             
             Selection.activeObject = null;
             Object.DestroyImmediate(obj);
             AssetDatabase.Refresh();
-        }
-        
 
-        
-        #endregion
-        #region >--------------------------------------------------- SCRIPT
-        
-        
-        [MenuItem("Assets/Create/Scripting/Global", false, int.MinValue)]
-        public static void CreateGlobalScript()
-        {
-            CreateScript("Global.cs", File.ReadAllText(Constant.PathGlobalTemplate));
-        }
-        
-        [MenuItem("Assets/Create/Scripting/UI", false, int.MinValue)]
-        public static void CreateUIScript()
-        {
-            CreateScript("UINew.cs", File.ReadAllText(Constant.PathUITemplate));
+            return prefab;
         }
         
         public static void CreateScript(string scriptName, string template)
@@ -89,6 +74,8 @@ namespace LumosLib.Editor
         }
         
 
+        
+
         #endregion
         #region >--------------------------------------------------- PREFAB
 
@@ -117,10 +104,10 @@ namespace LumosLib.Editor
             CreatePrefab<AudioManager>();
         }
         
-        [MenuItem("Assets/Create/Prefab/Manager/UI", false, int.MinValue)]
-        public static void CreateUIManagerPrefab()
+        [MenuItem("Assets/Create/Prefab/Manager/Popup", false, int.MinValue)]
+        public static void CreatePopupManagerPrefab()
         {
-            CreatePrefab<UIManager>();
+            CreatePrefab<PopupManager>();
         }
         
         [MenuItem("Assets/Create/Prefab/Manager/Pool", false, int.MinValue)]

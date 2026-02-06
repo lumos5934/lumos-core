@@ -1,9 +1,0 @@
-﻿using LumosLib;
-
-public class #SCRIPTNAME# : UIBase
-{
-    public override void SetEnable(bool enable)
-    {
-        base.SetEnable(enable);
-    }
-}

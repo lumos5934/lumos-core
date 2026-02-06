@@ -2,36 +2,17 @@
 
 namespace LumosLib
 {
-    [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(CanvasGroup),
+        typeof(RectTransform))]
     public abstract class UIBase : MonoBehaviour
     {
-        #region >--------------------------------------------------- PROPERTIES
+        public CanvasGroup CanvasGroup { get; private set; }
+        public RectTransform RectTransform { get; private set; }
 
-        
-        public bool IsEnabled { get; protected set; }
-        protected CanvasGroup CanvasGroup { get; private set; }
-
-
-        #endregion
-        #region >--------------------------------------------------- UNITY
-
-
-        protected virtual void Awake()
+        public virtual void Init()
         {
             CanvasGroup = GetComponent<CanvasGroup>();
+            RectTransform = GetComponent<RectTransform>();
         }
-
-        
-        #endregion
-        #region >--------------------------------------------------- Set
-
-
-        public virtual void SetEnable(bool enable)
-        {
-            IsEnabled = enable;
-        }
-
-
-        #endregion
     }
 }

@@ -82,8 +82,11 @@ namespace LumosLib
             
             foreach (var group in _entryGroups)
             {
-                if(group.Label != label)
-                    continue;
+                if (label != string.Empty)
+                {
+                    if(group.Label != label)
+                        continue;
+                }
 
                 result.AddRange(group.GetResourcesAll<T>());
             }
