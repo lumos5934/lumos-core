@@ -8,7 +8,7 @@ namespace LumosLib.Editor
 {
     public class TestWindow : EditorWindow
     {
-        private BaseTestWindowEntry[] _entries;
+        private BaseTestWindowElement[] _entries;
         private Vector2 _scrollPos;
         
         [MenuItem("Window/[ Lumos Lib ]/Test Window", false, int.MinValue)]
@@ -22,9 +22,9 @@ namespace LumosLib.Editor
         private void OnEnable()
         {
             _entries = TypeCache
-                .GetTypesDerivedFrom<BaseTestWindowEntry>()
+                .GetTypesDerivedFrom<BaseTestWindowElement>()
                 .Where(t => !t.IsAbstract)
-                .Select(t => Activator.CreateInstance(t) as BaseTestWindowEntry)
+                .Select(t => Activator.CreateInstance(t) as BaseTestWindowElement)
                 .ToArray();
             
             EditorApplication.update += Repaint;

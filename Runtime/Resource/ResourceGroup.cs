@@ -7,30 +7,30 @@ using UnityEngine;
 namespace LumosLib
 {
     [Serializable]
-    public class ResourceEntryGroup
+    public class ResourceGroup
     {
         public string Label => _label;
-        public string FolderPath => _folderPath;
+        public string Path => _path;
 
-        [SerializeField, LabelWidth(5)] private string _folderPath;
-        [SerializeField] private string _label;
-        [SerializeField, ReadOnly] private List<ResourceEntry> _entries;
+        [Group("Address"), SerializeField, LabelWidth(50)] private string _path;
+        [Group("Address"), SerializeField, LabelWidth(50)] private string _label;
+        [Group("Element"), SerializeField, ReadOnly, LabelText("Key")] private List<ResourceElement> _elements;
 
-        private Dictionary<string, ResourceEntry> _entriesDict;
+        private Dictionary<string, ResourceElement> _elementsDict;
 
         public void Init()
         {
-            _entriesDict = new();
+            _elementsDict = new();
             
-            foreach (var entry in _entries)
+            foreach (var entry in _elements)
             {
-                _entriesDict[entry.key] = entry;
+                _elementsDict[entry.key] = entry;
             }
         }
         
         public T GetResource<T>(string entryName)
         {
-            if (_entriesDict.TryGetValue(entryName, out var entry))
+            if (_elementsDict.TryGetValue(entryName, out var entry))
             {
                 return entry.GetResource<T>();
             }
@@ -42,7 +42,7 @@ namespace LumosLib
         {
             var result = new List<T>();
 
-            foreach (var entry in _entries)
+            foreach (var entry in _elements)
             {
                 var resource = entry.GetResource<T>();
 
@@ -55,9 +55,9 @@ namespace LumosLib
             return result;
         }
 
-        public void SetResources(List<ResourceEntry> entries)
+        public void SetResources(List<ResourceElement> entries)
         {
-            _entries = entries;
+            _elements = entries;
         }
     }
 }

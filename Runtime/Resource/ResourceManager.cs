@@ -7,21 +7,17 @@ using Object = UnityEngine.Object;
 
 namespace LumosLib
 {
-    [DeclareBoxGroup("Resources", Title = "Resources")]
     public class ResourceManager : MonoBehaviour, IPreInitializable, IResourceManager
     {
         #region  >--------------------------------------------------- FIELD
 
         
-        [Group("Resources"), 
-         SerializeField, 
-         LabelText("Entries"), 
+        [SerializeField, 
          TableList(Draggable = true,
              HideAddButton = false,
              HideRemoveButton = false,
              AlwaysExpanded = false)] 
-        private List<ResourceEntryGroup> _entryGroups;
-        
+        private List<ResourceGroup> _groups;
         
         
         #endregion
@@ -30,7 +26,7 @@ namespace LumosLib
         
         public UniTask<bool> InitAsync()
         {
-            foreach (var group in _entryGroups)
+            foreach (var group in _groups)
             {
                 group.Init();
             }
@@ -46,7 +42,7 @@ namespace LumosLib
 
         public T Get<T>(string assetName)
         {
-            foreach (var group in _entryGroups)
+            foreach (var group in _groups)
             {
                 var result = group.GetResource<T>(assetName);
 
@@ -65,7 +61,7 @@ namespace LumosLib
                 return Get<T>(assetName);
             
             
-            foreach (var group in _entryGroups)
+            foreach (var group in _groups)
             {
                 if(group.Label != label) 
                     continue;
@@ -80,7 +76,7 @@ namespace LumosLib
         {
             var result = new List<T>();
             
-            foreach (var group in _entryGroups)
+            foreach (var group in _groups)
             {
                 if (label != string.Empty)
                 {
@@ -99,12 +95,27 @@ namespace LumosLib
         #region >--------------------------------------------------- INSPECTOR
         
         
-        [Group("Resources"), Button("Collect All Resources")]
+        [Button("Collect All Resources")]
         public void SetEntriesResources()
         {
-            foreach (var group in _entryGroups)
+            List<string> usedPath = new();
+            List<ResourceGroup> duplicateGroups = new();
+            
+            foreach (var group in _groups)
             {
-                group.SetResources(ResourcesUtil.Find<Object>(this, group.FolderPath, SearchOption.TopDirectoryOnly));
+                if (usedPath.Contains(group.Path))
+                {
+                    duplicateGroups.Add(group);
+                    continue;
+                }
+
+                usedPath.Add(group.Path);
+                group.SetResources(ResourcesUtil.Find<Object>(this, group.Path, SearchOption.TopDirectoryOnly));
+            }
+
+            foreach (var group in duplicateGroups)
+            {
+               _groups.Remove(group);
             }
         }
         

@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace LumosLib.Editor
 {
-    public abstract class BaseTestWindowEntry
+    public abstract class BaseTestWindowElement
     {
         protected abstract string Title { get; }
         
