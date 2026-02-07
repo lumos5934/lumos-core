@@ -14,7 +14,7 @@ namespace LumosLib
             GlobalService.Get<IPopupManager>()?.Register(this);
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             GlobalService.Get<IPopupManager>()?.Unregister(this);
         }

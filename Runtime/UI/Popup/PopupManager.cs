@@ -18,7 +18,6 @@ namespace LumosLib
         [Title("Parameter")]
         [SerializeField] private int _startOrder;
         [SerializeField] private int _orderInterval;
-        [SerializeField, Min(1)] private int _cameraStackIndex; 
          
         [PropertySpace(15f)]
         [Title("Resource")]
@@ -98,8 +97,9 @@ namespace LumosLib
         
         public T Open<T>()  where T : UIPopup
         {
-            if(Get<T>())
-                return null;
+            var contains = Get<T>();
+            if (contains != null)
+                return contains;
             
             var type = typeof(T);
             
