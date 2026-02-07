@@ -1,19 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace LumosLib
 {
-    [RequireComponent(typeof(Canvas))]
+    [RequireComponent(typeof(Canvas)),
+     RequireComponent(typeof(CanvasScaler)),
+     RequireComponent(typeof(GraphicRaycaster))]
     public abstract class UIPanel : UIBase
     {
-        public bool IsOpened { get; protected set; }
-
         protected Canvas _canvas;
-        protected Camera _camera;
         
-        
-        public virtual void Open() => IsOpened = true;
-        public virtual void Close() => IsOpened = false;
-        public  override void Init()
+        public override void Init()
         {
             base.Init();
             
@@ -31,7 +28,6 @@ namespace LumosLib
 
         public void SetCamera(Camera cam)
         {
-            _camera = cam;
             _canvas.worldCamera = cam;
         }
 

@@ -9,13 +9,11 @@ using UnityEngine.SceneManagement;
 
 namespace LumosLib
 {
-    public class PopupManager : MonoBehaviour, IPopupManager, IPreInitializable
+    public class PopupManager : BasePopupManager
     {
         #region >--------------------------------------------------- FIELD
 
-        
-        [PropertySpace(15f)]
-        [Title("Parameter")]
+        [Title("Canvas Parameter")]
         [SerializeField] private int _startOrder;
         [SerializeField] private int _orderInterval;
          
@@ -24,17 +22,13 @@ namespace LumosLib
         [SerializeField] private List<UIPopup> _popupPrefabs;
         
         
-        private Dictionary<Type, UIPopup> _popupPool = new();
         private Dictionary<Type, UIPopup> _popupPrefabDict = new();
-        private Stack<UIPopup> _popupStack = new();
-        private Camera _camera;
-       
-        
+
+
         #endregion
         #region >--------------------------------------------------- INIT
         
-        
-        public async UniTask<bool> InitAsync()
+        protected override async UniTask<bool> OnInitAsync()
         {
             _camera = GetComponentInChildren<Camera>();
             if (_camera == null)
@@ -61,49 +55,21 @@ namespace LumosLib
             
             return await UniTask.FromResult(true);
         }
-        
+
         
         #endregion
         #region >--------------------------------------------------- CORE
         
-        
-        public void Register(UIPopup popup)
-        {
-            var type = popup.GetType();
-            _popupPool.TryAdd(type, popup);
-        }
 
-        public void Unregister(UIPopup popup)
+        protected override T OnOpen<T>()
         {
-            var type = popup.GetType();
-            _popupPool.Remove(type);
-        }
-        
-        public T Get<T>() where T : UIPopup
-        {
-            var type = typeof(T);
-            
-            foreach (var popup in _popupStack)
-            {
-                if (popup.GetType() == type)
-                {
-                    return popup as T;
-                }
-            }
-            
-            return null;
-        }
-        
-        
-        public T Open<T>()  where T : UIPopup
-        {
-            var contains = Get<T>();
-            if (contains != null)
-                return contains;
+            var opened = Get<T>();
+            if (opened != null)
+                return Open(opened) as T;
             
             var type = typeof(T);
             
-            if (!_popupPool.TryGetValue(type, out UIPopup popup))
+            if (!_popupCache.TryGetValue(type, out UIPopup popup))
             {
                 _popupPrefabDict.TryGetValue(type, out UIPopup resource);
                 if (resource == null)
@@ -117,68 +83,76 @@ namespace LumosLib
                     popup.transform.SetParent(transform);
                 }
             }
-            
-            _popupStack.Push(popup);
-            popup.SetOrder(_startOrder + _popupStack.Count * _orderInterval);
-            popup.SetCamera(_camera);
-            popup.Open();
-            
-            return popup as T;
+
+            return Open(popup) as T;
         }
-        
-        public void Close()
+
+        protected override void OnClose()
         {
-            if (_popupStack.Count == 0) 
+            if (_openedPopups.Count == 0)
                 return;
 
-            var popup = _popupStack.Pop();
-            popup?.Close();
-        }
-        
-        public void Close<T>() where T : UIPopup
-        {
-            var type = typeof(T);
-            
-            UIPopup targetPopup = null;
+            int lastIndex = _openedPopups.Count - 1;
+            var popup = _openedPopups[lastIndex];
 
-            var tempStackList = new List<UIPopup>(_popupStack);
-            for (int i = 0; i < tempStackList.Count; i++)
+            _openedPopups.RemoveAt(lastIndex);
+            popup.Close();
+
+            UpdateOrders();
+        }
+
+        protected override void OnClose<T>()
+        {
+            for (int i = _openedPopups.Count - 1; i >= 0; i--)
             {
-                if (tempStackList[i].GetType() == type)
+                if (_openedPopups[i] is T popup)
                 {
-                    targetPopup = tempStackList[i];
-                    tempStackList.RemoveAt(i); 
-                    break;
+                    int index = _openedPopups.IndexOf(popup);
+                    if (index < 0)
+                        return;
+
+                    _openedPopups.RemoveAt(index);
+                    
+                    popup.Close();
+                    UpdateOrders();
+                    return;
                 }
             }
-
-            if (targetPopup == null) 
-                return;
-            
-            
-            targetPopup.Close(); 
-            _popupStack.Clear();
-        
-            for (int i = tempStackList.Count - 1; i >= 0; i--)
-            {
-                var popup = tempStackList[i];
-                _popupStack.Push(popup);
-            
-                popup.SetOrder(_startOrder + _popupStack.Count * _orderInterval);
-            }
         }
-        
 
-        public void CloseAll()
+        private UIPopup Open(UIPopup popup)
         {
-            while (_popupStack.Count > 0)
+            if (_openedPopups.Contains(popup))
             {
-                var popup = _popupStack.Pop();
-                popup?.Close();
+                int index = _openedPopups.IndexOf(popup);
+                if (index == _openedPopups.Count - 1)
+                    return popup;
+
+                _openedPopups.RemoveAt(index);
+                _openedPopups.Add(popup);
+            }
+            else
+            {
+                _openedPopups.Add(popup);
+                popup.SetCamera(_camera);
+                popup.Open();
+            }
+            
+            UpdateOrders();
+            
+            return popup;
+        }
+        
+        private void UpdateOrders()
+        {
+            for (int i = 0; i < _openedPopups.Count; i++)
+            {
+                int order = _startOrder + (i + 1) * _orderInterval;
+                
+                _openedPopups[i].SetOrder(order);
             }
         }
-
-
+        
         private void UpdateCameraStack()
         {
             Camera mainCam = Camera.main;
