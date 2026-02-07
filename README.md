@@ -6,6 +6,7 @@
 
 ## ℹ️의존성
 
+* **URP**
 * **Newtonsoft.Json (자동 설치)**
 * [ UniTask ](https://github.com/Cysharp/UniTask?tab=readme-ov-file#upm-package)
 * [ Tri-Inspector ](https://github.com/codewriter-packages/Tri-Inspector?tab=readme-ov-file)
@@ -37,7 +38,7 @@
 * [ Resource ](https://www.notion.so/Resource-2df3966a742c80bbbad3d8fbf0bd24d2?source=copy_link)
 * [ Save ](https://www.notion.so/Save-2df3966a742c80898b8ad7cd3d16f9ec?source=copy_link)
 * [ Tutorial ](https://www.notion.so/Tutorial-2df3966a742c808b860be13cf2e99a08?source=copy_link)
-* [ TestEditor ](https://www.notion.so/Test-Editor-2df3966a742c80c3af6ac96904d157da?source=copy_link)
+* [ TestWindow ](https://www.notion.so/Test-Editor-2df3966a742c80c3af6ac96904d157da?source=copy_link)
 * [ Popup ](https://www.notion.so/UI-2df3966a742c80f38990cbc42a6d1b49?source=copy_link)
 
 <br>
