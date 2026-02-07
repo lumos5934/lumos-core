@@ -36,11 +36,6 @@ namespace LumosLib
         
         public async UniTask<bool> InitAsync()
         {
-            if (_camera == null)
-            {
-                return await UniTask.FromResult(false);
-            }
-            
             foreach (var prefab in _popupPrefabs)
             {
                 _popupPrefabDict[prefab.GetType()] = prefab;
@@ -70,9 +65,24 @@ namespace LumosLib
             _popupPool.Remove(type);
         }
         
-        public void SetCamera(Camera sceneCam)
+        public T Get<T>() where T : UIPopup
         {
-            _camera = sceneCam;
+            var type = typeof(T);
+            
+            foreach (var popup in _popupStack)
+            {
+                if (popup.GetType() == type)
+                {
+                    return popup as T;
+                }
+            }
+            
+            return null;
+        }
+        
+        public void SetCamera(Camera baseCam)
+        {
+            _camera = baseCam;
 
             foreach (var popup in _popupStack)
             {
@@ -161,21 +171,7 @@ namespace LumosLib
                 popup?.Close();
             }
         }
-      
-        public T Get<T>() where T : UIPopup
-        {
-            var type = typeof(T);
-            
-            foreach (var popup in _popupStack)
-            {
-                if (popup.GetType() == type)
-                {
-                    return popup as T;
-                }
-            }
-            
-            return null;
-        }
+        
         
         #endregion
 #if UNITY_EDITOR

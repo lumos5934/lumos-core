@@ -9,6 +9,7 @@ namespace LumosLib
         public void Close<T>() where T : UIPopup;
         public void Close();
         public void CloseAll();
+        public void SetCamera(Camera baseCam);
         public void Register(UIPopup popup);
         public void Unregister(UIPopup popup);
     }
