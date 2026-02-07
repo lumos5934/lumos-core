@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace LumosLib.Editor
 {
-    public class EditorHierarchyMenu
+    public class EditorGameObjectMenu
     {
-        [MenuItem("GameObject/UI/World Button", false, 0)]
+        [MenuItem("GameObject/[ LumosLib ]/UI/World Button", false, 0)]
         private static void CreateWorldButton(MenuCommand menuCommand)
         {
             CreateNewObject(menuCommand, "WorldButton", new []
@@ -15,7 +15,6 @@ namespace LumosLib.Editor
                 typeof(WorldButton),
             });
         }
-
 
         private static void CreateNewObject(MenuCommand menuCommand, string name, Type[] addComponents)
         {

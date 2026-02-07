@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace LumosLib.Editor
 {
@@ -12,7 +11,7 @@ namespace LumosLib.Editor
         private BaseTestWindowEntry[] _entries;
         private Vector2 _scrollPos;
         
-        [MenuItem("Window/Lumos Lib/Test Window")]
+        [MenuItem("Window/[ Lumos Lib ]/Test Window", false, int.MinValue)]
         public static void Open()
         {
             var window = GetWindow<TestWindow>();
