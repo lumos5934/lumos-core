@@ -4,7 +4,8 @@
     "references": [
         "TriInspector",
         "Unity.InputSystem",
-        "UniTask"
+        "UniTask",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

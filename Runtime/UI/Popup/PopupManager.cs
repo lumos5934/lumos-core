@@ -4,6 +4,7 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 namespace LumosLib
@@ -36,12 +37,26 @@ namespace LumosLib
         
         public async UniTask<bool> InitAsync()
         {
+            _camera = GetComponentInChildren<Camera>();
+            if (_camera == null)
+                return await UniTask.FromResult(false);
+            
+            _camera.cullingMask = LayerMask.GetMask("UI");
+            _camera.clearFlags = CameraClearFlags.Depth;
+            
+            
             foreach (var prefab in _popupPrefabs)
             {
                 _popupPrefabDict[prefab.GetType()] = prefab;
             }
+
+            UpdateCameraStack();
             
-            SceneManager.sceneLoaded += ( scene, mode) => CloseAll();
+            SceneManager.sceneLoaded += ( scene, mode) =>
+            {
+                CloseAll();
+                UpdateCameraStack();
+            };
             
             GlobalService.Register<IPopupManager>(this);
             
@@ -80,15 +95,6 @@ namespace LumosLib
             return null;
         }
         
-        public void SetCamera(Camera baseCam)
-        {
-            _camera = baseCam;
-
-            foreach (var popup in _popupStack)
-            {
-                popup.SetCamera(_camera);
-            }
-        }
         
         public T Open<T>()  where T : UIPopup
         {
@@ -171,7 +177,29 @@ namespace LumosLib
                 popup?.Close();
             }
         }
-        
+
+
+        private void UpdateCameraStack()
+        {
+            Camera mainCam = Camera.main;
+            if (mainCam != null)
+            {
+                var mainCamData = mainCam.GetUniversalAdditionalCameraData();
+                var popupCamData = _camera.GetUniversalAdditionalCameraData();
+                
+                if (!mainCamData.cameraStack.Contains(_camera))
+                {
+                    mainCamData.cameraStack.Add(_camera);
+                    
+                    _camera.targetTexture = mainCam.targetTexture;
+                    _camera.targetDisplay = mainCam.targetDisplay;
+                    _camera.allowMSAA = mainCam.allowMSAA;
+                
+                    popupCamData.antialiasing = mainCamData.antialiasing;
+                    popupCamData.antialiasingQuality = mainCamData.antialiasingQuality;
+                }
+            }
+        }
         
         #endregion
 #if UNITY_EDITOR

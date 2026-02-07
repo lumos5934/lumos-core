@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.Universal;
 
 namespace LumosLib.Editor
 {
@@ -98,9 +99,11 @@ namespace LumosLib.Editor
         {
             CreatePrefab<PopupManager>(obj =>
             {
-                GameObject camera = new GameObject("Camera");
-                camera.AddComponent<Camera>();
-                camera.transform.SetParent(obj.transform);
+                GameObject cameraObj = new GameObject("Camera");
+                cameraObj.transform.SetParent(obj.transform);
+                var camera = cameraObj.AddComponent<Camera>();
+                var data = camera.GetUniversalAdditionalCameraData();
+                data.renderType =  CameraRenderType.Overlay;
             });
         }
         
