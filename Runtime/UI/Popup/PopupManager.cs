@@ -13,17 +13,13 @@ namespace LumosLib
     {
         #region >--------------------------------------------------- FIELD
 
-        [Title("Canvas Parameter")]
+        
+        [InfoBox("Requirement : IResourceManager")]
         [SerializeField] private int _startOrder;
         [SerializeField] private int _orderInterval;
-         
-        [PropertySpace(15f)]
-        [Title("Resource")]
-        [SerializeField] private List<UIPopup> _popupPrefabs;
-        
         
         private Dictionary<Type, UIPopup> _popupPrefabDict = new();
-
+        private IResourceManager _resourceMgr;
 
         #endregion
         #region >--------------------------------------------------- INIT
@@ -31,14 +27,18 @@ namespace LumosLib
         protected override async UniTask<bool> OnInitAsync()
         {
             _camera = GetComponentInChildren<Camera>();
-            if (_camera == null)
+            _resourceMgr = GlobalService.Get<IResourceManager>();
+            
+            if (_camera == null || 
+                _resourceMgr == null)
                 return await UniTask.FromResult(false);
             
             _camera.cullingMask = LayerMask.GetMask("UI");
             _camera.clearFlags = CameraClearFlags.Depth;
+
+            var prefabs  = _resourceMgr.GetAll<UIPopup>("");
             
-            
-            foreach (var prefab in _popupPrefabs)
+            foreach (var prefab in prefabs)
             {
                 _popupPrefabDict[prefab.GetType()] = prefab;
             }
@@ -176,29 +176,5 @@ namespace LumosLib
         }
         
         #endregion
-#if UNITY_EDITOR
-        #region >--------------------------------------------------- INSPECTOR
-        
-        
-        [Button("Collect Popup Prefabs")]
-        public void SetUIResources()
-        {
-            _popupPrefabs = new();
-            
-            var entries = AssetFinder.Find<UIPopup>(this, "", SearchOption.AllDirectories);
-
-            /*foreach (var entry in entries)
-            {
-                var result = entry.GetResource<UIPopup>();
-                if (result != null)
-                {
-                    _popupPrefabs.Add(result);
-                }
-            }*/
-        }
-        
-        
-        #endregion
-#endif
     }
 }
