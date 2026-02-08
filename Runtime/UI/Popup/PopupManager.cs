@@ -185,16 +185,16 @@ namespace LumosLib
         {
             _popupPrefabs = new();
             
-            var entries = ResourcesUtil.Find<UIPopup>(this, "", SearchOption.AllDirectories);
+            var entries = AssetFinder.Find<UIPopup>(this, "", SearchOption.AllDirectories);
 
-            foreach (var entry in entries)
+            /*foreach (var entry in entries)
             {
                 var result = entry.GetResource<UIPopup>();
                 if (result != null)
                 {
                     _popupPrefabs.Add(result);
                 }
-            }
+            }*/
         }
         
         

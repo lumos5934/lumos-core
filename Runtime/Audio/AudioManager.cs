@@ -200,16 +200,16 @@ namespace LumosLib
         {
             _soundAssets = new();
             
-            var entries = ResourcesUtil.Find<SoundAsset>(this, "", SearchOption.AllDirectories);
+            var entries = AssetFinder.Find<SoundAsset>(this, "", SearchOption.AllDirectories);
 
-            foreach (var entry in entries)
+            /*foreach (var entry in entries)
             {
                 var result = entry.GetResource<SoundAsset>();
                 if (result != null)
                 {
                     _soundAssets.Add(result);
                 }
-            }
+            }*/
         }
         
 

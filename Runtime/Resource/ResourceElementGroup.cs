@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using TriInspector;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LumosLib
 {
     [Serializable]
-    public class ResourceGroup
+    public class ResourceElementGroup
     {
         public string Label => _label;
         public string Path => _path;
@@ -17,7 +18,7 @@ namespace LumosLib
         [Group("Element"), SerializeField, ReadOnly, LabelText("Key")] private List<ResourceElement> _elements;
 
         private Dictionary<string, ResourceElement> _elementsDict;
-
+    
         public void Init()
         {
             _elementsDict = new();
@@ -55,9 +56,18 @@ namespace LumosLib
             return result;
         }
 
-        public void SetResources(List<ResourceElement> entries)
+        public void SetResources(Dictionary<string, List<Object>> resources)
         {
-            _elements = entries;
+            _elements = new();
+
+            foreach (var resourceKvp in resources)
+            {
+                var newElement =  new ResourceElement();
+                newElement.key = resourceKvp.Key;
+                newElement.resources =  resourceKvp.Value;
+                
+                _elements.Add(newElement);
+            }
         }
     }
 }

@@ -11,13 +11,14 @@ namespace LumosLib
     {
         #region  >--------------------------------------------------- FIELD
 
+        [SerializeField] private string _rootPath;
         
         [SerializeField, 
          TableList(Draggable = true,
              HideAddButton = false,
              HideRemoveButton = false,
              AlwaysExpanded = false)] 
-        private List<ResourceGroup> _groups;
+        private List<ResourceElementGroup> _groups;
         
         
         #endregion
@@ -96,27 +97,26 @@ namespace LumosLib
         
         
         [Button("Collect All Resources")]
-        public void SetEntriesResources()
+        private void SetResourcesGroup()
         {
-            List<string> usedPath = new();
-            List<ResourceGroup> duplicateGroups = new();
+            var usedPath = new List<string>();
+            var useGroup = new List<ResourceElementGroup>();
             
             foreach (var group in _groups)
             {
-                if (usedPath.Contains(group.Path))
-                {
-                    duplicateGroups.Add(group);
+                if (usedPath.Contains(group.Path)) 
                     continue;
-                }
-
+                
+                useGroup.Add(group);
                 usedPath.Add(group.Path);
-                group.SetResources(ResourcesUtil.Find<Object>(this, group.Path, SearchOption.TopDirectoryOnly));
             }
 
-            foreach (var group in duplicateGroups)
+            foreach (var group in useGroup)
             {
-               _groups.Remove(group);
+                group.SetResources(AssetFinder.Find<Object>(this, _rootPath + "/" + group.Path, SearchOption.TopDirectoryOnly));
             }
+            
+            _groups = useGroup;
         }
         
         
