@@ -9,10 +9,6 @@ namespace LumosLib
     [Serializable]
     public class ResourceGroup
     {
-        public string FolderPath => _folderPath;
-        public string Label => _label;
-        public Dictionary<string, Object> Resources => _resources;
-        
         [Group("Folder Path"), 
          SerializeField, 
          HideLabel, 
@@ -26,6 +22,11 @@ namespace LumosLib
 
         private readonly Dictionary<string, Object> _resources = new();
 
+        
+        public string FolderPath => _folderPath;
+        public string Label => _label;
+        public Dictionary<string, Object> Resources => _resources;
+    
   
         public void SetResources(Object[] resources)
         {

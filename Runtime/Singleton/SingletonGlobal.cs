@@ -4,6 +4,9 @@ namespace LumosLib
 {
     public class SingletonGlobal<T> : MonoBehaviour where T : MonoBehaviour
     {
+        private static bool applicationIsQuitting = false;
+        
+        private static T _instance;
         public static T Instance
         {
             get
@@ -26,10 +29,7 @@ namespace LumosLib
                 return _instance;
             }
         }
-        private static T _instance;
-    
-        private static bool applicationIsQuitting = false;
- 
+     
   
         protected virtual void Awake()
         {

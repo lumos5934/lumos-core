@@ -5,17 +5,9 @@ namespace LumosLib
 {
     public class TutorialManager : MonoBehaviour, IPreInitializable, ITutorialManager
     {
-        #region >--------------------------------------------------- FIELD
-
-
         private TutorialTable _curTutorialTable;
         private BaseTutorial _curTutorial;
         private int _curStep;
-    
-    
-        #endregion
-        #region >--------------------------------------------------- UNITY
-        
         
         private void Update()
         {
@@ -29,10 +21,6 @@ namespace LumosLib
                 }
             }
         }
-
-        
-        #endregion
-        #region >--------------------------------------------------- INIT
     
     
         public UniTask<bool> InitAsync()
@@ -41,11 +29,6 @@ namespace LumosLib
             return UniTask.FromResult(true);
         }
       
-    
-        #endregion
-        #region >--------------------------------------------------- GET
-
-        
         public TutorialTable GetTable()
         {
             return _curTutorialTable;
@@ -56,11 +39,6 @@ namespace LumosLib
             return _curTutorial;
         }
     
-    
-        #endregion
-        #region >--------------------------------------------------- CORE
-
-
         public void Play(TutorialTable table)
         {
             _curStep = 0;
@@ -78,11 +56,6 @@ namespace LumosLib
             _curTutorial = _curStep < _curTutorialTable.GetAssetCount() ? _curTutorialTable.CreateTutorial(_curStep) : null ;
             _curTutorial?.Enter();
         }
-    
-
-        #endregion
-
-
     }
 }
 

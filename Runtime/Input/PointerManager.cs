@@ -9,9 +9,13 @@ namespace LumosLib
 {
     public class PointerManager : MonoBehaviour, IPreInitializable, IPointerManager
     {
-        #region >--------------------------------------------------- PROPERTIE
+        [SerializeField] private InputActionReference _posInputReference;
+        [SerializeField] private InputActionReference _clickInputReference;
 
+        private Camera _camera;
+        private Vector2 _worldPosition;
 
+        
         public bool IsPressed { get; private set; }
         public Vector2 ScreenPosition { get; private set; }
         public Vector2 WorldPosition { get; private set; }
@@ -28,28 +32,10 @@ namespace LumosLib
             }
         }
 
-
-        #endregion
-        #region >--------------------------------------------------- FIELD
-
-        
-        [SerializeField] private InputActionReference _posInputReference;
-        [SerializeField] private InputActionReference _clickInputReference;
-
-        private Camera _camera;
-        private Vector2 _worldPosition;
-        
-        
-        #endregion
-        #region >--------------------------------------------------- EVENT
-        
         
         public event UnityAction<PointerDownEvent> OnPointerDown;
         public event UnityAction<PointerUpEvent> OnPointerUp;
         
-        
-        #endregion
-        #region >--------------------------------------------------- UNITY
 
         private void Update()
         {
@@ -80,9 +66,6 @@ namespace LumosLib
             }
         }
 
-        #endregion
-        #region >--------------------------------------------------- INIT
-        
         
         public UniTask<bool> InitAsync()
         {
@@ -102,10 +85,6 @@ namespace LumosLib
         }
   
         
-        #endregion
-        #region >--------------------------------------------------- GET & SET
-
-
         public Collider2D GetHitCollider()
         {
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
@@ -118,8 +97,5 @@ namespace LumosLib
         {
             _camera = cam;
         }
-        
-        
-        #endregion
     }
 }

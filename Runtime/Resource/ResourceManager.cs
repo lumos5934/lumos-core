@@ -8,9 +8,6 @@ namespace LumosLib
 {
     public class ResourceManager : MonoBehaviour, IPreInitializable, IResourceManager
     {
-        #region  >--------------------------------------------------- FIELD
-
-        
         [SerializeField, 
          TableList(Draggable = true,
              HideAddButton = false,
@@ -20,11 +17,6 @@ namespace LumosLib
         
         private readonly Dictionary<string, Object> _allResources = new();
         private Dictionary<string, List<ResourceGroup>> _allGroups = new();
-        
-        
-        #endregion
-        #region  >--------------------------------------------------- INIT
-        
         
         public UniTask<bool> InitAsync()
         {
@@ -59,10 +51,6 @@ namespace LumosLib
             GlobalService.Register<IResourceManager>(this);
             return UniTask.FromResult(true);
         }
-    
-        
-        #endregion
-        #region  >--------------------------------------------------- GET
 
 
         public T Get<T>(string assetName) where T : Object
@@ -154,7 +142,5 @@ namespace LumosLib
 
             return default;
         }
-
-        #endregion
     }
 }

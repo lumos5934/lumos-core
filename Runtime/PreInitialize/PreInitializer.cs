@@ -7,22 +7,6 @@ namespace LumosLib
 {
     public static class PreInitializer
     {
-        #region >--------------------------------------------------- PROPERTIES
-
-        
-        public static bool IsInitialized => _isInitialized;
-
-        public static float InitElapsedMS =>
-            (float)((Time.realtimeSinceStartup - _elementInitStartTime) * 1000f);
-
-        public static float InitProgress =>
-            _maxInitCount == 0 ? 1f : (float)_curInitCount / _maxInitCount;
-
-        
-        #endregion
-        #region >--------------------------------------------------- FIELDS
-
-        
         private static double _elementInitStartTime;
 
         private static int _curInitCount;
@@ -35,9 +19,14 @@ namespace LumosLib
         private static UniTaskCompletionSource _initBarrier;
         private static LumosLibSettings _libSettings;
         
+        public static bool IsInitialized => _isInitialized;
 
-        #endregion
-        #region >--------------------------------------------------- INIT
+        public static float InitElapsedMS =>
+            (float)((Time.realtimeSinceStartup - _elementInitStartTime) * 1000f);
+
+        public static float InitProgress =>
+            _maxInitCount == 0 ? 1f : (float)_curInitCount / _maxInitCount;
+
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Boot()
@@ -141,7 +130,5 @@ namespace LumosLib
 
             _initBarrier.TrySetResult();
         }
-        
-        #endregion
     }
 }

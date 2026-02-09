@@ -10,9 +10,6 @@ namespace LumosLib
 {
     public class PopupManager : BasePopupManager
     {
-        #region >--------------------------------------------------- FIELD
-
-        
         [InfoBox("Requirement : IResourceManager")]
         [SerializeField] private int _startOrder;
         [SerializeField] private int _orderInterval;
@@ -20,9 +17,6 @@ namespace LumosLib
         private Dictionary<Type, UIPopup> _popupPrefabDict = new();
         private IResourceManager _resourceMgr;
 
-        #endregion
-        #region >--------------------------------------------------- INIT
-        
         protected override async UniTask<bool> OnInitAsync()
         {
             _camera = GetComponentInChildren<Camera>();
@@ -55,10 +49,6 @@ namespace LumosLib
             return await UniTask.FromResult(true);
         }
 
-        
-        #endregion
-        #region >--------------------------------------------------- CORE
-        
 
         protected override T OnOpen<T>()
         {
@@ -173,7 +163,5 @@ namespace LumosLib
                 }
             }
         }
-        
-        #endregion
     }
 }

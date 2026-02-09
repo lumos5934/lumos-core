@@ -4,17 +4,8 @@ using UnityEngine.UI;
 
 public class WorldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
 {
-    #region >--------------------------------------------------- FIELD
-
-    
     public Button.ButtonClickedEvent onClick = new();
-    
     private bool _isPressed;
-    
-
-    #endregion
-    #region >--------------------------------------------------- POINTER_EVENT
-
     
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -35,7 +26,4 @@ public class WorldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         _isPressed = false;
     }
-    
-
-    #endregion
 }

@@ -10,9 +10,6 @@ namespace LumosLib
     [DeclareBoxGroup("Resources")]
     public class AudioManager : MonoBehaviour, IPreInitializable, IAudioManager
     {
-        #region >--------------------------------------------------- FIELD
-      
-        
         [Title("REQUIREMENT"), PropertyOrder(-1)]
         [ShowInInspector, HideReferencePicker, ReadOnly, LabelText("IPoolManager")] private IPoolManager _poolManager;
         [PropertySpace(20f)]
@@ -26,10 +23,6 @@ namespace LumosLib
         private readonly Dictionary<string, SoundAsset> _assetResources = new();
         private readonly Dictionary<int, AudioPlayer> _bgmPlayers = new();
         private readonly HashSet<AudioPlayer> _activePlayers = new();
-        
-        
-        #endregion
-        #region >--------------------------------------------------- INIT
         
         
         public UniTask<bool> InitAsync()
@@ -46,35 +39,11 @@ namespace LumosLib
             GlobalService.Register<IAudioManager>(this);
             return UniTask.FromResult(true);
         }
-        
-        
-        #endregion
-        #region >--------------------------------------------------- GET & SET 
-       
-
-        private AudioPlayer GetBGMPlayer(int bgmType)
-        {
-            return _bgmPlayers.GetValueOrDefault(bgmType);
-        }
-
-       
-        private AudioPlayer GetNewAudioPlayer()
-        {
-            var player = _poolManager.Get(_audioPlayerPrefab);
-            
-            _activePlayers.Add(player);
-            
-            return player;
-        }
 
         public void SetVolume(string groupName, float volume)
         {
             _mixer.SetFloat(groupName, Mathf.Log10(volume) * 20f);
         }
-
-        
-        #endregion
-        #region >--------------------------------------------------- PLAY
 
 
         public void PlayBGM(int bgmType, string assetName)
@@ -100,10 +69,6 @@ namespace LumosLib
             }
         }
         
-        
-        #endregion
-        #region >--------------------------------------------------- STOP
-
 
         public void StopBGM(int bgmType)
         {
@@ -122,7 +87,6 @@ namespace LumosLib
                 }
             }
         }
-
         
         public void StopAll()
         {
@@ -133,33 +97,6 @@ namespace LumosLib
                 player.Stop();
             }
         }
-
-        private void OnStopBGM(int bgmType, AudioPlayer player)
-        {
-            _poolManager.Release(player);
-
-            _bgmPlayers.Remove(bgmType);
-            
-            if (_activePlayers.Contains(player))
-            {
-                _activePlayers.Remove(player);
-            }
-        }
-        
-        private void OnStopSFX(AudioPlayer player)
-        {
-            _poolManager.Release(player);
-            
-            if (_activePlayers.Contains(player))
-            {
-                _activePlayers.Remove(player);
-            }
-        }
-
-
-        #endregion
-        #region >--------------------------------------------------- PAUSE
-
 
         public void PauseBGM(int bgmType, bool enable)
         {
@@ -188,32 +125,45 @@ namespace LumosLib
                 player.Pause(enable);
             }
         }
-
-
-        #endregion
-        #region >--------------------------------------------------- INSPECTOR
-
         
-        [Group("Resources")]
-        [Button("Collect SoundAsset Resources")]
-        public void SetSoundAssetResources()
+        private void OnStopBGM(int bgmType, AudioPlayer player)
         {
-            _soundAssets = new();
-            
-            var entries = AssetFinder.Find<SoundAsset>(this, "", SearchOption.AllDirectories);
+            _poolManager.Release(player);
 
-            /*foreach (var entry in entries)
+            _bgmPlayers.Remove(bgmType);
+            
+            if (_activePlayers.Contains(player))
             {
-                var result = entry.GetResource<SoundAsset>();
-                if (result != null)
-                {
-                    _soundAssets.Add(result);
-                }
-            }*/
+                _activePlayers.Remove(player);
+            }
         }
         
+        private void OnStopSFX(AudioPlayer player)
+        {
+            _poolManager.Release(player);
+            
+            if (_activePlayers.Contains(player))
+            {
+                _activePlayers.Remove(player);
+            }
+        }
 
-        #endregion
+                
+        
+        private AudioPlayer GetBGMPlayer(int bgmType)
+        {
+            return _bgmPlayers.GetValueOrDefault(bgmType);
+        }
+
        
+        private AudioPlayer GetNewAudioPlayer()
+        {
+            var player = _poolManager.Get(_audioPlayerPrefab);
+            
+            _activePlayers.Add(player);
+            
+            return player;
+        }
+
     }
 }

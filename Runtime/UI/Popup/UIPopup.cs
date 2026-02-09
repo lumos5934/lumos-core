@@ -4,12 +4,12 @@ namespace LumosLib
 {
     public abstract class UIPopup : UIPanel
     {
+        [SerializeField] private bool _isGlobal;
+        private BasePopupManager _baseManager; 
+        
         public bool IsGlobal => _isGlobal;
         public bool IsOpened { get; protected set; }
-        
-        [SerializeField] private bool _isGlobal;
 
-        private BasePopupManager _baseManager; 
         public override void Init()
         {
             base.Init();

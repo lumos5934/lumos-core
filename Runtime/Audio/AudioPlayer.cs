@@ -7,28 +7,16 @@ namespace LumosLib
     [RequireComponent(typeof(AudioSource))]
     public class AudioPlayer : MonoBehaviour, IPoolable 
     {
-        #region >--------------------------------------------------- PROPERTIE
-
-        
-        public float Volume => _audioSource.volume;
-        public bool Loop => _audioSource.loop;
-        public bool IsPlaying => _audioSource.isPlaying;
-        public AudioClip Clip => _audioSource.clip;
-        
-        
-        #endregion
-        #region >--------------------------------------------------- FIELD
-
-        
         private const float DefaultVolume = 1;
         private UnityAction<AudioPlayer> _onStop;
         private Coroutine _stopAsync;
         private AudioSource _audioSource;
         private bool _isPause;
         
-        
-        #endregion
-        #region >--------------------------------------------------- UNITY
+        public float Volume => _audioSource.volume;
+        public bool Loop => _audioSource.loop;
+        public bool IsPlaying => _audioSource.isPlaying;
+        public AudioClip Clip => _audioSource.clip;
 
         
         private void Awake()
@@ -37,11 +25,6 @@ namespace LumosLib
             _audioSource.playOnAwake = false;
             _audioSource.loop = false;
         }
-        
-
-        #endregion
-        #region >--------------------------------------------------- SET
-        
         
         public void Play(SoundAsset asset, UnityAction<AudioPlayer> onStop)
         {
@@ -57,13 +40,7 @@ namespace LumosLib
 
             _stopAsync = StartCoroutine(StopAsync());
         }
-
-        private IEnumerator StopAsync()
-        {
-            yield return new WaitWhile(() => _audioSource.isPlaying || _isPause);
-            
-            Stop();
-        }
+        
         
         public void Stop()
         {
@@ -87,11 +64,6 @@ namespace LumosLib
                 _audioSource.UnPause();
             }
         }
-
-
-        #endregion
-        #region >--------------------------------------------------- POOL
-
         public void OnCreated()
         {
         }
@@ -114,6 +86,11 @@ namespace LumosLib
         {
         }
 
-        #endregion
+        private IEnumerator StopAsync()
+        {
+            yield return new WaitWhile(() => _audioSource.isPlaying || _isPause);
+            
+            Stop();
+        }
     }
 }

@@ -9,7 +9,6 @@ namespace LumosLib
         [SerializeField] private string _name;
         [SerializeField] private string _description;
         [SerializeField] private BaseTutorialAsset[] _assets;
-
     
         public int GetID()
         {

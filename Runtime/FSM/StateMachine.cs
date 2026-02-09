@@ -6,31 +6,13 @@ namespace LumosLib
 {
     public class StateMachine
     {
-        #region >--------------------------------------------------- PROPERTIE
-        
-        
-        public IState CurState => _curState;
-
-        
-        #endregion
-        #region >--------------------------------------------------- FIELD
-
-        
         private Dictionary<Type, IState> _stateDict = new();
         private IState _curState;
-
         
-        #endregion
-        #region >--------------------------------------------------- EVENT
-        
-        
+        public IState CurState => _curState;
         public event UnityAction<IState> OnExit;
         public event UnityAction<IState> OnEnter;
         
-        
-        #endregion    
-        #region >--------------------------------------------------- CORE
-
         public void Register(IState state)
         {
             _stateDict[state.GetType()] = state;
@@ -59,7 +41,5 @@ namespace LumosLib
             OnEnter?.Invoke(_curState);
         }
         
-        
-        #endregion
     }
 }

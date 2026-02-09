@@ -4,9 +4,6 @@ namespace LumosLib
 {
     public static class VectorExtensions
     {
-        #region >--------------------------------------------------- VECTOR3
-
-        
         public static Vector3 SetX(this Vector3 vector, float value)
         {
             return new Vector3(value, vector.y, vector.z);
@@ -37,11 +34,6 @@ namespace LumosLib
             return Vector3.Distance(a, b);
         }
         
-
-        #endregion
-        #region >--------------------------------------------------- VECTOR3 INT 
-
-        
         public static Vector3Int SetX(this Vector3Int vector, int value)
         {
             return new Vector3Int(value, vector.y, vector.z);
@@ -71,11 +63,6 @@ namespace LumosLib
         {
             return Vector3.Distance(a, b);
         }
-        
-
-        #endregion
-        #region >--------------------------------------------------- VECTOR2
-        
         
         public static Vector2 SetX(this Vector2 vector, float value)
         {
@@ -110,11 +97,6 @@ namespace LumosLib
             };
         }
         
-        
-        #endregion
-        #region >--------------------------------------------------- VECTOR2 INT
-        
-        
         public static Vector2Int SetX(this Vector2Int vector, int value)
         {
             return new Vector2Int(value, vector.y);
@@ -135,7 +117,5 @@ namespace LumosLib
             return Vector2.Distance(a, b);
         }
         
-        
-        #endregion
     }
 }

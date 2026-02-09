@@ -9,18 +9,10 @@ public static class DebugUtil
     public static bool EnableLogs = false;
 #endif
 
-    #region >--------------------------------------------------- CORE
-
-    
     private static string FormatMessage(string emoji, string tag, string message)
     {
         return $"[{emoji} {tag}] {message}";
     }
-    
-    
-    #endregion
-    #region >--------------------------------------------------- LOG
-
     
     public static void Log(string message, string tag = "")
     {
@@ -59,8 +51,4 @@ public static class DebugUtil
         if (!EnableLogs) return;
         Debug.LogError(message);
     }
-    
-    #endregion
-
-
 }

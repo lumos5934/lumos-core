@@ -7,27 +7,15 @@ namespace LumosLib
 {
     public class SaveManager : MonoBehaviour, IPreInitializable, ISaveManager
     {
-        #region >--------------------------------------------------- FIELD
-
-        
         [SerializeField] private BaseDataSource _saveDataSource;
         
         private readonly Dictionary<Type, object> _saveDataDict = new();
-        
-        
-        #endregion
-        #region >--------------------------------------------------- INIT
-        
         
         public UniTask<bool> InitAsync()
         {
             GlobalService.Register<ISaveManager>(this);
             return UniTask.FromResult(true);
         }
-        
-        
-        #endregion
-        #region >--------------------------------------------------- CORE
         
         
         public async UniTask SaveAsync<T>(T data)
@@ -89,9 +77,6 @@ namespace LumosLib
                 throw;
             }
         }
-        
-        
-        #endregion
     }
 }
 

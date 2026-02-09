@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -9,27 +7,14 @@ namespace LumosLib
 {
     public class PoolManager : MonoBehaviour, IPreInitializable, IPoolManager
     {
-        #region >--------------------------------------------------- FIELD
- 
-        
         private Dictionary<string, object> _pools = new();
         private Dictionary<string, HashSet<MonoBehaviour>> _activeObjects = new();
-
-        
-        #endregion
-        #region >--------------------------------------------------- INIT
-        
         
         public UniTask<bool> InitAsync()
         {
             GlobalService.Register<IPoolManager>(this);
             return UniTask.FromResult(true);
         }
-      
-        
-        #endregion
-        #region >--------------------------------------------------- CREATE
-
      
         private ObjectPool<T> CreatePool<T>(T prefab, int defaultCapacity = Constant.PoolDefaultCapacity, int maxSize = Constant.PoolMaxSize) where T : MonoBehaviour, IPoolable
         {
@@ -69,21 +54,6 @@ namespace LumosLib
             return pool;
         }
 
-
-        #endregion
-        #region >--------------------------------------------------- GET
-
-
-        private ObjectPool<T> GetPool<T>(string key)  where T : MonoBehaviour, IPoolable
-        {
-            if (_pools.TryGetValue(key, out var pool))
-            {
-                return pool as ObjectPool<T>;
-            }
-            
-            return null;
-        }
-
         public T Get<T>(T prefab)  where T : MonoBehaviour, IPoolable
         {
             var key = prefab.name;
@@ -100,11 +70,6 @@ namespace LumosLib
 
             return obj;
         }
-
-
-        #endregion
-        #region >--------------------------------------------------- REALEASE
-
 
         public void Release<T>(T obj)  where T : MonoBehaviour, IPoolable
         {
@@ -133,10 +98,6 @@ namespace LumosLib
             }
         }
    
-
-        #endregion
-        #region >--------------------------------------------------- DESTROY
-
         
         public void DestroyAll<T>(T prefab)  where T : MonoBehaviour, IPoolable
         {
@@ -165,9 +126,14 @@ namespace LumosLib
             }
         }
         
-        
-        #endregion
-
-      
+        private ObjectPool<T> GetPool<T>(string key)  where T : MonoBehaviour, IPoolable
+        {
+            if (_pools.TryGetValue(key, out var pool))
+            {
+                return pool as ObjectPool<T>;
+            }
+            
+            return null;
+        }
     }
 }

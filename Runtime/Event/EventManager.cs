@@ -7,26 +7,13 @@ namespace LumosLib
 {
     public class EventManager : MonoBehaviour, IPreInitializable, IEventManager
     {
-        #region >--------------------------------------------------- FIELD
-
-        
         private readonly Dictionary<Type, Delegate> _events = new();
-
-        
-        #endregion
-        #region >--------------------------------------------------- INIT
-        
         
         public UniTask<bool> InitAsync()
         {
             GlobalService.Register<IEventManager>(this);
             return UniTask.FromResult(true);
         }
-        
-        
-        #endregion
-        #region >--------------------------------------------------- CORE
-
         
         public void Subscribe<T>(Action<T> handler) where T : IGameEvent
         {
@@ -48,10 +35,5 @@ namespace LumosLib
             if (_events.TryGetValue(typeof(T), out var del))
                 ((Action<T>)del)?.Invoke(evt);
         }
-        
-        
-        #endregion
-
-      
     }
 }
