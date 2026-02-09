@@ -2,8 +2,10 @@
 {
     public interface IPoolable
     {
-        public void OnGet();
-        public void OnRelease();
+        void OnCreated();
+        void OnGet();
+        void OnRelease();
+        void OnDestroyed();
     }
 }
 

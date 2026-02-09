@@ -39,6 +39,7 @@ namespace LumosLib
                     var obj = Instantiate(prefab);
                     obj.gameObject.SetActive(false);
                     obj.name = prefab.name;
+                    obj.OnCreated();
                     return obj;
                 },
                 actionOnGet: obj =>
@@ -55,6 +56,7 @@ namespace LumosLib
                 {
                     if (obj != null)
                     {
+                        obj.OnRelease();
                         Destroy(obj.gameObject);
                     }
                 },

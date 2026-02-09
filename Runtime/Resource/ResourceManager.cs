@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
@@ -11,14 +11,16 @@ namespace LumosLib
     {
         #region  >--------------------------------------------------- FIELD
 
-        [SerializeField] private string _rootPath;
         
         [SerializeField, 
          TableList(Draggable = true,
              HideAddButton = false,
              HideRemoveButton = false,
              AlwaysExpanded = false)] 
-        private List<ResourceElementGroup> _groups;
+        private List<ResourceGroup> _groups;
+        
+        private readonly Dictionary<string, Object> _allResources = new();
+        private Dictionary<string, List<ResourceGroup>> _allGroups = new();
         
         
         #endregion
@@ -27,11 +29,34 @@ namespace LumosLib
         
         public UniTask<bool> InitAsync()
         {
+            _allResources.Clear();
+            _allGroups.Clear();
+
             foreach (var group in _groups)
             {
-                group.Init();
+                if (string.IsNullOrEmpty(group.Label) || 
+                    string.IsNullOrEmpty(group.FolderPath))
+                    continue;
+
+                if (!_allGroups.ContainsKey(group.Label))
+                {
+                    _allGroups[group.Label] = new List<ResourceGroup>();
+                }
+                
+                _allGroups[group.Label].Add(group);
+
+                var resources = Resources.LoadAll<Object>(group.FolderPath);
+                group.SetResources(resources);
+
+                foreach (var resource in resources)
+                {
+                    if (!_allResources.TryAdd(resource.name, resource))
+                    {
+                        DebugUtil.LogWarning($"fail add all resources: {resource.name} (label : {group.Label}, path: {group.FolderPath})", "Duplicate Name");
+                    }
+                }
             }
-            
+
             GlobalService.Register<IResourceManager>(this);
             return UniTask.FromResult(true);
         }
@@ -41,84 +66,39 @@ namespace LumosLib
         #region  >--------------------------------------------------- GET
        
 
-        public T Get<T>(string assetName)
-        {
-            foreach (var group in _groups)
-            {
-                var result = group.GetResource<T>(assetName);
+        public T Get<T>(string assetName) where T : Object 
+            => _allResources.GetValueOrDefault(assetName) as T;
 
-                if (result != null)
+        public T Get<T>(string label, string assetName) where T : Object
+        {
+            if (string.IsNullOrEmpty(label)) return Get<T>(assetName);
+
+            if (_allGroups.TryGetValue(label, out var groups))
+            {
+                foreach (var group in groups)
                 {
-                    return result;
+                    var asset = group.GetResource<T>(assetName);
+                    if (asset != null) return asset;
                 }
             }
-
-            return default;
+            return null;
         }
-        
-        public T Get<T>(string label, string assetName)
+
+        public List<T> GetAll<T>(string label) where T : Object
         {
-            if(label == "") 
-                return Get<T>(assetName);
-            
-            
-            foreach (var group in _groups)
-            {
-                if(group.Label != label) 
-                    continue;
+            if (string.IsNullOrEmpty(label)) return GetAll<T>();
 
-                return Get<T>(assetName);
+            if (_allGroups.TryGetValue(label, out var groups))
+            {
+                return groups.SelectMany(g => g.GetResourcesAll<T>()).Distinct().ToList();
             }
             
-            return default;
+            return new List<T>();
         }
 
-        public List<T> GetAll<T>(string label)
-        {
-            var result = new List<T>();
-            
-            foreach (var group in _groups)
-            {
-                if (label != string.Empty)
-                {
-                    if(group.Label != label)
-                        continue;
-                }
+        public List<T> GetAll<T>() where T : Object 
+            => _allResources.Values.OfType<T>().ToList();
 
-                result.AddRange(group.GetResourcesAll<T>());
-            }
-            
-            return result;
-        }
-
-        
-        #endregion
-        #region >--------------------------------------------------- INSPECTOR
-        
-        
-        [Button("Collect All Resources")]
-        private void SetResourcesGroup()
-        {
-            var usedPath = new List<string>();
-            var useGroup = new List<ResourceElementGroup>();
-            
-            foreach (var group in _groups)
-            {
-                if (usedPath.Contains(group.Path)) 
-                    continue;
-                
-                useGroup.Add(group);
-                usedPath.Add(group.Path);
-            }
-
-            foreach (var group in useGroup)
-            {
-                group.SetResources(AssetFinder.Find<Object>(this, _rootPath + "/" + group.Path, SearchOption.TopDirectoryOnly));
-            }
-            
-            _groups = useGroup;
-        }
-        
         
         #endregion
     }

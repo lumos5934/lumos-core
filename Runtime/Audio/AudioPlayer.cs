@@ -91,8 +91,11 @@ namespace LumosLib
 
         #endregion
         #region >--------------------------------------------------- POOL
-        
-        
+
+        public void OnCreated()
+        {
+        }
+
         public void OnGet()
         {
         }
@@ -106,8 +109,11 @@ namespace LumosLib
                 _stopAsync = null;
             }
         }
-        
-        
+
+        public void OnDestroyed()
+        {
+        }
+
         #endregion
     }
 }
