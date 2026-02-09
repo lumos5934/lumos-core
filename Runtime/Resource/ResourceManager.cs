@@ -52,7 +52,7 @@ namespace LumosLib
                 {
                     if (!_allResources.TryAdd(resource.name, resource))
                     {
-                        DebugUtil.LogWarning($"fail add all resources: {resource.name} (label : {group.Label}, path: {group.FolderPath})", "Duplicate Name");
+                        DebugUtil.LogWarning($"fail add {group.Label} resources: {resource.name} (label : {group.Label}, path: {group.FolderPath})", "Duplicate Name");
                     }
                 }
             }

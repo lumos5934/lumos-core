@@ -39,12 +39,15 @@ namespace LumosLib
         #endregion
         #region >--------------------------------------------------- INIT
 
-        
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Boot()
         {
             _initBarrier = new UniTaskCompletionSource();
-            
+        }
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Init()
+        {
             _libSettings = Resources.Load<LumosLibSettings>(nameof(LumosLibSettings));
             
             if (_isInitializing || _isInitialized || _libSettings == null)

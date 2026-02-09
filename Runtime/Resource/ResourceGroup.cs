@@ -12,15 +12,16 @@ namespace LumosLib
         public string FolderPath => _folderPath;
         public string Label => _label;
         
+        [Group("Folder Path"), 
+         SerializeField, 
+         HideLabel, 
+         Required] private string _folderPath;
+        
         [Group("Label "), 
          SerializeField, 
          HideLabel , 
          Required] private string _label;
         
-        [Group("Folder Path"), 
-         SerializeField, 
-         HideLabel, 
-         Required] private string _folderPath;
 
         private readonly Dictionary<string, Object> _resources = new();
 
@@ -54,10 +55,7 @@ namespace LumosLib
         {
             foreach (var resource in resources)
             {
-                if (!_resources.TryAdd(resource.name, resource))
-                {
-                    DebugUtil.LogWarning($"fail add {_label} resources: {resource.name} (path: {_folderPath})", "Duplicate Name");
-                }
+                _resources.TryAdd(resource.name, resource);
             }
         }
 
