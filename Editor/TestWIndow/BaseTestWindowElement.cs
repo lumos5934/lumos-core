@@ -88,9 +88,6 @@ namespace LumosLib.Editor
         }
         
         protected abstract void OnDraw();
-        
-        #region >--------------------------------------------------- DRAW : OTHER
-
 
         protected void DrawBox(Action drawContents)
         {
@@ -136,13 +133,6 @@ namespace LumosLib.Editor
                 onClick?.Invoke();
             }
         }
-        
-       
-        
-        
-        #endregion
-        #region >--------------------------------------------------- DRAW : FIELD
-
         
         protected void DrawField(string label, ref int value)
         {
@@ -235,8 +225,5 @@ namespace LumosLib.Editor
 
             GUILayout.EndHorizontal();
         }
-
-        
-        #endregion
     }
 }

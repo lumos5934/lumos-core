@@ -9,9 +9,6 @@ namespace LumosLib.Editor
 {
     public static class EditorCreateAssetMenu
     {
-        #region >--------------------------------------------------- CORE
-
-
         private static string GetCurrentPath()
         {
             string path = AssetDatabase.GetAssetPath(Selection.activeObject);
@@ -71,11 +68,9 @@ namespace LumosLib.Editor
             }
         }
         
-
-        #endregion
-        #region >--------------------------------------------------- PREFAB
-
-        
+        /// <summary>
+        /// Prefabs
+        /// </summary>
         [MenuItem("Assets/Create/[ LumosLib ]/Prefabs/Manager/Event", false, int.MinValue)]
         public static void CreateEventManagerPrefab()
         {
@@ -136,7 +131,5 @@ namespace LumosLib.Editor
         {
             CreatePrefab<AudioPlayer>();
         }
-
-        #endregion
     }
 }
