@@ -11,6 +11,7 @@ namespace LumosLib
     {
         public string FolderPath => _folderPath;
         public string Label => _label;
+        public Dictionary<string, Object> Resources => _resources;
         
         [Group("Folder Path"), 
          SerializeField, 
@@ -25,32 +26,7 @@ namespace LumosLib
 
         private readonly Dictionary<string, Object> _resources = new();
 
-        
-        public T GetResource<T>(string entryName) where T : Object
-        {
-            if (_resources.TryGetValue(entryName, out var resource))
-            {
-                return resource as T;
-            }
-            
-            return null;
-        }
-
-        public List<T> GetResourcesAll<T>() where T : Object
-        {
-            var result = new List<T>();
-
-            foreach (var resource in _resources)
-            {
-                if (resource.Value is T t)
-                {
-                    result.Add(t);
-                }
-            }
-
-            return result;
-        }
-
+  
         public void SetResources(Object[] resources)
         {
             foreach (var resource in resources)
@@ -58,6 +34,5 @@ namespace LumosLib
                 _resources.TryAdd(resource.name, resource);
             }
         }
-
     }
 }

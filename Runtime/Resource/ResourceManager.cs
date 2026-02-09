@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
@@ -64,21 +63,32 @@ namespace LumosLib
         
         #endregion
         #region  >--------------------------------------------------- GET
-       
 
-        public T Get<T>(string assetName) where T : Object 
-            => _allResources.GetValueOrDefault(assetName) as T;
+
+        public T Get<T>(string assetName) where T : Object
+        {
+            if (_allResources.TryGetValue(assetName, out var resource))
+            {
+                return GetTypeResource<T>(resource);
+            }
+
+            return null;
+        }
 
         public T Get<T>(string label, string assetName) where T : Object
         {
-            if (string.IsNullOrEmpty(label)) return Get<T>(assetName);
+            if (string.IsNullOrEmpty(label)) 
+                return Get<T>(assetName);
 
             if (_allGroups.TryGetValue(label, out var groups))
             {
                 foreach (var group in groups)
                 {
-                    var asset = group.GetResource<T>(assetName);
-                    if (asset != null) return asset;
+                    if (group.Resources.TryGetValue(assetName, out var resource))
+                    {
+                        var target = GetTypeResource<T>(resource);
+                        if (target != null) return target;
+                    }
                 }
             }
             return null;
@@ -86,20 +96,65 @@ namespace LumosLib
 
         public List<T> GetAll<T>(string label) where T : Object
         {
-            if (string.IsNullOrEmpty(label)) return GetAll<T>();
+            if (string.IsNullOrEmpty(label)) 
+                return GetAll<T>();
 
+            var result = new List<T>();
+            
             if (_allGroups.TryGetValue(label, out var groups))
             {
-                return groups.SelectMany(g => g.GetResourcesAll<T>()).Distinct().ToList();
+                foreach (var group in groups)
+                {
+                    foreach (var resource in group.Resources.Values)
+                    {
+                        var target = GetTypeResource<T>(resource);
+                        if (target != null)
+                        {
+                            result.Add(target);
+                        }
+                    }
+                }
             }
             
-            return new List<T>();
+            return result;
         }
 
-        public List<T> GetAll<T>() where T : Object 
-            => _allResources.Values.OfType<T>().ToList();
+        public List<T> GetAll<T>() where T : Object
+        {
+            var result = new List<T>();
 
+            foreach (var resource in _allResources.Values)
+            {
+                var target = GetTypeResource<T>(resource);
+                if (target != null)
+                {
+                    result.Add(target);
+                }
+            }
+
+            return result;
+        }
         
+        private T GetTypeResource<T>(Object resource) where T : Object
+        {
+            switch (resource)
+            {
+                case T target:
+                    return target;
+                    
+                case GameObject go:
+                    var component = go.GetComponent<T>();
+                    if (component != null)
+                    {
+                        return component;
+                    }
+
+                    break;
+            }
+
+            return default;
+        }
+
         #endregion
     }
 }
