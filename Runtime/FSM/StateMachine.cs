@@ -23,7 +23,7 @@ namespace LumosLib
             _curState?.Update();
         }
 
-        public void Transition<T>() where T : IState
+        public void ChangeState<T>() where T : IState
         {
             if (!_stateDict.TryGetValue(typeof(T), out var newState) ||
                 _curState == newState) return;
