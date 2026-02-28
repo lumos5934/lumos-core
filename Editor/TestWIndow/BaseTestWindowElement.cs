@@ -9,7 +9,8 @@ namespace LumosLib.Editor
 {
     public abstract class BaseTestWindowElement
     {
-        protected abstract string Title { get; }
+        public abstract string Title { get; }
+        public abstract int Order { get; }
         
         private bool _isOpen;
         

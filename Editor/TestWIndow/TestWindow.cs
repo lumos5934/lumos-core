@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
@@ -8,7 +9,7 @@ namespace LumosLib.Editor
 {
     public class TestWindow : EditorWindow
     {
-        private BaseTestWindowElement[] _entries;
+        private List<BaseTestWindowElement> _entries;
         private Vector2 _scrollPos;
         
         [MenuItem("Window/[ Lumos Lib ]/Test Window", false, int.MinValue)]
@@ -25,7 +26,9 @@ namespace LumosLib.Editor
                 .GetTypesDerivedFrom<BaseTestWindowElement>()
                 .Where(t => !t.IsAbstract)
                 .Select(t => Activator.CreateInstance(t) as BaseTestWindowElement)
-                .ToArray();
+                .OrderBy(i => i?.Order)
+                .ToList();
+            
             
             EditorApplication.update += Repaint;
         }
@@ -53,7 +56,7 @@ namespace LumosLib.Editor
             
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             
-            for (int i = 0; i < _entries.Length; i++)
+            for (int i = 0; i < _entries.Count; i++)
             {
                 _entries[i].Draw();
             }
