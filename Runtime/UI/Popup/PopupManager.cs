@@ -29,7 +29,7 @@ namespace LumosLib
             _resourceMgr = await ctx.GetAsync<IResourceManager>();
             if (_resourceMgr == null)
                 return false;
-            
+
             _camera = GetComponentInChildren<Camera>();
             if (_camera == null)
                 return false;
