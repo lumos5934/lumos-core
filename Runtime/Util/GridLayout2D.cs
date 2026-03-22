@@ -49,9 +49,6 @@ public class GridLayout2D : MonoBehaviour
                 row = i % _columns;
             }
 
-            float xMultiplier = 1;
-            float yMultiplier = 1;
-            
             Vector2 mult = Vector2.one;
             
             switch (_sortDirection)

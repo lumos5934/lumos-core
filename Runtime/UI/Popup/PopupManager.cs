@@ -17,14 +17,22 @@ namespace LumosLib
         private Dictionary<Type, UIPopup> _popupPrefabDict = new();
         private IResourceManager _resourceMgr;
 
-        protected override async UniTask<bool> OnInitAsync()
+
+        private void Awake()
         {
-            _camera = GetComponentInChildren<Camera>();
-            _resourceMgr = GlobalService.Get<IResourceManager>();
+            Services.Register<IPopupManager>(this);
+        }
+
+
+        protected override async UniTask<bool> OnInitAsync(PreInitContext ctx)
+        {
+            _resourceMgr = await ctx.GetAsync<IResourceManager>();
+            if (_resourceMgr == null)
+                return false;
             
-            if (_camera == null || 
-                _resourceMgr == null)
-                return await UniTask.FromResult(false);
+            _camera = GetComponentInChildren<Camera>();
+            if (_camera == null)
+                return false;
             
             _camera.cullingMask = LayerMask.GetMask("UI");
             _camera.clearFlags = CameraClearFlags.Depth;
@@ -38,16 +46,17 @@ namespace LumosLib
 
             UpdateCameraStack();
             
+            
             SceneManager.sceneLoaded += ( scene, mode) =>
             {
                 CloseAll();
                 UpdateCameraStack();
             };
-            
-            GlobalService.Register<IPopupManager>(this);
-            
-            return await UniTask.FromResult(true);
+
+
+            return true;
         }
+
 
 
         protected override T OnOpen<T>()

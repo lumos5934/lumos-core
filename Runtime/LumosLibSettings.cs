@@ -7,8 +7,12 @@ namespace LumosLib
     [CreateAssetMenu(fileName = "LumosLibSettings", menuName = "[ LumosLib ]/Scriptable Objects/Settings", order = int.MinValue)]
     public class LumosLibSettings : ScriptableObject
     {
-        [field: Title("Pre Initialize")]
-        [field: SerializeField, LabelText("Use")] public bool UsePreInit { get; private set; }
-        [field: SerializeField, ShowIf("UsePreInit")] public List<GameObject> PreloadObjects { get; private set; } = new();
+        [SerializeField] private bool _usePreInitialize;
+
+        [PropertySpace(10f)] 
+        [SerializeField] private List<GameObject> _preloadObjects;
+
+        public bool UsePreInitialize => _usePreInitialize;
+        public List<GameObject> PreloadObjects => _preloadObjects;
     }
 }

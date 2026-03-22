@@ -1,19 +1,25 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace LumosLib
 {
-    public class TutorialManager : MonoBehaviour, IPreInitializable, ITutorialManager
+    public class TutorialManager : MonoBehaviour, ITutorialManager
     {
         private TutorialTable _curTutorialTable;
         private BaseTutorial _curTutorial;
         private int _curStep;
+
+
+        private void Awake()
+        {
+            Services.Register<ITutorialManager>(this);
+        }
         
+
         private void Update()
         {
             if (_curTutorial != null)
             {
-                _curTutorial.Update();
+                _curTutorial.Update();  
 
                 if (_curTutorial.IsComplete())
                 {
@@ -22,12 +28,6 @@ namespace LumosLib
             }
         }
     
-    
-        public UniTask<bool> InitAsync()
-        {
-            GlobalService.Register<ITutorialManager>(this);
-            return UniTask.FromResult(true);
-        }
       
         public TutorialTable GetTable()
         {

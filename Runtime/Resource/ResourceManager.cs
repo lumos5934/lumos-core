@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
@@ -6,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace LumosLib
 {
-    public class ResourceManager : MonoBehaviour, IPreInitializable, IResourceManager
+    public class ResourceManager : MonoBehaviour, IResourceManager, IPreInitializable
     {
         [SerializeField, 
          TableList(Draggable = true,
@@ -16,13 +17,22 @@ namespace LumosLib
         private List<ResourceGroup> _groups;
         
         private readonly Dictionary<string, Object> _allResources = new();
-        private Dictionary<string, List<ResourceGroup>> _allGroups = new();
+        private readonly Dictionary<string, List<ResourceGroup>> _allGroups = new();
+
+        public Type RegisterType => typeof(IResourceManager);
+
         
-        public UniTask<bool> InitAsync()
+        private void Awake()
+        {
+            Services.Register<IResourceManager>(this);
+        }
+
+        
+        public UniTask<bool> InitAsync(PreInitContext ctx)
         {
             _allResources.Clear();
             _allGroups.Clear();
-
+            
             foreach (var group in _groups)
             {
                 if (string.IsNullOrEmpty(group.Label) || 
@@ -48,11 +58,10 @@ namespace LumosLib
                 }
             }
 
-            GlobalService.Register<IResourceManager>(this);
             return UniTask.FromResult(true);
         }
 
-
+        
         public T Get<T>(string assetName) where T : Object
         {
             if (_allResources.TryGetValue(assetName, out var resource))
@@ -142,5 +151,8 @@ namespace LumosLib
 
             return default;
         }
+
+
+      
     }
 }

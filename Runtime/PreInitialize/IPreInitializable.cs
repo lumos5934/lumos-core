@@ -1,9 +1,11 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 
 namespace LumosLib
 {
     public interface IPreInitializable
     {
-        public UniTask<bool> InitAsync();
+        Type RegisterType { get; }
+        UniTask<bool> InitAsync(PreInitContext ctx);
     }
 }

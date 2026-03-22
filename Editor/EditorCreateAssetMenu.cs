@@ -71,11 +71,6 @@ namespace LumosLib.Editor
         /// <summary>
         /// Prefabs
         /// </summary>
-        [MenuItem("Assets/Create/[ LumosLib ]/Prefabs/Manager/Event", false, int.MinValue)]
-        public static void CreateEventManagerPrefab()
-        {
-            CreatePrefab<EventManager>();
-        }
         
         [MenuItem("Assets/Create/[ LumosLib ]/Prefabs/Manager/Resource", false, int.MinValue)]
         public static void CreateResourceManagerPrefab()

@@ -5,18 +5,18 @@ using UnityEngine;
 
 namespace LumosLib
 {
-    public class SaveManager : MonoBehaviour, IPreInitializable, ISaveManager
+    public class SaveManager : MonoBehaviour, ISaveManager
     {
         [SerializeField] private BaseDataSource _saveDataSource;
         
         private readonly Dictionary<Type, object> _saveDataDict = new();
-        
-        public UniTask<bool> InitAsync()
+
+
+        private void Awake()
         {
-            GlobalService.Register<ISaveManager>(this);
-            return UniTask.FromResult(true);
+            Services.Register<ISaveManager>(this);
         }
-        
+
         
         public async UniTask SaveAsync<T>(T data)
         {

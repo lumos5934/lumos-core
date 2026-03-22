@@ -13,7 +13,7 @@ namespace LumosLib
         public override void Init()
         {
             base.Init();
-            _baseManager = GlobalService.Get<IPopupManager>() as  BasePopupManager;
+            _baseManager = Services.Get<IPopupManager>() as  BasePopupManager;
             _baseManager?.Register(this);
         }
 

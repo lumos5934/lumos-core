@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -7,7 +9,7 @@ using UnityEngine.InputSystem;
 
 namespace LumosLib
 {
-    public class PointerManager : MonoBehaviour, IPreInitializable, IPointerManager
+    public class PointerManager : MonoBehaviour, IPointerManager, IPreInitializable
     {
         [SerializeField] private InputActionReference _posInputReference;
         [SerializeField] private InputActionReference _clickInputReference;
@@ -16,6 +18,7 @@ namespace LumosLib
         private Vector2 _worldPosition;
 
         
+        public Type RegisterType => typeof(IPointerManager);
         public bool IsPressed { get; private set; }
         public Vector2 ScreenPosition { get; private set; }
         public Vector2 WorldPosition { get; private set; }
@@ -35,7 +38,13 @@ namespace LumosLib
         
         public event UnityAction<PointerDownEvent> OnPointerDown;
         public event UnityAction<PointerUpEvent> OnPointerUp;
-        
+
+
+        private void Awake()
+        {
+            Services.Register<IPointerManager>(this);
+        }
+
 
         private void Update()
         {
@@ -67,7 +76,7 @@ namespace LumosLib
         }
 
         
-        public UniTask<bool> InitAsync()
+        public UniTask<bool> InitAsync(PreInitContext ctx)
         {
             if (_clickInputReference == null ||
                 _posInputReference == null)
@@ -79,12 +88,10 @@ namespace LumosLib
             _clickInputReference.action.actionMap.Enable(); 
             _posInputReference.action.actionMap.Enable(); 
             
-            GlobalService.Register<IPointerManager>(this);
-            
             return UniTask.FromResult(true);
         }
-  
-        
+
+
         public Collider2D GetHitCollider()
         {
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
@@ -97,5 +104,7 @@ namespace LumosLib
         {
             _camera = cam;
         }
+
+      
     }
 }

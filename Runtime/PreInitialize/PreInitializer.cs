@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -7,8 +8,6 @@ namespace LumosLib
 {
     public static class PreInitializer
     {
-        private static double _elementInitStartTime;
-
         private static int _curInitCount;
         private static int _maxInitCount;
         private static int _failCount;
@@ -18,13 +17,10 @@ namespace LumosLib
         private static UniTaskCompletionSource _initBarrier;
         
         public static bool IsInitialized => _isInitialized;
-
-        public static float InitElapsedMS =>
-            (float)((Time.realtimeSinceStartup - _elementInitStartTime) * 1000f);
-
         public static float InitProgress =>
             _maxInitCount == 0 ? 1f : (float)_curInitCount / _maxInitCount;
 
+        
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Boot()
@@ -37,9 +33,11 @@ namespace LumosLib
         {
             var libSettings = Resources.Load<LumosLibSettings>(nameof(LumosLibSettings));
             
-            if (libSettings == null ||
-                !libSettings.UsePreInit)
+            if (libSettings == null || !libSettings.UsePreInitialize)
+            {
+                _initBarrier.TrySetResult();
                 return;
+            }
 
             Initialize(libSettings).Forget();
         }
@@ -54,73 +52,85 @@ namespace LumosLib
 
         private static async UniTask Initialize(LumosLibSettings libSettings)
         {
-            DebugUtil.Log("", " INIT : START ");
+            DebugUtil.Log("", "------ INITIALIZE START");
 
-            _elementInitStartTime = Time.realtimeSinceStartup;
-
-            var initTargets = new List<IPreInitializable>();
-
+            var totalSW = System.Diagnostics.Stopwatch.StartNew();
+            var context = new PreInitContext();
+            var preloadSW = System.Diagnostics.Stopwatch.StartNew();
+            
             foreach (var prefab in libSettings.PreloadObjects)
             {
                 if (prefab == null)
                     continue;
 
                 var obj = Object.Instantiate(prefab);
-
-                if (obj.TryGetComponent(out IPreInitializable initializer))
-                {
-                    initTargets.Add(initializer);
-                }
+                obj.name = prefab.name;
             }
+            
+            DebugUtil.Log("", $"PRELOAD FINISH ({preloadSW.ElapsedMilliseconds:F2} ms)");
 
-            _maxInitCount = initTargets.Count;
-
-            foreach (var target in initTargets)
+            
+            var allInitializable = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .OfType<IPreInitializable>()
+                .ToList();
+            
+            _maxInitCount = allInitializable.Count;
+            
+            var taskList = new List<UniTask<bool>>();
+            
+            foreach (var initializable in allInitializable)
             {
-                _elementInitStartTime = Time.realtimeSinceStartup;
-
-                bool success = false;
-                try
-                {
-                    success = await target.InitAsync();
-                }
-                catch (System.Exception e)
-                {
-                    DebugUtil.LogError(e.ToString(), " INIT : EXCEPTION ");
-                }
-
-                _curInitCount++;
-
-                if (success)
-                {
-                    DebugUtil.Log(
-                        $"{target.GetType().Name}",
-                        $" INIT : SUCCESS ({_curInitCount}/{_maxInitCount})"
-                    );
-                }
-                else
-                {
-                    _failCount++;
-                    DebugUtil.LogError(
-                        $"{target.GetType().Name}",
-                        $" INIT : FAIL ({_curInitCount}/{_maxInitCount})"
-                    );
-                }
+                var task = InitializeTarget(context, initializable);
+                taskList.Add(task);
+                
+                context.Register(initializable, task);
             }
-
-            DebugUtil.Log(
-                "",
-                $" INIT : FINISH - COMPLETE : {_curInitCount - _failCount}, FAIL : {_failCount}"
-            );
+            
+            await UniTask.WhenAll(taskList);
+            
+            DebugUtil.Log("", $"------ INITIALIZE FINISH ({totalSW.ElapsedMilliseconds:F2} ms)");
 
             FinishInit();
         }
         
+        
         private static void FinishInit()
         {
             _isInitialized = true;
-
             _initBarrier.TrySetResult();
+        }
+        
+        
+        private static async UniTask<bool> InitializeTarget(PreInitContext ctx, IPreInitializable target)
+        {
+            string targetName = target.GetType().Name;
+            float startTime = Time.realtimeSinceStartup;
+
+            try
+            {
+                bool success = await target.InitAsync(ctx);
+
+                float elapsed = (Time.realtimeSinceStartup - startTime) * 1000f;
+
+                if (success)
+                {
+                    _curInitCount++;
+                    DebugUtil.Log(targetName, $"INIT SUCCESS ({elapsed:F2} ms) [{_curInitCount}/{_maxInitCount}]");
+                }
+                else
+                {
+                    _failCount++;
+                    DebugUtil.LogError(targetName, $"INIT FAIL");
+                }
+
+                return success;
+            }
+            catch (System.Exception e)
+            {
+                _failCount++;
+                DebugUtil.LogError(targetName, $"INIT EXCEPTION: {e.Message}");
+                return false;
+            }
         }
     }
 }

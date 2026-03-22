@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace LumosLib
 {
-    public class PoolManager : MonoBehaviour, IPreInitializable, IPoolManager
+    public class PoolManager : MonoBehaviour, IPoolManager
     {
         private Dictionary<string, object> _pools = new();
         private Dictionary<string, HashSet<MonoBehaviour>> _activeObjects = new();
-        
-        public UniTask<bool> InitAsync()
+
+
+        private void Awake()
         {
-            GlobalService.Register<IPoolManager>(this);
-            return UniTask.FromResult(true);
+            Services.Register<IPoolManager>(this);
         }
-     
+
+      
         private ObjectPool<T> CreatePool<T>(T prefab, int defaultCapacity = Constant.PoolDefaultCapacity, int maxSize = Constant.PoolMaxSize) where T : MonoBehaviour, IPoolable
         {
             var pool = new ObjectPool<T>(

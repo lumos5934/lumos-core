@@ -10,14 +10,18 @@ namespace LumosLib
         protected Dictionary<Type, UIPopup> _popupCache = new();
         protected List<UIPopup> _openedPopups = new();
         protected Camera _camera;
-       
         
-        public async UniTask<bool> InitAsync()
+        public Type RegisterType => typeof(IPopupManager);
+        
+        
+        public async UniTask<bool> InitAsync(PreInitContext ctx)
         {
-            return await OnInitAsync();
+            return await OnInitAsync(ctx);
         }
-
-        protected abstract UniTask<bool> OnInitAsync();
+     
+        
+        protected abstract UniTask<bool> OnInitAsync(PreInitContext ctx);
+        
         
         internal void Register(UIPopup popup)
         {
@@ -65,5 +69,6 @@ namespace LumosLib
         protected abstract void OnClose<T>() where T : UIPopup;
 
 
+        
     }
 }

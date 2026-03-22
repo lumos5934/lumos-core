@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace LumosLib
 {
-    public static class GlobalService
+    public static class Services
     {
         private static Dictionary<Type, object> _services = new();
         

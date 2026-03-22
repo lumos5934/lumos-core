@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TriInspector;
 using UnityEngine;
@@ -8,7 +8,7 @@ using UnityEngine.Audio;
 namespace LumosLib
 {
     [DeclareBoxGroup("Resources")]
-    public class AudioManager : MonoBehaviour, IPreInitializable, IAudioManager
+    public class AudioManager : MonoBehaviour, IAudioManager, IPreInitializable
     {
         [Title("REQUIREMENT"), PropertyOrder(-1)]
         [ShowInInspector, HideReferencePicker, ReadOnly, LabelText("IPoolManager")] private IPoolManager _poolManager;
@@ -23,23 +23,34 @@ namespace LumosLib
         private readonly Dictionary<string, SoundAsset> _assetResources = new();
         private readonly Dictionary<int, AudioPlayer> _bgmPlayers = new();
         private readonly HashSet<AudioPlayer> _activePlayers = new();
+
         
+        public Type RegisterType => typeof(IAudioManager);
         
-        public UniTask<bool> InitAsync()
+
+        private void Awake()
         {
-            _poolManager = GlobalService.Get<IPoolManager>();
+            Services.Register<IAudioManager>(this);
+        }
+
+        
+        public UniTask<bool> InitAsync(PreInitContext ctx)
+        {
+            _poolManager = Services.Get<IPoolManager>();
             if (_poolManager == null)
+            {
                 return UniTask.FromResult(false);
+            }
             
             foreach (var asset in _soundAssets)
             {
                 _assetResources[asset.name] = asset;
             }
-
-            GlobalService.Register<IAudioManager>(this);
+            
             return UniTask.FromResult(true);
         }
-
+        
+        
         public void SetVolume(string groupName, float volume)
         {
             _mixer.SetFloat(groupName, Mathf.Log10(volume) * 20f);
@@ -165,5 +176,6 @@ namespace LumosLib
             return player;
         }
 
+       
     }
 }
