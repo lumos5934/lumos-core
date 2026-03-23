@@ -12,15 +12,158 @@ namespace LumosLib.Editor
         private ITestToolElement _selectedElement;
         private Vector2 _scrollPos;
         
+        
         private GUIStyle _titleStyle;
+        private GUIStyle TitleStyle
+        {
+            get
+            {
+                if (_titleStyle == null)
+                {
+                    _titleStyle = new GUIStyle(EditorStyles.boldLabel);
+                    _titleStyle.fontSize = 25;
+                    _titleStyle.fontStyle = FontStyle.Bold;
+                    _titleStyle.alignment = TextAnchor.MiddleCenter;
+
+                    _titleStyle.hover.background = null;
+                    _titleStyle.active.background = null;
+                }
+
+                return _titleStyle;
+            }
+        }
+        
         private GUIStyle _titleShadowStyle;
+        private GUIStyle TitleShadowStyle
+        {
+            get
+            {
+                if (_titleShadowStyle == null)
+                {
+                    _titleShadowStyle = new GUIStyle(EditorStyles.boldLabel);
+                    _titleShadowStyle.fontSize = 25;
+                    _titleShadowStyle.fontStyle = FontStyle.Bold;
+                    _titleShadowStyle.alignment = TextAnchor.MiddleCenter;
+                    _titleShadowStyle.hover.background = null;
+                    _titleShadowStyle.active.background = null;
+                }
+
+                return _titleShadowStyle;
+            }
+        }
         
         private GUIStyle _mainRectStyle;
+        private GUIStyle MainRectStyle
+        {
+            get
+            {
+                if (_mainRectStyle == null)
+                {
+                    _mainRectStyle = new GUIStyle("box")
+                    {
+                        padding = new RectOffset(0, 0, 0, 0),
+                        margin = new RectOffset(0, 0, 0, 0),
+                        stretchWidth = true,
+                        stretchHeight = true,
+                    };
+                }
+            
+                return _mainRectStyle;
+            }
+        }
         private GUIStyle _sideRectStyle;
+        private GUIStyle SideRectStyle
+        {
+            get
+            {
+                if (_sideRectStyle == null)
+                {
+                    _sideRectStyle = new GUIStyle()
+                    {
+                        padding = new RectOffset(2, 0, 3, 3),
+                        margin = new RectOffset(0, 0, 0, 0)
+                    };
+                }
+
+                return _sideRectStyle;
+            }
+        }
         private GUIStyle _contentRectStyle;
+        private GUIStyle ContentRectStyle
+        {
+            get
+            {
+                if (_contentRectStyle == null)
+                {
+                    _contentRectStyle = new GUIStyle("box")
+                    {
+                        margin = new RectOffset(0, 1, 1, 0),
+                    };
+                }
+              
+                return _contentRectStyle;
+            }
+        }
 
         private GUIStyle _btnStyle;
+        private GUIStyle BtnStyle
+        {
+            get
+            {
+                if (_btnStyle == null)
+                {
+                    _btnStyle = new GUIStyle(EditorStyles.miniButtonMid)
+                    {
+                        margin = new RectOffset(0, 0, 0, 0),
+                        padding = new RectOffset(0,0,0,0),
+                        overflow = new RectOffset(0,0,0,0),
+                        fontStyle = FontStyle.Bold,
+                        alignment = TextAnchor.MiddleCenter,
+                        fontSize = 12,
+                        stretchWidth = true,
+                        fixedHeight = 25,
+                    };
+                }
+
+                return _btnStyle;
+            }
+        }
         private GUIStyle _noticeStyle;
+        private GUIStyle NoticeStyle
+        {
+            get
+            {
+                if (_noticeStyle == null)
+                {
+                    _noticeStyle = new GUIStyle()
+                    {
+                        alignment = TextAnchor.MiddleCenter,
+                        fontSize = 18,
+                        fontStyle = FontStyle.Bold,
+                        padding = new RectOffset(20, 20, 20, 20),
+                    };
+                    
+                    _noticeStyle.normal.textColor = new Color(0.7f, 0.7f, 0.7f);
+                }
+            
+                return _noticeStyle;
+            }
+        }
+
+        private LumosLibSettings _settings;
+        private LumosLibSettings Settings
+        {
+            get
+            {
+                if (_settings == null)
+                {
+                    _settings = Resources.Load<LumosLibSettings>(nameof(LumosLibSettings));
+                }
+
+                return _settings;
+            }
+        }
+
         
         
         [MenuItem("Window/[ Lumos Lib ]/Test Tool", false, int.MinValue)]
@@ -63,112 +206,120 @@ namespace LumosLib.Editor
         
         private void OnGUI()
         {
+            Color titleColor = Settings.NameColor;
+            TitleStyle.normal.textColor = titleColor;
+            TitleStyle.hover.textColor = titleColor;
+            TitleStyle.active.textColor = titleColor;
+            TitleStyle.focused.textColor = titleColor;
+            
+            Color titleShadowColor = Settings.NameShadowColor;
+            TitleShadowStyle.normal.textColor = titleShadowColor;
+            TitleShadowStyle.hover.textColor = titleShadowColor;
+            TitleShadowStyle.active.textColor = titleShadowColor;
+            TitleShadowStyle.focused.textColor = titleShadowColor;
+            
+            BtnStyle.normal.textColor = Settings.ButtonNameNormalColor;
+            BtnStyle.hover.textColor = Settings.ButtonNameHoverColor;
+            
+            
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
-            
-            DrawTitle();
-
-            Rect mainRect = new Rect();
-            Rect sideRect = new Rect();
-            Rect contentRect = new Rect();
-
-            DrawMain(out mainRect, () =>
             {
-                if (!Application.isPlaying)
-                {
-                    DrawNotice();
-                    return;
-                }
-                
-                if (_selectedElement == null)
-                {
-                    DrawGrid(mainRect);
-                    EditorGUILayout.Space(3);
-                    DrawElementButtons();
-                }
-                else
-                {
-                    EditorGUILayout.BeginHorizontal();
-                
-                    DrawSideRect(out sideRect, () =>
-                    {
-                        DrawGrid(sideRect);
-                        DrawElementButtons();
-                    });
-                
-                    DrawContentRect(out contentRect, () =>
-                    {
-                        if (_selectedElement != null)
-                        {
-                            _selectedElement.OnGUI();
-                            HandleElementMenu(contentRect, _selectedElement);
-                        }
-                    });
-                
-                    EditorGUILayout.EndHorizontal();
-                }
-            });
+                DrawTitle();
+
             
-            EditorGUILayout.EndScrollView();
+                GUI.backgroundColor = Color.black;
+                Rect mainRect = EditorGUILayout.BeginVertical(MainRectStyle);
+                {
+                    GUI.backgroundColor = Color.white;
+                
+                    if (!Application.isPlaying)
+                    {
+                        DrawNotice();
+                    }
+                    else
+                    {
+                        if (_selectedElement == null)
+                        {
+                            DrawGrid(mainRect);
+                            EditorGUILayout.Space(3);
+                            DrawElementButtons();
+                        }
+                        else
+                        {
+                            EditorGUILayout.BeginHorizontal();
+                            {
+                                Rect sideRect = EditorGUILayout.BeginVertical(SideRectStyle, 
+                                    GUILayout.Width(90), GUILayout.ExpandHeight(true));
+                                {
+                                    DrawGrid(sideRect);
+                                    DrawElementButtons();
+                                
+                                    EditorGUILayout.EndVertical();
+                                }
+                
+                            
+                                GUI.backgroundColor = new Color(0f, 0f, 0f, 0.7f);
+                                Rect contentRect = EditorGUILayout.BeginVertical(ContentRectStyle,
+                                    GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
+                                {
+                                    GUI.backgroundColor = Color.white;
+                                
+                                    if (_selectedElement != null)
+                                    {
+                                        _selectedElement.OnGUI();
+                                        HandleElementMenu(contentRect, _selectedElement);
+                                    }
+                                
+                                    EditorGUILayout.EndVertical();
+                                }
+                            
+                                EditorGUILayout.EndHorizontal();
+                            }
+                        }
+                    }
+                    EditorGUILayout.EndVertical();
+                }
+                EditorGUILayout.EndScrollView();
+            }
         }
 
-        
-        #region Notice
 
         private void DrawNotice()
         {
             EditorGUILayout.BeginVertical();
-            GUILayout.FlexibleSpace();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-
-            string message = "⚠️ RUNTIME ONLY";
-            GUILayout.Label(message, GetNoticeStyle(), GUILayout.MinWidth(300), GUILayout.MinHeight(100));
-
-            GUILayout.FlexibleSpace(); // 오른쪽 여백 밀어내기
-            EditorGUILayout.EndHorizontal();
-
-            GUILayout.FlexibleSpace(); // 아래쪽 여백 밀어내기
-            EditorGUILayout.EndVertical();
-        }
-        
-        private GUIStyle GetNoticeStyle()
-        {
-            if (_noticeStyle != null)
-                return _noticeStyle;
-
-            _noticeStyle = new GUIStyle()
             {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 18,
-                fontStyle = FontStyle.Bold,
-                padding = new RectOffset(20, 20, 20, 20),
-            };
+                GUILayout.FlexibleSpace();
 
-            _noticeStyle.normal.textColor = new Color(0.7f, 0.7f, 0.7f);
-            
-            return _noticeStyle;
+                EditorGUILayout.BeginHorizontal();
+                {
+                    GUILayout.FlexibleSpace();
+
+                    string message = "⚠️ RUNTIME ONLY";
+                    GUILayout.Label(message, NoticeStyle, GUILayout.MinWidth(300), GUILayout.MinHeight(100));
+
+                    GUILayout.FlexibleSpace(); // 오른쪽 여백 밀어내기
+                    EditorGUILayout.EndHorizontal();
+                    {
+                        GUILayout.FlexibleSpace(); // 아래쪽 여백 밀어내기
+                        EditorGUILayout.EndVertical();
+                    }
+                }
+            }
         }
-
-        #endregion
-        
-        #region Title
-        
+     
         private void DrawTitle()
         {
             EditorGUILayout.Space(20f);
 
-            var titleStyle = GetTitleStyle();
-            
             GUIContent content = EditorGUIUtility.TrTextContent("TEST TOOL");
-            Rect rect = GUILayoutUtility.GetRect(content, titleStyle);
+            Rect rect = GUILayoutUtility.GetRect(content, TitleStyle);
 
-            
-            var shadowStyle = GetShadowStyle();
+
+            var shadowStyle = TitleShadowStyle;
             GUI.Label(new Rect(rect.x + 2.5f, rect.y + 2.5f, rect.width, rect.height), content, shadowStyle);
 
             
-            GUI.Label(rect, content, titleStyle);
+            GUI.Label(rect, content, TitleStyle);
 
             
             EditorGUILayout.Space(20f);
@@ -182,134 +333,24 @@ namespace LumosLib.Editor
             float lineY = rect.yMax - 1.5f;
             EditorGUI.DrawRect(new Rect(rect.x, lineY - 1f, rect.width, 1), new Color(0.6f, 0.6f, 0.6f, 0.15f));
             EditorGUI.DrawRect(new Rect(rect.x, lineY, rect.width, 2), new Color(1, 1, 1, 0.15f));
-            EditorGUI.DrawRect(new Rect(rect.center.x - 20, lineY - 1f, 40, 1), new Color(0.6f, 0.45f, 0f, 0.6f));
-            EditorGUI.DrawRect(new Rect(rect.center.x - 20, lineY, 40, 2), new Color(1f, 0.85f, 0.4f, 0.6f));
+            EditorGUI.DrawRect(new Rect(rect.center.x - 20, lineY - 1f, 40, 1), Settings.UnderLineHighlightShadowColor);
+            EditorGUI.DrawRect(new Rect(rect.center.x - 20, lineY, 40, 2), Settings.UnderLineHighlightColor);
         }
-
-
-        private GUIStyle GetShadowStyle()
-        {
-            if(_titleShadowStyle != null)
-                return  _titleShadowStyle;
-            
-            _titleShadowStyle = new GUIStyle(EditorStyles.boldLabel);
-            _titleShadowStyle.fontSize = 25;
-            _titleShadowStyle.fontStyle = FontStyle.Bold;
-            _titleShadowStyle.alignment = TextAnchor.MiddleCenter;
-            
-            Color mainColor = new Color(0.15f, 0.1f, 0f, 0.8f);
-            _titleShadowStyle.normal.textColor = mainColor;
-            _titleShadowStyle.hover.textColor = mainColor;
-            _titleShadowStyle.active.textColor = mainColor;
-            _titleShadowStyle.focused.textColor = mainColor;
-                     
-            _titleShadowStyle.hover.background = null;
-            _titleShadowStyle.active.background = null;
-            
-            return _titleShadowStyle;
-        }
-        
-        private GUIStyle GetTitleStyle()
-        {
-            if (_titleStyle != null)
-                return _titleStyle;
-
-            _titleStyle = new GUIStyle(EditorStyles.boldLabel);
-            _titleStyle.fontSize = 25;
-            _titleStyle.fontStyle = FontStyle.Bold;
-            _titleStyle.alignment = TextAnchor.MiddleCenter;
-        
-            Color mainColor = new Color(1f, 0.9f, 0.9f);
-            _titleStyle.normal.textColor = mainColor;
-            _titleStyle.hover.textColor = mainColor;
-            _titleStyle.active.textColor = mainColor;
-            _titleStyle.focused.textColor = mainColor;
-            
-            _titleStyle.hover.background = null;
-            _titleStyle.active.background = null;
-            
-            return _titleStyle;
-        }
-
-        #endregion
-        
-        #region Main
-
-        private void DrawMain(out Rect rect, Action onMain)
-        {
-            GUI.backgroundColor = Color.black;
-            rect = EditorGUILayout.BeginVertical(GetMainRectStyle());
-            GUI.backgroundColor = Color.white;
-            
-            onMain?.Invoke();
-            
-            EditorGUILayout.EndVertical();
-        }
-        
-        private GUIStyle GetMainRectStyle()
-        {
-            if (_mainRectStyle != null)
-                return _mainRectStyle;
-            
-            _mainRectStyle = new GUIStyle("box")
-            {
-                padding = new RectOffset(0, 0, 0, 0),
-                margin = new RectOffset(0, 0, 0, 0),
-                stretchWidth = true,
-                stretchHeight = true,
-            };
-            
-            return _mainRectStyle;
-        }
-
-        #endregion
-        
-        #region Side
-
-
-        private void DrawSideRect(out Rect rect, Action onSide)
-        {
-            rect = EditorGUILayout.BeginVertical(GetSideRectStyle(), GUILayout.Width(90), GUILayout.ExpandHeight(true));
-           
-            onSide?.Invoke();
-            
-            EditorGUILayout.EndVertical();
-        }
-
-
-        private GUIStyle GetSideRectStyle()
-        {
-            if (_sideRectStyle != null)
-                return _sideRectStyle;
-
-            
-            _sideRectStyle = new GUIStyle()
-            {
-                padding = new RectOffset(2, 0, 3, 3),
-                margin = new RectOffset(0, 0, 0, 0)
-            };
-
-            return _sideRectStyle;
-        }
-
-        #endregion
-        
-        #region Button
-        
+       
         private void DrawElementButtons()
         {
             for (int i = 0; i < _elements.Count; i++)
             {
                 var target = _elements[i];
-                
-                GUI.backgroundColor = (_selectedElement == target) ? 
-                    new Color(0.40f,0.40f,0.40f, 1f) : 
-                    Color.white;
 
-                var btnStyle = GetButtonStyle();
+                GUI.backgroundColor = (_selectedElement == target)
+                    ? Settings.ButtonSelectedColor
+                    : Settings.ButtonNormalColor;
+
+
                 var label = target.Title.ToUpper();
                 
-                if (GUILayout.Button(label, btnStyle))
+                if (GUILayout.Button(label, BtnStyle))
                 {
                     _selectedElement = _selectedElement == target ? null : target;
                 }
@@ -321,8 +362,8 @@ namespace LumosLib.Editor
                     rect.width -= 2;
                     rect.height -= 2;
                     rect.center -= new Vector2(0f, -1f);
-                    
-                    var outlineColor = new Color(1f, 0.85f, 0.4f, 0.9f);
+
+                    var outlineColor = Settings.ButtonHighlightColor;
                     
                     Handles.color = outlineColor;
                     // 내부 색상은 투명하게(new Color(0,0,0,0)), 테두리는 노란색으로
@@ -334,61 +375,6 @@ namespace LumosLib.Editor
                 GUI.backgroundColor = Color.white;
             }
         }
-        
-        
-        private GUIStyle GetButtonStyle()
-        {
-            if (_btnStyle != null)
-                return _btnStyle;
-
-            _btnStyle = new GUIStyle(EditorStyles.miniButtonMid)
-            {
-                margin = new RectOffset(0, 0, 0, 0),
-                padding = new RectOffset(0,0,0,0),
-                overflow = new RectOffset(0,0,0,0),
-                fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 12,
-                stretchWidth = true,
-                fixedHeight = 25,
-            };
-
-            _btnStyle.hover.textColor = new Color(1f, 0.9f, 0.7f, 1);
-
-            return _btnStyle;
-        }
-
-        
-        #endregion
-        
-        #region Content
-
-        private void DrawContentRect(out Rect rect, Action onContent)
-        {
-            GUI.backgroundColor = new Color(0f, 0f, 0f, 0.7f);
-            rect = EditorGUILayout.BeginVertical(GetContentRectStyle(), GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
-            GUI.backgroundColor = Color.white;
-                
-            
-            onContent?.Invoke();
-                
-            EditorGUILayout.EndVertical();
-        }
-
-        private GUIStyle GetContentRectStyle()
-        {
-            if (_contentRectStyle != null)
-                return _contentRectStyle;
-
-            _contentRectStyle = new GUIStyle("box")
-            {
-                margin = new RectOffset(0, 1, 1, 0),
-            };
-            
-            return _contentRectStyle;
-        }
-
-        #endregion
         
         private void DrawGrid(Rect rect)
         {
