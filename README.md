@@ -29,7 +29,7 @@
 * [ Input ](#Input)
 * [ PreInitialize ](#PreInitialize)
 * [ Pool ](#Pool)
-* [ Resource ](https://www.notion.so/Resource-2df3966a742c80bbbad3d8fbf0bd24d2?source=copy_link)
+* [ Resource ](#Resource)
 * [ Save ](https://www.notion.so/Save-2df3966a742c80898b8ad7cd3d16f9ec?source=copy_link)
 * [ Tutorial ](https://www.notion.so/Tutorial-2df3966a742c808b860be13cf2e99a08?source=copy_link)
 * [ TestWindow ](https://www.notion.so/Test-Editor-2df3966a742c80c3af6ac96904d157da?source=copy_link)
@@ -446,6 +446,53 @@ public async void Awake()
   </tr>
 </table>
 
+```cs
+
+public class Projectile : MonoBehaviour, IPoolable
+{
+    // 풀에 처음 생성될 때 호출
+    public void OnCreated() => Debug.Log("화살 생성됨");
+
+    // 풀에서 꺼내질 때 호출 (초기화 로직)
+    public void OnGet() => Debug.Log("화살 발사 준비");
+
+    // 풀로 돌아갈 때 호출 (데이터 리셋)
+    public void OnRelease() => GetComponent<Rigidbody>().velocity = Vector3.zero;
+}
+
+public class Shooter : MonoBehaviour
+{
+    [SerializeField] private Projectile _arrowPrefab;
+    private IPoolManager _pool;
+
+    private void Start()
+    {
+        _pool = Services.Get<IPoolManager>();
+    }
+
+    private void Fire()
+    {
+        // 1. Get: 풀에서 가져오기 (없으면 자동 생성)
+        var arrow = _pool.Get(_arrowPrefab);
+        arrow.transform.position = transform.position;
+    }
+
+    private void ReturnArrow(Projectile arrow)
+    {
+        // 2. Release: 사용이 끝난 객체 반환
+        _pool.Release(arrow);
+    }
+
+    private void ClearAll()
+    {
+        // 3. ReleaseAll: 현재 화면에 나간 특정 프리팹 일괄 회수
+        _pool.ReleaseAll(_arrowPrefab);
+    }
+}
+
+```
+
+
 [🎞️튜토리얼](https://youtu.be/uHugRk2FvsE?si=enZf8aUPJZqyzbuO)
 
 <br>
@@ -453,8 +500,35 @@ public async void Awake()
 
 ---
 
+### Resource
 
+**ResourceManager**
 
+리소스를 미리 캐싱해놓고 참조의 편의를 돕는 관리자. 어드레서블과의 교체를 염두해 label 과 key 를 사용해 조회하고 현재 label 은 폴더이름을 이용.
+
+<table>
+  <tr>
+    <td><b>Get(assetName)<b></td>
+    <td>해당 이름의 리소스 반환</td>
+  </tr>
+  <tr>
+    <td><b>Get(label, assetName)<b></td>
+    <td>해당 label의 목표 리소스 반환</td>
+  </tr>
+  <tr>
+    <td><b>GetAll(label)</td>
+    <td>해당 label 의 모든 리소스 반환</td>
+  </tr>
+      <tr>
+    <td><b>GetAll()</td>
+    <td>모든 리소스 반환</td>
+  </tr>
+</table>
+
+<br>
+<br>
+
+---
 
 
 ## ℹ️사전 작업
