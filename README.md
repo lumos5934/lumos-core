@@ -23,11 +23,11 @@
 ## ℹ️기능
 
 * [ Audio ](#Audio)
-* [ Event ](#Event)
-* [ FSM ](https://www.notion.so/FSM-2df3966a742c8021b453c80bab800d3f?source=copy_link)
-* [ Global ](https://www.notion.so/Global-2df3966a742c802d9ca9ffb15b215c58?source=copy_link)
-* [ Input ](https://www.notion.so/Input-2df3966a742c80829b9fd7302ad19cdb?source=copy_link)
-* [ PreInitialize ](https://www.notion.so/PreInitialize-2df3966a742c800185e4d1920150c6a3?source=copy_link)
+* [ EventBus ](#EventBus)
+* [ FSM ](#FSM)
+* [ Services ](#Services)
+* [ Input ](#Input)
+* [ PreInitialize ](#PreInitialize)
 * [ Pool ](https://www.notion.so/Pool-2df3966a742c8066b614c44f459abde8?source=copy_link)
 * [ Resource ](https://www.notion.so/Resource-2df3966a742c80bbbad3d8fbf0bd24d2?source=copy_link)
 * [ Save ](https://www.notion.so/Save-2df3966a742c80898b8ad7cd3d16f9ec?source=copy_link)
@@ -231,6 +231,188 @@ public class MoveState : IState
 <br>
 
 ---
+
+### Services
+
+간편한 참조와 의존성 주입을 위한 서비스 로케이터, 기본적으로 싱글톤 적 성격을 띄고 있으므로 Monobehaviour 객체는 등록시 DontDestroyOnLoad 처리되며 중복된 객체가 등록되거나 등록 해제시 파괴됨.
+
+<table>
+  <tr>
+    <td><b>Register(T service)<b></td>
+    <td>서비스 등록</td>
+  </tr>
+  <tr>
+    <td><b>Unregister()<b></td>
+    <td>서비스 등록 해제</td>
+  </tr>
+  <tr>
+    <td><b>Get<b></td>
+    <td>서비스 조회</td>
+  </tr>
+</table>
+
+
+```csharp
+Services.Register<IGameSettings>(this);
+IGameSettings Settings => Services.Get<IGameSettings>();
+```
+
+<br>
+<br>
+
+---
+
+### Input
+
+**PointerManager**
+
+InputSystem 을 통해 메인 클릭에 대한 처리를 담당.
+
+<table>
+  <tr>
+    <td><b>PosInputReference<b></td>
+    <td>포인터의 위치를 나타낼 InputActionReference</td>
+  </tr>
+  <tr>
+    <td><b>ClickInputReference<b></td>
+    <td>포인터의 입력을 나타낼 InputActionReference</td>
+  </tr>
+  <tr>
+    <td><b>IsPressed</td>
+    <td>포인터가 눌려있는지 여부</td>
+  </tr>
+      <tr>
+    <td><b>ScreenPosition</td>
+    <td>스크린 기준 포인터 위치</td>
+  </tr>
+      <tr>
+    <td><b>WorldPosition</td>
+    <td>월드 기준 포인터 위치</td>
+  </tr>
+       <tr>
+    <td><b>GetHitCollider()</td>
+    <td>레이캐스트를 통한 포인터 위치 콜라이더 검출</td>
+  </tr>
+      <tr>
+    <td><b>SetCamera()</td>
+    <td>수동 카메라 등록 필요시 등록</td>
+  </tr>
+</table>
+
+
+<br>
+
+**PointerDownEvent & UpEvent**
+
+<table>
+  <tr>
+    <td><b>ScreenPosition<b></td>
+    <td>이벤트 발생 기준 포인터의 스크린 위치</td>
+  </tr>
+  <tr>
+    <td><b>WorldPosition<b></td>
+    <td>이벤트 발생 기준 포인터의 월드 위치</td>
+  </tr>
+  <tr>
+    <td><b>HitCollider</td>
+    <td>이벤트 발생 기준 검출된 포인터 위치의 콜라이더</td>
+  </tr>
+</table>
+
+<br>
+
+```csharp
+
+EventBus<PointerDownEvent>.Subscribe(OnPointerDown);
+EventBus<PointerDownEvent>.Unsubscribe(OnPointerDown);
+
+private void OnPointerDown(PointerDownEvent evt)
+{
+    // 1. 클릭된 위치의 콜라이더 확인
+    if (evt.HitCollider != null)
+    {
+        Debug.Log($"클릭된 오브젝트: {evt.HitCollider.name}");
+        Debug.Log($"월드 좌표: {evt.WorldPosition}");
+    }
+    else
+    {
+        Debug.Log("허공을 클릭했습니다.");
+    }
+}
+
+```
+
+
+<br>
+<br>
+
+---
+
+### PreInitialize
+
+**PreInitializer** 
+
+<img width="472" height="270" alt="image" src="https://github.com/user-attachments/assets/f53b06e9-a2cf-4df8-ab0a-16bab73839d6" />
+
+플레이시 `Preload Objects` 들을 생성하고 `Use Pre Initialize` 체크 시 사전 초기화를 진행. `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]` 시점에 병렬식 비동기로 진행되므로 씬에 미리 배치되어있던 오브젝트의 Awake등에서 호출 주의
+
+
+<table>
+  <tr>
+    <td><b>IsInitialized<b></td>
+    <td>초기화가 완료되었는지 확인</td>
+  </tr>
+  <tr>
+    <td><b>InitProgress<b></td>
+    <td>[완료 목록 개수 / 총 목록 개수] 의 진행률</td>
+  </tr>
+  <tr>
+    <td><b>WaitInitAsync()</td>
+    <td>외부에서 해당 초기화가 완료될때까지 비동기로 기다리는 UniTask</td></td>
+  </tr>
+</table>
+
+```cs
+
+public async void Awake()
+{
+    // 사전 초기화가 필요한 클래스를 참조할 경우 대기
+    await PreInitializer.WaitInitAsync();
+
+    //이후 참조
+}
+
+```
+
+<br>
+
+**IPreInitializable**
+
+사전 초기화를 진행 할 대상. `UniTask<bool> InitAsync(PreInitContext ctx);` 매서드를 통해 초기화를 진행하고 결과를 bool 로 리턴. 만약 초기화중 참조해야 할 대상 또한 초기화 대상이라면 `context` 의 `GetAsync()` 를 호출하여 대상의 초기화를 기다린 후 진행 가능. 
+
+```cs
+
+```
+
+ protected override async UniTask<bool> OnInitAsync(PreInitContext ctx)
+{
+    _resourceMgr = Services.Get<IResourceManager>();
+    
+    var resourceInit = _resourceMgr as IPreInitializable;
+    if (resourceInit == null)
+        return false;
+    
+    var result = await ctx.GetAsync(resourceInit);
+    if (result == null) 
+        return false;
+}
+
+<br>
+<br>
+
+---
+
+
 
 ## ℹ️사전 작업
 
