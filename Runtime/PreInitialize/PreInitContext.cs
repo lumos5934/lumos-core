@@ -22,12 +22,12 @@ namespace LumosLib
         }
 
         
-        public void Register(IPreInitializable instance)
+        internal void Register(IPreInitializable instance)
         {
             _instances[instance.GetType()] = instance;
         }
         
-        public void SetTaskResult(Type type, bool success)
+        internal void SetTaskResult(Type type, bool success)
         {
             // 작업 결과 연결
             GetSource(type).TrySetResult(success);
