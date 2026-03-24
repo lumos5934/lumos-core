@@ -4,7 +4,7 @@
 
 <br>
 
-## ℹ️의존성
+### ℹ️의존성
 
 * **URP**
 * **Newtonsoft.Json (자동 설치)**
@@ -13,14 +13,14 @@
 
 <br>
 
-## ℹ️확장
+### ℹ️확장
 * [ lumos-DOTween ](https://github.com/lumos5934/lumos-DOTween)
 * [ lumos-firebase ](https://github.com/lumos5934/lumos-firebase)
 * [ lumos-BGDatabase ](https://github.com/lumos5934/lumos-BGDatabase)
 
 <br>
 
-## ℹ️기능
+## 🔧기능
 
 * [ Audio ](#Audio)
 * [ EventBus ](#EventBus)
