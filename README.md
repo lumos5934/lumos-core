@@ -27,14 +27,14 @@
 | [ PreInitialize ](#PreInitialize)<br>[ Services ](#Services)<br>[ EventBus ](#EventBus)<br>[ FSM ](#FSM)| [ TestTool ](#TestTool) | [ Save ](#Save)<br>[ Pool ](#Pool)<br>[ Resource ](#Resource) | [ Input ](#Input)<br>[ Audio ](#Audio)<br>[ Tutorial ](#Tutorial) | [ Popup ](#Popup)
 
 
-<table align="center">
+<table align="center", width="100%">
   <thead>
     <tr>
-      <th width="30%"><b>Core</b></th>
-      <th width="30%"><b>Editor</b></th>
-      <th width="30%"><b>Management</b></th>
-      <th width="30%"><b>Gameplay</b></th>
-      <th width="30%"><b>UI</b></th>
+      <th width="20%"><b>Core</b></th>
+      <th width="20%"><b>Editor</b></th>
+      <th width="20%"><b>Management</b></th>
+      <th width="20%"><b>Gameplay</b></th>
+      <th width="20%"><b>UI</b></th>
     </tr>
   </thead>
   <tbody>
