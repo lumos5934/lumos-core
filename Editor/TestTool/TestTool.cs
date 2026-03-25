@@ -215,7 +215,7 @@ namespace LumosLib.Editor
                     {
                         EditorGUILayout.BeginHorizontal();
                         {
-                            var categorySideRect = EditorGUILayout.BeginVertical(CategorySideRectStyle, GUILayout.Width(Settings.CategorySideWidth), GUILayout.ExpandHeight(true));
+                            var categorySideRect = EditorGUILayout.BeginVertical(CategorySideRectStyle, GUILayout.Width(Settings.ButtonWidth), GUILayout.ExpandHeight(true));
                             {
                                 DrawCategory(categorySideRect);
                             

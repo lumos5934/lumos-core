@@ -81,13 +81,13 @@ namespace LumosLib
         
         internal int ButtonFontSize = 12;
         internal float ButtonHeight = 25;
+        internal float ButtonWidth = 90;
+        
         internal Color ButtonNormalColor = new (1f, 0.80f, 0.6f, 0.6f);
         internal Color ButtonSelectedColor = new (0.40f, 0.40f, 0.40f, 1f);
         internal Color ButtonHighlightColor = new (1f, 0.85f, 0.4f, 0.9f);
         internal Color ButtonFontNormalColor = Color.white; 
         internal Color ButtonFontHoverColor = new (0.5f, 0.8f, 0.7f, 1);
-        
-        internal float CategorySideWidth = 90;
         internal Color ContentsBackgroundColor = new (0f, 0f, 0f, 0.7f);
     }
 }

@@ -61,11 +61,10 @@ public class TestToolSettingElement : ITestToolElement
         Settings.ButtonFontHoverColor = EditorGUILayout.ColorField("Font Hover Color", Settings.ButtonFontHoverColor);
         EditorGUILayout.Space(5f);
         Settings.ButtonHeight = EditorGUILayout.FloatField("Button Height", Settings.ButtonHeight);
+        Settings.ButtonWidth = EditorGUILayout.FloatField("Button Width", Settings.ButtonWidth);
         Settings.ButtonNormalColor = EditorGUILayout.ColorField("Button Normal Color", Settings.ButtonNormalColor);
         Settings.ButtonSelectedColor = EditorGUILayout.ColorField("Button Selected Color", Settings.ButtonSelectedColor);
         Settings.ButtonHighlightColor = EditorGUILayout.ColorField("Button Highlight Color", Settings.ButtonHighlightColor);
-        EditorGUILayout.Space(5f);
-        Settings.CategorySideWidth = EditorGUILayout.FloatField("Side Width", Settings.CategorySideWidth);
     }
     
     
