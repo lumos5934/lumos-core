@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace LumosLib
 {
@@ -18,14 +19,17 @@ namespace LumosLib
         
         public Currency(int id, long initialValue) : this(id)
         {
-            Value = Math.Max(0, initialValue);
+            var value = Math.Clamp(initialValue, 0, long.MaxValue);
+            
+            Value = Math.Max(0, value);
         }
 
         
         public void Set(long newValue)
         {
             long previous = Value;
-            Value = Math.Max(0, newValue);
+            var value = Math.Clamp(newValue, 0, long.MaxValue);
+            Value = Math.Max(0, value);
 
             if (previous != Value)
             {
