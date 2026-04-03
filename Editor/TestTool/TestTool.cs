@@ -73,7 +73,7 @@ namespace LLib.Editor
                 EditorGUI.DrawRect(mainRect, Settings.BottomBackgroundColor);
                 DrawGrid(mainRect);
              
-                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, false, false, GUIStyle.none, GUIStyle.none, GUIStyle.none);
                 {
                     if (_selectedModule == null)
                     {
