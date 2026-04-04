@@ -8,48 +8,59 @@ namespace LLib.Editor
     public class TestToolSettingsModule : BaseTestToolModule
     {
         private ReorderableList _reorderableList;
+
+        private ReorderableList ReorderableList
+        {
+            get
+            {
+                if (_reorderableList == null)
+                {
+                    var modules = Settings.Modules;
+            
+                    _reorderableList = new ReorderableList(
+                        modules, 
+                        typeof(BaseTestToolModule), 
+                        true, 
+                        false, 
+                        true, 
+                        true);
+            
+                    _reorderableList.drawElementCallback = (rect, index, isActive, isFocused) => 
+                    {
+                        var previousValue = modules[index];
+                
+                        rect.y += 2.45f;
+            
+                        modules[index] = (BaseTestToolModule)EditorGUI.ObjectField(
+                            new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
+                            modules[index],
+                            typeof(BaseTestToolModule), 
+                            false                  
+                        );
+                
+                        if (previousValue != modules[index] && modules[index] != null)
+                        {
+                            modules[index].Init();
+                        }
+                    };
+        
+                    _reorderableList.onAddCallback = (list) => modules.Add(null);
+                }
+                
+                return _reorderableList;
+            }
+        }
         private TestToolSettings Settings => TestToolSettings.instance;
 
 
         public override void Init()
         {
-            var modules = Settings.Modules;
-            
-            _reorderableList = new ReorderableList(
-                modules, 
-                typeof(BaseTestToolModule), 
-                true, 
-                false, 
-                true, 
-                true);
-            
-            _reorderableList.drawElementCallback = (rect, index, isActive, isFocused) => 
-            {
-                var previousValue = modules[index];
-                
-                rect.y += 2.45f;
-            
-                modules[index] = (BaseTestToolModule)EditorGUI.ObjectField(
-                    new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
-                    modules[index],
-                    typeof(BaseTestToolModule), 
-                    false                  
-                );
-                
-                if (previousValue != modules[index] && modules[index] != null)
-                {
-                    modules[index].Init();
-                }
-            };
-        
-            _reorderableList.onAddCallback = (list) => modules.Add(null);
         }
         
 
         public override void OnGUI()
         {
-            EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);
-            _reorderableList.DoLayoutList();
+            DrawModules();
             EditorGUILayout.Space(10f);
 
             DrawTop();
@@ -63,6 +74,13 @@ namespace LLib.Editor
 
             DrawContents();
             EditorGUILayout.Space(20f);
+        }
+
+
+        private void DrawModules()
+        {
+            EditorGUILayout.LabelField("Modules", EditorStyles.boldLabel);
+            ReorderableList.DoLayoutList();
         }
         
         
