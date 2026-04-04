@@ -7,27 +7,32 @@ namespace LLib.Editor
     [FilePath("ProjectSettings/TestToolSetting.asset", FilePathAttribute.Location.ProjectFolder)]
     public class TestToolSettings : ScriptableSingleton<TestToolSettings>
     {
-        internal int TitleFontSize = 25;
-        internal Color TitleFontColor = new (1f, 0.9f, 0.9f);
-        internal Color TitleFontShadowColor = new (0.15f, 0.1f, 0f, 0.8f);
-        internal Color TitleUnderLineColor =  new (1, 1, 1, 0.15f);
-        internal Color TitleUnderLineHighlightColor = new (1f, 0.85f, 0.4f, 0.6f);
+        [SerializeField] internal int TitleFontSize = 25;
+        [SerializeField] internal Color TitleFontColor = new (1f, 0.9f, 0.9f);
+        [SerializeField] internal Color TitleFontShadowColor = new (0.15f, 0.1f, 0f, 0.8f);
+        [SerializeField] internal Color TitleUnderLineColor =  new (1, 1, 1, 0.15f);
+        [SerializeField] internal Color TitleUnderLineHighlightColor = new (1f, 0.85f, 0.4f, 0.6f);
         
-        internal Color BottomBackgroundColor = new (0.2f, 0.2f, 0.2f, 1f);
+        [SerializeField] internal Color BottomBackgroundColor = new (0.2f, 0.2f, 0.2f, 1f);
         
-        internal float CategoryRectWidth = 90;
+        [SerializeField] internal float CategoryRectWidth = 90;
         
-        internal int ButtonFontSize = 12;
-        internal float ButtonHeight = 25;
+        [SerializeField] internal int ButtonFontSize = 12;
+        [SerializeField] internal float ButtonHeight = 25;
         
-        internal Color ButtonNormalColor = new (1f, 0.80f, 0.6f, 0.6f);
-        internal Color ButtonHighlightColor = new (1f, 0.85f, 0.4f, 0.9f);
-        internal Color ButtonFontNormalColor = Color.white; 
-        internal Color ButtonFontHoverColor = new (0.5f, 0.8f, 0.7f, 1);
-        internal Color ContentsBackgroundColor = new (0.1f, 0.1f, 0.1f, 1f);
+        [SerializeField] internal Color ButtonNormalColor = new (1f, 0.80f, 0.6f, 0.6f);
+        [SerializeField] internal Color ButtonHighlightColor = new (1f, 0.85f, 0.4f, 0.9f);
+        [SerializeField] internal Color ButtonFontNormalColor = Color.white; 
+        [SerializeField] internal Color ButtonFontHoverColor = new (0.5f, 0.8f, 0.7f, 1);
+        [SerializeField] internal Color ContentsBackgroundColor = new (0.1f, 0.1f, 0.1f, 1f);
         
-        internal List<BaseTestToolModule> Modules = new();
+        [SerializeField] internal List<BaseTestToolModule> Modules = new();
 
+
+        public void Save()
+        {
+            Save(true);
+        }
 
 
         #region GUIStyle

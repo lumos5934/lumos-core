@@ -6,7 +6,6 @@ namespace LLib.Editor
 {
     public class TestTool : EditorWindow
     {
-        private List<BaseTestToolModule> _modules;
         private BaseTestToolModule _selectedModule;
         private int _selectedIndex;
         private TestToolSettingsModule _settingsModule;
@@ -48,7 +47,7 @@ namespace LLib.Editor
             Settings.InitStyles();
             
             
-            foreach (var module in _modules)
+            foreach (var module in Settings.Modules)
             {
                 module.Init();
             }
@@ -70,8 +69,7 @@ namespace LLib.Editor
         {
             if (Settings == null)
                 return;
-
-            _modules = Settings.Modules;
+            
             
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, false, false, GUIStyle.none, GUIStyle.none, GUIStyle.none);
             {
@@ -105,7 +103,6 @@ namespace LLib.Editor
                                 EditorGUI.DrawRect(contentsRect, Settings.ContentsBackgroundColor);
 
                                 DrawContents(contentsRect);
-                                EditorGUILayout.Space(20);
                                 EditorGUILayout.EndVertical();
                             }
                         
@@ -159,9 +156,9 @@ namespace LLib.Editor
 
         private void DrawCategoryButtons()
         {
-            for (int i = 0; i <= _modules.Count; i++)
+            for (int i = 0; i <= Settings.Modules.Count; i++)
             {
-                BaseTestToolModule target = (i == _modules.Count) ? SettingsModule : _modules[i];
+                BaseTestToolModule target = (i == Settings.Modules.Count) ? SettingsModule : Settings.Modules[i];
                 if (target == null) 
                     continue;
 

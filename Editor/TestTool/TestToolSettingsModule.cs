@@ -42,6 +42,8 @@ namespace LLib.Editor
                         {
                             modules[index].Init();
                         }
+
+                        Settings.Save();
                     };
         
                     _reorderableList.onAddCallback = (list) => modules.Add(null);
@@ -73,7 +75,12 @@ namespace LLib.Editor
             EditorGUILayout.Space(20f);
             
             DrawModules();
-            EditorGUILayout.Space(10f);
+            EditorGUILayout.Space(20f);
+
+            if (GUILayout.Button("SAVE", EditorStyles.miniButton))
+            {
+                Settings.Save();
+            }
         }
 
 
