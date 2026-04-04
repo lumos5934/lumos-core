@@ -23,9 +23,10 @@ namespace LLib.Editor
                 if (_settingsModule == null)
                 {
                     _settingsModule = CreateInstance<TestToolSettingsModule>();
-                    _settingsModule.Title = "Settings";
-                    _settingsModule.IsRunTimeOnly = false;
                 }   
+                
+                _settingsModule.Title = "SETTINGS";
+                _settingsModule.IsRunTimeOnly = false;
                 
                 return _settingsModule;
             }
@@ -164,7 +165,7 @@ namespace LLib.Editor
                 if (target == null) 
                     continue;
 
-                var label = target.Title.ToUpper();
+                var label = target.Title;
 
                 if (_selectedModule == target && _selectedIndex == i)
                 {
@@ -189,7 +190,7 @@ namespace LLib.Editor
                 }
                 else
                 {
-                    GUI.backgroundColor = Settings.ButtonNormalColor;
+                    GUI.backgroundColor = target.UseCustomButtonColor? target.ButtonColor : Settings.ButtonNormalColor;
             
                     if (GUILayout.Button(label, Settings.BtnStyle))
                     {

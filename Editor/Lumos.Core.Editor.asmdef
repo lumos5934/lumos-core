@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "LumosLib.Runtime",
-        "Unity.RenderPipelines.Universal.Runtime"
+        "Unity.RenderPipelines.Universal.Runtime",
+        "TriInspector"
     ],
     "includePlatforms": [
         "Editor"

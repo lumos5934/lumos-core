@@ -122,7 +122,7 @@ namespace LLib.Editor
                     _categorySideRectStyle = new GUIStyle();
                 }
                 
-                _categorySideRectStyle.padding = new RectOffset(1, 0, 0, 3);
+                _categorySideRectStyle.padding = new RectOffset(0, 0, 0, 3);
                 _categorySideRectStyle.margin = new RectOffset(0, 0, 0, 0);
 
                 return _categorySideRectStyle;

@@ -60,9 +60,6 @@ namespace LLib.Editor
 
         public override void OnGUI()
         {
-            DrawModules();
-            EditorGUILayout.Space(10f);
-
             DrawTop();
             EditorGUILayout.Space(20f);
 
@@ -74,6 +71,9 @@ namespace LLib.Editor
 
             DrawContents();
             EditorGUILayout.Space(20f);
+            
+            DrawModules();
+            EditorGUILayout.Space(10f);
         }
 
 
