@@ -2,39 +2,29 @@
 
 namespace LLib
 {
-    public abstract class UIPopup : UIPanel
+    public abstract class UIPopup : UIScene
     {
-        [SerializeField] private bool _isGlobal;
-        private BasePopupManager _baseManager; 
+        [SerializeField] private bool _isGlobal = false;
+        [SerializeField] private bool _isModal = true;
+        
+        private PopupManager _popupManager; 
         
         public bool IsGlobal => _isGlobal;
-        public bool IsOpened { get; protected set; }
+        public bool IsModal => _isModal;
 
+        
+        protected virtual void OnDestroy()
+        {
+            Services.Get<PopupManager>()?.Add(this);
+        }
+        
+        
         public override void Init()
         {
             base.Init();
-            _baseManager = Services.Get<IPopupManager>() as  BasePopupManager;
-            _baseManager?.Register(this);
+            
+            Services.Get<PopupManager>()?.Remove(this);
         }
-
-        private void OnDestroy()
-        {
-            _baseManager?.Unregister(this);
-        }
-    
-        internal void Open()
-        {
-            IsOpened = true;
-            OnOpen();
-        }
-
-        internal void Close()
-        {
-            IsOpened = false;
-            OnClose();
-        }
-        
-        protected virtual void OnOpen() => gameObject.SetActive(true);
-        protected virtual void OnClose() => gameObject.SetActive(false);
     }
 }
+

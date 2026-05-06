@@ -1,20 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace LLib
 {
-    [RequireComponent(typeof(Canvas)),
-     RequireComponent(typeof(CanvasScaler)),
-     RequireComponent(typeof(GraphicRaycaster))]
-    public abstract class UIPanel : UIBase
+    [RequireComponent(typeof(Canvas))]
+    public abstract class UIScene : UIBase
     {
-        protected Canvas _canvas;
-        
+        public Canvas Canvas { get; private set; }
+
         public override void Init()
         {
             base.Init();
             
-            _canvas =  GetComponent<Canvas>();
+            Canvas =  GetComponent<Canvas>();
             
             var childUIs = GetComponentsInChildren<UIBase>();
             foreach (var ui in childUIs)
@@ -28,12 +25,12 @@ namespace LLib
 
         public void SetCamera(Camera cam)
         {
-            _canvas.worldCamera = cam;
+            Canvas.worldCamera = cam;
         }
 
         public void SetOrder(int order)
         {
-            _canvas.sortingOrder = order;
+            Canvas.sortingOrder = order;
         }
     }
 }
