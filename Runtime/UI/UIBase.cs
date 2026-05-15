@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace LLib
 {
@@ -12,7 +11,6 @@ namespace LLib
         public RectTransform RectTransform { get; private set; }
 
         
-        protected abstract void Refresh();
         
         
         public virtual void Init()
@@ -20,40 +18,41 @@ namespace LLib
             CanvasGroup = GetComponent<CanvasGroup>();
             RectTransform = GetComponent<RectTransform>();
         }
+        
+        
+        public abstract void Refresh();
 
         
-        public virtual void Open<T>(Action<T> onBeforeOpen) where T : UIBase
+        public void Open()
         {
             if (IsOpened) 
                 return;
             
-            onBeforeOpen?.Invoke(this as T);
-            
             IsOpened = true;
             
-            OnShow();
-            
+            Show();
             Refresh();
         }
 
 
-        public virtual void Close()
+        public void Close()
         {
             if (!IsOpened) 
                 return;
             
             IsOpened = false;
             
-            OnHide();
+            Hide();
         }
 
 
-        protected virtual void OnShow()
+        protected virtual void Show()
         {
             gameObject.SetActive(true);
         }
 
-        protected virtual void OnHide()
+        
+        protected virtual void Hide()
         {
             gameObject.SetActive(false);
         }

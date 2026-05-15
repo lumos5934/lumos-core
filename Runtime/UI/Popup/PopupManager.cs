@@ -15,8 +15,8 @@ namespace LLib
         [SerializeField] private int _startSortingOrder;
         [SerializeField] private Canvas _dimmerCanvas;
         
-        private Dictionary<Type, UIPopup> _popupPrefabDict = new();
         private IResourceManager _resourceMgr;
+        private Dictionary<Type, UIPopup> _popupPrefabDict = new();
         private Dictionary<Type, UIPopup> _popupCache = new();
         private List<UIPopup> _openedPopups = new();
         private Camera _camera;
@@ -94,66 +94,62 @@ namespace LLib
         private T Get<T>() where T : UIPopup
         {
             var type = typeof(T);
-            
-            foreach (var popup in _openedPopups)
-            {
-                if (popup.GetType() == type)
-                {
-                    return popup as T;
-                }
-            }
-            
-            return null;
-        }
 
-        public T Open<T>(Action<T> onBeforeOpen = null) where T : UIPopup
-        {
-            var opened = Get<T>();
-            if (opened != null)
-                return Open(opened, onBeforeOpen) as T;
-            
-            var type = typeof(T);
-            
-            if (!_popupCache.TryGetValue(type, out UIPopup popup))
+            if (_popupCache.TryGetValue(type, out var containsPopup))
+            {
+                return containsPopup as T;
+            }
+            else
             {
                 _popupPrefabDict.TryGetValue(type, out UIPopup resource);
                 if (resource == null)
                     return null;
 
-                popup = Instantiate(resource);
-                popup.Init();
-
-                if (popup.IsGlobal)
+                var newPopup = Instantiate(resource);
+                newPopup.Init();
+                
+                if (newPopup.IsGlobal)
                 {
-                    popup.transform.SetParent(transform);
+                    newPopup.transform.SetParent(transform);
                 }
+                
+                _popupCache.Add(type, newPopup);
+                
+                return newPopup as T;
             }
-
-            return Open(popup, onBeforeOpen) as T;
         }
+
         
-        
-        private UIPopup Open<T>(UIPopup popup, Action<T> onBeforeOpen) where T : UIPopup
+        public T Open<T>() where T : UIPopup
+        {
+            var popup = Get<T>();
+            
+            OnOpen(popup);
+            
+            popup.Open();
+            
+            return popup;
+        }
+
+
+        private void OnOpen(UIPopup popup)
         {
             if (_openedPopups.Contains(popup))
             {
-                int index = _openedPopups.IndexOf(popup);
-                if (index == _openedPopups.Count - 1)
-                    return popup;
+                if (_openedPopups[^1] == popup)
+                    return;
 
-                _openedPopups.RemoveAt(index);
+                _openedPopups.Remove(popup);
                 _openedPopups.Add(popup);
             }
             else
             {
-                _openedPopups.Add(popup);
                 popup.SetCamera(_camera);
-                popup.Open(onBeforeOpen);
             }
             
-            UpdateOrders();
+            _openedPopups.Add(popup);
             
-            return popup;
+            UpdateOrders();
         }
 
         
@@ -234,6 +230,7 @@ namespace LLib
             }
         }
         
+        
         private void UpdateCameraStack()
         {
             Camera mainCam = Camera.main;
@@ -255,8 +252,5 @@ namespace LLib
                 }
             }
         }
-        
-        
-
     }
 }

@@ -23,6 +23,8 @@ namespace LLib
         {
             base.Init();
             
+            gameObject.SetActive(false);
+            
             Services.Get<PopupManager>()?.Add(this);
         }
     }
