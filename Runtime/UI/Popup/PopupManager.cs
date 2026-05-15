@@ -113,8 +113,6 @@ namespace LLib
                     newPopup.transform.SetParent(transform);
                 }
                 
-                _popupCache.Add(type, newPopup);
-                
                 return newPopup as T;
             }
         }
