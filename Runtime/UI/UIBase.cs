@@ -20,9 +20,6 @@ namespace LLib
         }
         
         
-        public abstract void Refresh();
-
-        
         public void Open()
         {
             if (IsOpened) 
@@ -30,8 +27,7 @@ namespace LLib
             
             IsOpened = true;
             
-            Show();
-            Refresh();
+            OnOpen();
         }
 
 
@@ -42,20 +38,20 @@ namespace LLib
             
             IsOpened = false;
             
-            Hide();
+            OnClose();
         }
 
+        
+        public abstract void Refresh();
 
-        protected virtual void Show()
+        protected virtual void OnOpen()
         {
             gameObject.SetActive(true);
         }
 
-        
-        protected virtual void Hide()
+        protected virtual void OnClose()
         {
             gameObject.SetActive(false);
         }
-        
     }
 }
